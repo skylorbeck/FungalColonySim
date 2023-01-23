@@ -19,6 +19,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
     
     [SerializeField] private String tooltipText;
     [SerializeField] private int3 lightPos;
+    [SerializeField] private int3 lastLightPos;
     [SerializeField] private bool isPlacing = false;
 
     void Start()
@@ -40,8 +41,11 @@ public class Block : MonoBehaviour, IPointerClickHandler
             blockOffsetPrevious = blockOffset;
             UpdateWorldPos();
         }
-        
-        UpdateLighting();
+
+        if (lastLightPos.x != lightPos.x || lastLightPos.y != lightPos.y || lastLightPos.z != lightPos.z)
+        {
+            UpdateLighting();
+        }
 
     }
     private void UpdateWorldPos()
@@ -56,12 +60,14 @@ public class Block : MonoBehaviour, IPointerClickHandler
     }
     private void UpdateLighting()
     {
+        lastLightPos = lightPos;
+        // spriteRenderer.DOComplete();
         //use lightpos to calculate the distance between the light and the block
         float color = 1 - (Vector3.Distance(new Vector3(lightPos.x,lightPos.y,lightPos.z), new Vector3(blockPos.x,blockPos.y,blockPos.z)) / shadowDistance);
         color = Mathf.Clamp(color, 0.25f, 1);
         
         // float color = 1- Mathf.Abs(Math.Abs(blockPos.x) + Math.Abs(blockPos.y) + Math.Abs(blockPos.z)) / shadowDistance;
-        spriteRenderer.color = new Color(color, color, color, 1);
+        spriteRenderer.DOColor(new Color(color, color, color, 1), 0.5f);
     }
     void FixedUpdate()
     {

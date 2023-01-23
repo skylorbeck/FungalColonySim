@@ -14,6 +14,7 @@ public class BlockMaster : MonoBehaviour
 {
     public BiomeBlock biomeBlockPrefab;
     public MushroomBlock mushroomBlockPrefab;
+    public SelectionBlock selectionBlock;
     public List<Block> allBlocks;
     public List<BiomeBlock> biomeBlocks;
     public List<BiomeBlock> dirtBlocks;
@@ -50,6 +51,8 @@ public class BlockMaster : MonoBehaviour
             block.SetLightPos(mousePos);
                 block.SetBlockOffset(new Vector3(0, Mathf.Sin(Time.time + (floatX?block.blockPos.x:0) + (floatY?block.blockPos.y:0))*floatDistance, 0));
         }
+        
+        selectionBlock.SetBlockPos(mousePos);
         
         MushPerSecText.text = "MPS: " + GetMushPerSec();
     }
@@ -191,6 +194,11 @@ public class BlockMaster : MonoBehaviour
         }
         
         ScoreMaster.instance.UpdateMushroomText();
+        if (dirtBlocks.Count ==0)
+        {
+            enrichButton.SetActive(false);
+            return;
+        }
         enrichButton.SetActive(true);
 
     }

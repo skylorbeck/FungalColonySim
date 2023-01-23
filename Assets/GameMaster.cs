@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -54,9 +55,8 @@ public class GameMaster : MonoBehaviour
         
     }
     
-    public async void Prestige()
+    public async Task Prestige()
     {
-    
         await blockMaster.DissolveWorld();
         ScoreMaster.instance.Reset();
         UpgradeMaster.instance.Reset();

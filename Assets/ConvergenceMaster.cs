@@ -148,7 +148,7 @@ public class ConvergenceMaster : MonoBehaviour
         await Task.Delay((int)(duration * 1000));
     }
     
-    public async void Converge()
+    public async void Converge()//TODO Disable this when button is clicked
     {
         // SFXMaster.instance.PlayMenuClick();
         GameMaster.instance.SaveSystem.sporeCountTotal += reward;
@@ -162,6 +162,7 @@ public class ConvergenceMaster : MonoBehaviour
 
     public void ShowStoreMenu()
     {
+        convergeButton.interactable = false;
         convergenceStoreMenu.SetActive(true);
         inStore = true;
         convergenceStoreMenu.transform.DOLocalMoveX(0, 0.5f);
@@ -184,7 +185,9 @@ public class ConvergenceMaster : MonoBehaviour
             convergenceStoreMenu.SetActive(false);
         };
         await Task.Delay((int)(duration * 1000));
-        GameMaster.instance.Prestige();
+        await GameMaster.instance.Prestige();
+        convergeButton.interactable = true;
+
     }
 
     void FixedUpdate()

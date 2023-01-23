@@ -16,6 +16,7 @@ public class SFXMaster : MonoBehaviour
     public Toggle muteToggle;
     void Start()
     {
+        
         if (instance == null)
         {
             instance = this;
@@ -24,6 +25,9 @@ public class SFXMaster : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        muteToggle.isOn = PlayerPrefs.GetInt("SFXMute",1) == 1;
+        ToggleSFX();
         audioSource.maxDistance = 10000;
     }
 
@@ -89,9 +93,14 @@ public class SFXMaster : MonoBehaviour
         if (muteToggle.isOn)
         {
             audioSource.Stop();
+            PlayerPrefs.SetInt("SFXMute", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("SFXMute", 0);
         }
     }
-    
+
     void Update()
     {
         
