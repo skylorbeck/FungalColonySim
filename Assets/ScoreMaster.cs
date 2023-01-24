@@ -34,8 +34,8 @@ public class ScoreMaster : MonoBehaviour
     {
         
     }
-    
-    public void AddMushroom(MushroomBlock.MushroomType mushroomType)
+
+    public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool silent = false)
     {
         
         switch (mushroomType)
@@ -56,6 +56,11 @@ public class ScoreMaster : MonoBehaviour
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(mushroomType), mushroomType, null);
+        }
+
+        if (silent)
+        {
+            return;
         }
         UpdateMushroomText();
     }

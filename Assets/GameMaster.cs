@@ -61,7 +61,6 @@ public class GameMaster : MonoBehaviour
         ScoreMaster.instance.Reset();
         UpgradeMaster.instance.Reset();
         await blockMaster.CreateTestWorld();
-        SaveSystem.hivemindPoints++;
         SaveSystem.totalConverges++;
         SaveSystem.Save();
     }

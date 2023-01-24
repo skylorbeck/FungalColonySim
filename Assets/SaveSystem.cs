@@ -11,7 +11,7 @@ public class SaveSystem: MonoBehaviour
     public uint BlueMushrooms = 0;
     public uint mushroomBlockCount = 1;
     public uint[] mushroomCount = new uint[3];
-    public uint sporeCountTotal = 0;
+    public uint sporeCountTotal = 0;//TODO use sporeCountTotal to calculate hivemind points
     public uint sporeCount = 0;
     public int2 farmSize = new int2(0, 0);
     public uint mushroomMultiplier = 0;
@@ -20,7 +20,9 @@ public class SaveSystem: MonoBehaviour
     public uint growthSpeedBonus = 0;
     public uint autoHarvestSpeed =0;
     public uint totalConverges = 0;
-    public uint hivemindPoints = 0;
+    public uint hivemindPointsSpent = 0;
+    public bool redUnlocked = false;
+    public bool blueUnlocked = false;
 
     public void Save()
     {
@@ -50,6 +52,10 @@ public class SaveSystem: MonoBehaviour
         autoHarvest = save.autoHarvest;
         growthSpeedBonus = save.growthSpeedBonus;
         autoHarvestSpeed = save.autoHarvestSpeed;
+        totalConverges = save.totalConverges;
+        hivemindPointsSpent = save.hivemindPointsSpent;
+        redUnlocked = save.redUnlocked;
+        blueUnlocked = save.blueUnlocked;
         return true;
     }
 
@@ -72,7 +78,9 @@ public class SaveSystem: MonoBehaviour
             growthSpeedBonus = save.growthSpeedBonus;
             autoHarvestSpeed = save.autoHarvestSpeed;
             totalConverges = save.totalConverges;
-            hivemindPoints = save.hivemindPoints;
+            hivemindPointsSpent = save.hivemindPointsSpent;
+            redUnlocked = save.redUnlocked;
+            blueUnlocked = save.blueUnlocked;
         }
         
         public uint BrownMushrooms = 0;
@@ -89,6 +97,9 @@ public class SaveSystem: MonoBehaviour
         public uint growthSpeedBonus = 0;
         public uint autoHarvestSpeed =0;
         public uint totalConverges = 0;
-        public uint hivemindPoints = 0;
+        public uint hivemindPointsSpent = 0;
+        public bool redUnlocked = false;
+        public bool blueUnlocked = false;
+        
     }
 }

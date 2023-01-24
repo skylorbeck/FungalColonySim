@@ -46,11 +46,15 @@ public class BlockMaster : MonoBehaviour
     {
         int3 mousePos = GetMousePos();
 
-        foreach (Block block in allBlocks)
+        if (Math.Abs(transform.position.x)<100)
         {
-            block.SetLightPos(mousePos);
+            foreach (Block block in allBlocks)
+            {
+                block.SetLightPos(mousePos);
                 block.SetBlockOffset(new Vector3(0, Mathf.Sin(Time.time + (floatX?block.blockPos.x:0) + (floatY?block.blockPos.y:0))*floatDistance, 0));
+            }
         }
+        
         
         selectionBlock.SetBlockPos(mousePos);
         
@@ -113,7 +117,8 @@ public class BlockMaster : MonoBehaviour
         {
             BiomeBlock biomeBlock = dirtBlocks[0];
 
-            BiomeBlock newBlock = Instantiate(biomeBlockPrefab, biomeBlock.transform.position, Quaternion.identity);
+            BiomeBlock newBlock = Instantiate(biomeBlockPrefab, transform.position, Quaternion.identity);
+            newBlock.transform.SetParent(this.transform);
             newBlock.PlaceBlock(biomeBlock.blockPos, Biome.Grass);
             biomeBlocks.Add(newBlock);
             biomeBlocks.Remove(biomeBlock);

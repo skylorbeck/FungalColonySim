@@ -148,11 +148,12 @@ public class ConvergenceMaster : MonoBehaviour
         await Task.Delay((int)(duration * 1000));
     }
     
-    public async void Converge()//TODO Disable this when button is clicked
+    public async void Converge()
     {
         // SFXMaster.instance.PlayMenuClick();
         GameMaster.instance.SaveSystem.sporeCountTotal += reward;
         GameMaster.instance.SaveSystem.sporeCount += reward;
+        
         agreeToggle.isOn = false;
         confirmConvergeButton.interactable = false;
         await HideMenu();
@@ -192,12 +193,8 @@ public class ConvergenceMaster : MonoBehaviour
 
     void FixedUpdate()
     {
-        double sporeCost = Math.Pow(1.1, GameMaster.instance.SaveSystem.sporeCountTotal);
-        uint mushValue = (uint) Mathf.Pow(GameMaster.instance.SaveSystem.BrownMushrooms, 1.5f);
-        // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(mushValue/sporeCost)));
-        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(mushValue/sporeCost)));
-        uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt); 
-        reward = rewardLog;
+        CalculateSporeReward();
+        
         totalSporeText.text = "+" + reward;
         spendableSporeText.text = GameMaster.instance.SaveSystem.sporeCount + "Spores";
         rewardText.text = "+"+reward + " spores";
@@ -213,5 +210,15 @@ public class ConvergenceMaster : MonoBehaviour
             UpdateUpgradeText();
             return;
         }
+    }
+
+    private void CalculateSporeReward()
+    {
+        double sporeCost = Math.Pow(1.1, GameMaster.instance.SaveSystem.sporeCountTotal);
+        uint mushValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.BrownMushrooms, 1.5f);
+        // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(mushValue/sporeCost)));
+        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(mushValue / sporeCost)));
+        uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);
+        reward = rewardLog;
     }
 }

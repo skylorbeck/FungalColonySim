@@ -50,7 +50,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
     }
     private void UpdateWorldPos()
     {
-        transform.position =
+        transform.localPosition =
             new Vector3(
                 (blockPos.x * -blockDistance) + (blockPos.y * blockDistance),
                 (blockPos.x * (blockDistance * -0.5f)) + (blockPos.y * (blockDistance * -0.5f)) + (blockPos.z * blockDistance),

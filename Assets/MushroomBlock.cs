@@ -23,6 +23,17 @@ public class MushroomBlock : Block
     void Start()
     {
         UpdateSprite();
+        if (mushroomPop==null)
+        {
+            mushroomPop = new GameObject();
+            mushroomPop.transform.SetParent(transform);
+            SpriteRenderer mushSprite = mushroomPop.AddComponent<SpriteRenderer>();
+            mushSprite.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
+            mushSprite.sortingOrder = 100;
+            mushroomPop.transform.localScale = Vector3.zero;
+            mushroomPop.transform.position = transform.position;
+
+        }
     }
 
     protected override void Update()
@@ -94,21 +105,20 @@ public class MushroomBlock : Block
 
     private void Harvest()
     {
-        if (mushroomPop==null)
+        if (Mathf.Abs(transform.position.x)<100)
         {
-            mushroomPop = new GameObject();
-            SpriteRenderer mushSprite = mushroomPop.AddComponent<SpriteRenderer>();
-            mushSprite.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
-            mushSprite.sortingOrder = 100;
-
+            mushroomPop.transform.DOLocalJump(mushroomPop.transform.localPosition + Vector3.up * 2, 1, 1, 1).onComplete += () =>
+                mushroomPop.transform.DOScale(Vector3.zero, 0.25f).onComplete += () =>
+                    mushroomPop.transform.position = transform.position;
+            mushroomPop.transform.localScale = Vector3.zero;
+            mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f).onComplete +=
+                () => ScoreMaster.instance.AddMushroom(mushroomType);
         }
-
-        mushroomPop.transform.DOJump(transform.position + Vector3.up * 2, 1, 1, 1).onComplete += () =>
-            mushroomPop.transform.DOScale(Vector3.zero, 0.25f);
-        mushroomPop.transform.position = transform.position;
-        mushroomPop.transform.localScale = Vector3.zero;
-        mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f).onComplete +=
-            () => ScoreMaster.instance.AddMushroom(mushroomType);
+        else
+        {
+            ScoreMaster.instance.AddMushroom(mushroomType,true);
+        }
+        
         // Destroy(mushroomPop, 1.5f);
 
         isGrowing = true;
