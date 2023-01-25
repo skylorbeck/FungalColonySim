@@ -201,7 +201,7 @@ public class ConvergenceMaster : MonoBehaviour
         
         if (!unlocked)
         {
-            unlocked = GameMaster.instance.SaveSystem.mushroomBlockCount >=9 || GameMaster.instance.SaveSystem.totalConverges >= 1;
+            unlocked = GameMaster.instance.SaveSystem.mushroomBlockCount[0] >=9 || GameMaster.instance.SaveSystem.totalConverges >= 1;
             convergeButton.gameObject.SetActive(unlocked);
             return;
         }
@@ -215,7 +215,9 @@ public class ConvergenceMaster : MonoBehaviour
     private void CalculateSporeReward()
     {
         double sporeCost = Math.Pow(1.1, GameMaster.instance.SaveSystem.sporeCountTotal);
-        uint mushValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.BrownMushrooms, 1.5f);
+        uint mushValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Brown], 1.5f);
+        mushValue += (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Red], 1.6f);
+        mushValue += (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Blue], 1.7f);
         // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(mushValue/sporeCost)));
         int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(mushValue / sporeCost)));
         uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);

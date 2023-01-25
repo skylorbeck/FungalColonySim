@@ -30,6 +30,10 @@ public class MushroomBlock : Block
             SpriteRenderer mushSprite = mushroomPop.AddComponent<SpriteRenderer>();
             mushSprite.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
             mushSprite.sortingOrder = 100;
+            if (mushroomType == MushroomType.Blue|| mushroomType == MushroomType.Red)
+            {
+                mushSprite.transform.rotation = Quaternion.Euler(0, 0, -20);
+            }
             mushroomPop.transform.localScale = Vector3.zero;
             mushroomPop.transform.position = transform.position;
 
@@ -38,12 +42,10 @@ public class MushroomBlock : Block
 
     protected override void Update()
     {
-        if (mushroomType != MushroomType.None)
-        {
             //TODO ask the block manager what block is below and kill the mushroom if it's the wrong biome?
             if (isGrowing)
             {
-                growthTimer += Time.deltaTime + (GameMaster.instance.SaveSystem.growthSpeedBonus * Time.deltaTime * 0.1f) + (GameMaster.instance.SaveSystem.mushroomSpeed * Time.deltaTime * 0.05f);
+                growthTimer += Time.deltaTime + (GameMaster.instance.SaveSystem.growthSpeedBonus[(int)mushroomType] * Time.deltaTime * 0.1f) + (GameMaster.instance.SaveSystem.mushroomSpeed * Time.deltaTime * 0.05f);
                 spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
                
                 spriteRenderer.transform.localPosition = Vector3.Lerp( Vector3.down * verticalOffset,Vector3.zero, growthTimer / growthTime);
@@ -54,17 +56,16 @@ public class MushroomBlock : Block
                     isGrown = true;
                     UpdateSprite();
                 }
-            } else if (isGrown && GameMaster.instance.SaveSystem.autoHarvest)
+            } else if (isGrown && GameMaster.instance.SaveSystem.autoHarvest[(int)mushroomType])
             {
                 harvestTimer += Time.deltaTime +
-                                (GameMaster.instance.SaveSystem.autoHarvestSpeed * Time.deltaTime * 0.1f);
+                                (GameMaster.instance.SaveSystem.autoHarvestSpeed[(int)mushroomType] * Time.deltaTime * 0.1f);
                 if (harvestTimer >= harvestTime)
                 {
                     harvestTimer = 0;
                     Harvest();
                 }
             }
-        }
 
         if (mushroomType != plantTypePrevious)
         {
@@ -78,9 +79,11 @@ public class MushroomBlock : Block
 
     private void UpdateSprite()
     {
-        spriteRenderer.sprite = mushroomType == MushroomType.None
-            ? null
-            : Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
+        spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
+        if (mushroomType == MushroomType.Blue|| mushroomType == MushroomType.Red)
+        {
+            spriteRenderer.transform.rotation = Quaternion.Euler(0, 0, -20);
+        }
         this.name = "Mushroom " + mushroomType +" "+ blockPos;
 
     }
@@ -92,7 +95,6 @@ public class MushroomBlock : Block
             Harvest();
         } else if (isDead)
         {
-            mushroomType = MushroomType.None;
             isDead = false;
             UpdateSprite();
         }
@@ -113,17 +115,17 @@ public class MushroomBlock : Block
             mushroomPop.transform.localScale = Vector3.zero;
             mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f).onComplete +=
                 () => ScoreMaster.instance.AddMushroom(mushroomType);
+            SFXMaster.instance.PlayMushPop();
         }
         else
         {
-            ScoreMaster.instance.AddMushroom(mushroomType,true);
+            ScoreMaster.instance.AddMushroom(mushroomType);
         }
         
         // Destroy(mushroomPop, 1.5f);
 
         isGrowing = true;
         isGrown = false;
-        SFXMaster.instance.PlayMushPop();
     }
 
     void FixedUpdate()
@@ -141,9 +143,8 @@ public class MushroomBlock : Block
    
     public enum MushroomType
     {
-        None,
-        Red,
         Brown,
+        Red,
         Blue
     }
 }

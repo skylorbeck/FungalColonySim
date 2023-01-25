@@ -12,97 +12,147 @@ public class ModeMaster : MonoBehaviour
     public float duration = 0.5f;
     
     public GameObject BrownFarm;
-    public Canvas BrownFarmCanvas;
+    public GameObject BrownFarmUpgrades;
     public GameObject RedFarm;
+    public GameObject RedFarmUpgrades;
     public GameObject BlueFarm;
+    public GameObject BlueFarmUpgrades;
     public GameObject Hivemind;
     public Gamemode currentMode;
+    public Gamemode lastMode;
 
     public TextMeshProUGUI modeText;
+    public Button nextButton;
+    public Button previousButton;
     private void Start()
     {
         SetMode(Gamemode.BrownFarm);
+        UpdateButton();
     }
 
+    public void UpdateButton()
+    {
+        bool unlocked = (GameMaster.instance.SaveSystem.sporeCountTotal > 0);
+        modeText.gameObject.SetActive(unlocked);
+        nextButton.gameObject.SetActive(unlocked);
+        previousButton.gameObject.SetActive(unlocked);
+    }
+    
     public void NextMode()
     {
-        currentMode++;
-        if (currentMode > Gamemode.Hivemind)
+        Gamemode mode = currentMode;
+        mode++;
+        
+        if (!GameMaster.instance.SaveSystem.redUnlocked && mode == Gamemode.RedFarm)
         {
-            currentMode = Gamemode.BrownFarm;
+            mode++;
         }
-        SetMode(currentMode);
+        if (!GameMaster.instance.SaveSystem.blueUnlocked && mode == Gamemode.BlueFarm)
+        {
+            mode++;
+        }
+
+        if (!(GameMaster.instance.SaveSystem.sporeCountTotal>0) && mode == Gamemode.Hivemind)
+        {
+            mode++;
+        }
+        
+        if (mode > Gamemode.Hivemind)
+        {
+            mode = Gamemode.BrownFarm;
+        }
+        SetMode(mode);
     }
     
     public void PreviousMode()
     {
-        currentMode--;
-        if (!GameMaster.instance.SaveSystem.redUnlocked && currentMode == Gamemode.RedFarm)
+        Gamemode mode = currentMode;
+        mode--;
+        
+        if (!(GameMaster.instance.SaveSystem.sporeCountTotal>0) && mode == Gamemode.Hivemind)
         {
-            currentMode--;
+            mode--;
         }
-        if (!GameMaster.instance.SaveSystem.blueUnlocked && currentMode == Gamemode.BlueFarm)
+        if (!GameMaster.instance.SaveSystem.blueUnlocked && mode == Gamemode.BlueFarm)
         {
-            currentMode--;
+            mode--;
         }
-
-        if (!(GameMaster.instance.SaveSystem.sporeCountTotal>0) && currentMode == Gamemode.Hivemind)
+        if (!GameMaster.instance.SaveSystem.redUnlocked && mode == Gamemode.RedFarm)
         {
-            currentMode--;
+            mode--;
         }
-        if (currentMode < Gamemode.BrownFarm)
+       
+        
+        if (mode < Gamemode.BrownFarm)
         {
-            currentMode = Gamemode.Hivemind;
+            mode = Gamemode.Hivemind;
         }
-        SetMode(currentMode,true);
+        SetMode(mode,true);
     }
 
     private void SetMode(Gamemode gamemode, bool left = false)
     {
-        
+        lastMode = currentMode;
+        currentMode = gamemode;
         modeText.text = gamemode.ToString();
-        int dist = left ? -distance : distance;
         BrownFarm.transform.DOComplete();
         RedFarm.transform.DOComplete();
         BlueFarm.transform.DOComplete();
         Hivemind.transform.DOComplete();
         
-        BrownFarmCanvas.enabled = false;
+        BrownFarmUpgrades.SetActive(false);
+        RedFarmUpgrades.SetActive(false);
+        BlueFarmUpgrades.SetActive(false);
 
+        int dist = left ? -distance : distance;
         
-        switch (gamemode)
+        switch (lastMode)
         {
             case Gamemode.BrownFarm:
-                // BrownFarm.SetActive(true);
-                BrownFarm.transform.position = new Vector3(-dist, 0, 0);
-                BrownFarm.transform.DOMoveX(0, duration).onComplete = () => BrownFarmCanvas.enabled = true;
-                RedFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => RedFarm.SetActive(false)*/;
-                BlueFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => BlueFarm.SetActive(false)*/;
-                Hivemind.transform.DOMoveX(dist, duration)/*.onComplete = () => Hivemind.SetActive(false)*/;
+                BrownFarm.transform.DOMoveX(dist, duration);
                 break;
             case Gamemode.RedFarm:
-                RedFarm.SetActive(true);
-                RedFarm.transform.position = new Vector3(-dist, 0, 0);
-                RedFarm.transform.DOMoveX(0, duration);
-                BrownFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => BrownFarm.SetActive(false)*/;
-                BlueFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => BlueFarm.SetActive(false)*/;
-                Hivemind.transform.DOMoveX(dist, duration)/*.onComplete = () => Hivemind.SetActive(false)*/;
+                RedFarm.transform.DOMoveX(dist, duration);
                 break;
             case Gamemode.BlueFarm:
-                BlueFarm.SetActive(true);
-                BlueFarm.transform.position = new Vector3(-dist, 0, 0);
-                BlueFarm.transform.DOMoveX(0, duration);
-                BrownFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => BrownFarm.SetActive(false)*/;
-                RedFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => RedFarm.SetActive(false)*/;
-                Hivemind.transform.DOMoveX(dist, duration)/*.onComplete = () => Hivemind.SetActive(false)*/;
+                BlueFarm.transform.DOMoveX(dist, duration);
                 break;
             case Gamemode.Hivemind:
-                Hivemind.SetActive(true);
+                Hivemind.transform.DOMoveX(dist, duration);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
+        switch (currentMode)
+        {
+            case Gamemode.BrownFarm:
+                /*if (!GameMaster.instance.brownBlockMaster.isWorldCreated)
+                {
+                    GameMaster.instance.brownBlockMaster.CreateWorld();
+                }*/
+                BrownFarm.transform.position = new Vector3(-dist, 0, 0);
+                BrownFarm.transform.DOMoveX(0, duration).onComplete = () => BrownFarmUpgrades.SetActive(true);
+                break;
+            case Gamemode.RedFarm:
+                /*if (!GameMaster.instance.redBlockMaster.isWorldCreated)
+                {
+                    GameMaster.instance.redBlockMaster.CreateWorld();
+                }*/
+                RedFarm.transform.position = new Vector3(-dist, 0, 0);
+                RedFarm.transform.DOMoveX(0, duration).onComplete = () => RedFarmUpgrades.SetActive(true);
+                break;
+            case Gamemode.BlueFarm:
+                /*if (!GameMaster.instance.blueBlockMaster.isWorldCreated)
+                {
+                    GameMaster.instance.blueBlockMaster.CreateWorld();
+                }*/
+                BlueFarm.transform.position = new Vector3(-dist, 0, 0);
+                BlueFarm.transform.DOMoveX(0, duration).onComplete = () => BlueFarmUpgrades.SetActive(true);
+                break;
+            case Gamemode.Hivemind:
                 Hivemind.transform.position = new Vector3(-dist, 0, 0);
                 Hivemind.transform.DOMoveX(0, duration);
-                BrownFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => BrownFarm.SetActive(false)*/;
-                RedFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => RedFarm.SetActive(false)*/;
-                BlueFarm.transform.DOMoveX(dist, duration)/*.onComplete = () => BlueFarm.SetActive(false)*/;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");

@@ -22,6 +22,8 @@ public class BlockMaster : MonoBehaviour
     public int xMax = 5;
     public int yMax = 5;
     
+    public bool isWorldCreated = false;
+    
     public float floatDistance = 0.5f;
     public bool floatX = true;
     public bool floatY = true;
@@ -32,31 +34,34 @@ public class BlockMaster : MonoBehaviour
     
     public TextMeshProUGUI MushPerSecText;
     
-    void Start()
+    
+    
+    public MushroomBlock.MushroomType currentMushroomType = MushroomBlock.MushroomType.Brown;
+
+    async void Start()
     {
         biomeBlocks = new List<BiomeBlock>();
         mushroomBlocks = new List<MushroomBlock>();
         allBlocks = new List<Block>();
         dirtBlocks = new List<BiomeBlock>();
-        
-        CreateTestWorld();
+        await CreateWorld();//TODO figure out why this isn't working.
     }
 
     void Update()
     {
-        int3 mousePos = GetMousePos();
 
         if (Math.Abs(transform.position.x)<100)
         {
+            int3 mousePos = GetMousePos();
+
             foreach (Block block in allBlocks)
             {
                 block.SetLightPos(mousePos);
                 block.SetBlockOffset(new Vector3(0, Mathf.Sin(Time.time + (floatX?block.blockPos.x:0) + (floatY?block.blockPos.y:0))*floatDistance, 0));
             }
+            selectionBlock.SetBlockPos(mousePos);
+
         }
-        
-        
-        selectionBlock.SetBlockPos(mousePos);
         
         MushPerSecText.text = "MPS: " + GetMushPerSec();
     }
@@ -64,15 +69,15 @@ public class BlockMaster : MonoBehaviour
     private float GetMushPerSec()
     {
         float mushPerSec = 0;
-        if (GameMaster.instance.SaveSystem.autoHarvest)
+        if (GameMaster.instance.SaveSystem.autoHarvest[(int)currentMushroomType])
         {
-            mushPerSec = ((GameMaster.instance.SaveSystem.autoHarvestSpeed*0.1f)
-                          +(GameMaster.instance.SaveSystem.growthSpeedBonus*5*0.1f)
+            mushPerSec = ((GameMaster.instance.SaveSystem.autoHarvestSpeed[(int)currentMushroomType]*0.1f)
+                          +(GameMaster.instance.SaveSystem.growthSpeedBonus[(int)currentMushroomType]*5*0.1f)
                           +(GameMaster.instance.SaveSystem.mushroomSpeed*0.05f)
                           
-                          +(1 + GameMaster.instance.SaveSystem.mushroomMultiplier)
+                          +(1 + GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType])
                           
-                          * GameMaster.instance.SaveSystem.mushroomBlockCount) / 6f;
+                          * GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]) / 6f;
         }
         //truncate to 2 decimal places
         return (float) Math.Round(mushPerSec, 2);
@@ -104,11 +109,10 @@ public class BlockMaster : MonoBehaviour
 
     public void EnrichBlock()
     {
-        uint cost = (uint)Math.Pow(GameMaster.instance.SaveSystem.mushroomBlockCount, 2);
+        uint cost = (uint)Math.Pow(GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType], 2);
         // Debug.Log(cost);
-        if (GameMaster.instance.SaveSystem.BrownMushrooms < cost)
+        if (GameMaster.instance.SaveSystem.mushrooms[(int)currentMushroomType] < cost)
         {
-            Debug.Log("Not enough mushrooms, need " + cost);
             return;
         }
         bool success = false;
@@ -129,7 +133,7 @@ public class BlockMaster : MonoBehaviour
 
             MushroomBlock block =
                 Instantiate(mushroomBlockPrefab, new Vector3(-10000, -10000, 0), Quaternion.identity, transform);
-            block.PlaceBlock(biomeBlock.blockPos + new int3(0, 0, 1), MushroomBlock.MushroomType.Brown);
+            block.PlaceBlock(biomeBlock.blockPos + new int3(0, 0, 1), currentMushroomType);
             block.isGrowing = true;
             mushroomBlocks.Add(block);
             allBlocks.Add(block);
@@ -144,9 +148,22 @@ public class BlockMaster : MonoBehaviour
             return;
         }
         // SFXMaster.instance.PlayBlockReplace();
-        ScoreMaster.instance.SpendMushrooms(cost);
-        GameMaster.instance.SaveSystem.mushroomBlockCount++;
-        ScoreMaster.instance.UpdateMushroomText();
+        ScoreMaster.instance.SpendMushrooms(currentMushroomType,cost);
+        GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]++;
+        switch (currentMushroomType)
+        {
+            case MushroomBlock.MushroomType.Brown:
+                ScoreMaster.instance.UpdateBrownText();
+                break;
+            case MushroomBlock.MushroomType.Red:
+                ScoreMaster.instance.UpdateRedText();
+                break;
+            case MushroomBlock.MushroomType.Blue:
+                ScoreMaster.instance.UpdateBlueText();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         if (dirtBlocks.Count == 0)
         {
             enrichButton.SetActive(false);
@@ -158,7 +175,7 @@ public class BlockMaster : MonoBehaviour
 
     }
 
-    public async Task CreateTestWorld()
+    public async Task CreateWorld()
     {
         floatX = false;
         floatY = false;
@@ -177,12 +194,12 @@ public class BlockMaster : MonoBehaviour
                 if (x == 0 || y == 0 || x == xMax+GameMaster.instance.SaveSystem.farmSize.x - 1 || y == yMax+GameMaster.instance.SaveSystem.farmSize.y - 1)
                 {
                     biome = Biome.Rock;
-                } else if (GameMaster.instance.SaveSystem.mushroomBlockCount>blockCount)
+                } else if (GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]>blockCount)
                 {
                     biome = Biome.Grass;                    
                     blockCount++;
                     MushroomBlock mushroomBlock = Instantiate(mushroomBlockPrefab, new Vector3(-10000, -10000, 0), Quaternion.identity, transform);
-                    mushroomBlock.PlaceBlock(new int3(x, y,1),MushroomBlock.MushroomType.Brown);
+                    mushroomBlock.PlaceBlock(new int3(x, y,1),currentMushroomType);
                     mushroomBlock.isGrowing = true;
                     mushroomBlocks.Add(mushroomBlock);
                     allBlocks.Add(mushroomBlock);
@@ -197,19 +214,34 @@ public class BlockMaster : MonoBehaviour
                 await Task.Delay(100);
             }
         }
-        
-        ScoreMaster.instance.UpdateMushroomText();
+
+        switch (currentMushroomType)
+        {
+            case MushroomBlock.MushroomType.Brown:
+                ScoreMaster.instance.UpdateBrownText();
+                break;
+            case MushroomBlock.MushroomType.Red:
+                ScoreMaster.instance.UpdateRedText();
+                break;
+            case MushroomBlock.MushroomType.Blue:
+                ScoreMaster.instance.UpdateBlueText();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         if (dirtBlocks.Count ==0)
         {
             enrichButton.SetActive(false);
             return;
         }
         enrichButton.SetActive(true);
+        isWorldCreated = true;
 
     }
 
     public async Task DissolveWorld()
     {
+        isWorldCreated = false;
         foreach (var block in mushroomBlocks)
         {
             block.isGrowing = false;
@@ -224,7 +256,7 @@ public class BlockMaster : MonoBehaviour
         mushroomBlocks.Clear();
         allBlocks.Clear();
         dirtBlocks.Clear();
-        GameMaster.instance.SaveSystem.mushroomBlockCount = 1;
+        GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType] = 1;
         
     }
 }
