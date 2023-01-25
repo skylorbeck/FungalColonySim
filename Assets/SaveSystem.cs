@@ -9,7 +9,7 @@ public class SaveSystem: MonoBehaviour
     public uint[] mushrooms = new uint[3];//per run
     public uint[] mushroomBlockCount = new uint[3];
     public uint[] mushroomCount = new uint[3];//total 
-    public uint sporeCountTotal = 0;//TODO use sporeCountTotal to calculate hivemind points
+    public uint sporeCountTotal = 0;
     public uint sporeCount = 0;
     public int2 farmSize = new int2(0, 0);
     public uint mushroomMultiplier = 0;
@@ -18,7 +18,8 @@ public class SaveSystem: MonoBehaviour
     public uint[] growthSpeedBonus = new uint[3];
     public uint[] autoHarvestSpeed = new uint[3];
     public uint totalConverges = 0;
-    public uint hivemindPointsSpent = 0;
+    public uint hivemindPointsTotal = 0;
+    public uint hivemindPoints = 0;
     public bool redUnlocked = false;
     public bool blueUnlocked = false;
 
@@ -63,7 +64,8 @@ public class SaveSystem: MonoBehaviour
         growthSpeedBonus = save.growthSpeedBonus;
         autoHarvestSpeed = save.autoHarvestSpeed;
         totalConverges = save.totalConverges;
-        hivemindPointsSpent = save.hivemindPointsSpent;
+        hivemindPointsTotal = save.hivemindPointsTotal;
+        hivemindPoints = save.hivemindPoints;
         redUnlocked = save.redUnlocked;
         blueUnlocked = save.blueUnlocked;
         return true;
@@ -90,9 +92,10 @@ public class SaveSystem: MonoBehaviour
             growthSpeedBonus = save.growthSpeedBonus;
             autoHarvestSpeed = save.autoHarvestSpeed;
             totalConverges = save.totalConverges;
-            hivemindPointsSpent = save.hivemindPointsSpent;
             redUnlocked = save.redUnlocked;
             blueUnlocked = save.blueUnlocked;
+            hivemindPointsTotal = save.hivemindPointsTotal;
+            hivemindPoints = save.hivemindPoints;
         }
         
         public uint[] mushrooms = new uint[3];
@@ -107,7 +110,8 @@ public class SaveSystem: MonoBehaviour
         public uint[] growthSpeedBonus = new uint[3];
         public uint[] autoHarvestSpeed = new uint[3];
         public uint totalConverges = 0;
-        public uint hivemindPointsSpent = 0;
+        public uint hivemindPointsTotal = 0;
+        public uint hivemindPoints = 0;
         public bool redUnlocked = false;
         public bool blueUnlocked = false;
         

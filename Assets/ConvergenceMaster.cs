@@ -42,11 +42,14 @@ public class ConvergenceMaster : MonoBehaviour
 
     [Header("convergence menu")]
     [SerializeField] private TextMeshProUGUI rewardText;
+    [SerializeField] private TextMeshProUGUI skillRewardText;
     [SerializeField] private Button convergeButton;
     [SerializeField] private Button confirmConvergeButton;
     [SerializeField] private Button exitStoreButton;
     [SerializeField] private Toggle agreeToggle;
+    
     public uint reward= 0;
+    public uint skillReward= 0;
     void Start()
     {
         convergenceStoreMenu.SetActive(false);
@@ -153,7 +156,9 @@ public class ConvergenceMaster : MonoBehaviour
         // SFXMaster.instance.PlayMenuClick();
         GameMaster.instance.SaveSystem.sporeCountTotal += reward;
         GameMaster.instance.SaveSystem.sporeCount += reward;
-        
+        GameMaster.instance.SaveSystem.hivemindPointsTotal += skillReward;
+        GameMaster.instance.SaveSystem.hivemindPoints += skillReward;
+
         agreeToggle.isOn = false;
         confirmConvergeButton.interactable = false;
         await HideMenu();
@@ -194,11 +199,11 @@ public class ConvergenceMaster : MonoBehaviour
     void FixedUpdate()
     {
         CalculateSporeReward();
-        
+        CalculateHivemindPointsReward();
         totalSporeText.text = "+" + reward;
-        spendableSporeText.text = GameMaster.instance.SaveSystem.sporeCount + "Spores";
+        spendableSporeText.text = GameMaster.instance.SaveSystem.sporeCount + " Spores";
         rewardText.text = "+"+reward + " spores";
-        
+        skillRewardText.text = "+"+skillReward + " skill points";
         if (!unlocked)
         {
             unlocked = GameMaster.instance.SaveSystem.mushroomBlockCount[0] >=9 || GameMaster.instance.SaveSystem.totalConverges >= 1;
@@ -222,5 +227,15 @@ public class ConvergenceMaster : MonoBehaviour
         int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(mushValue / sporeCost)));
         uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);
         reward = rewardLog;
+    }
+
+    private void CalculateHivemindPointsReward()
+    {
+        double pointCost = Math.Pow(1.1, GameMaster.instance.SaveSystem.hivemindPointsTotal);
+        uint pointValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.sporeCountTotal+reward, 1.5f);
+        // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(pointValue/sporeCost)));
+        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(pointValue / pointCost)));
+        uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);
+        skillReward = rewardLog;
     }
 }

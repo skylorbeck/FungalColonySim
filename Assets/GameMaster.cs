@@ -24,6 +24,9 @@ public class GameMaster : MonoBehaviour
     public UpgradeMaster brownUpgradeMaster;
     public UpgradeMaster redUpgradeMaster;
     public UpgradeMaster blueUpgradeMaster;
+    
+    //TODO Unlocks for red and blue mushrooms
+
     void Start()
     {
         if (instance == null)

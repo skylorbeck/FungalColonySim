@@ -14,6 +14,9 @@ public class SFXMaster : MonoBehaviour
     public AudioClip menuClick;
 
     public Toggle muteToggle;
+    
+    //TODO too many sound effects killing the game. Maybe not an issue? Leaving this for the future
+
     void Start()
     {
         

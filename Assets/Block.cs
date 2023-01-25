@@ -86,20 +86,33 @@ public class Block : MonoBehaviour, IPointerClickHandler
     public virtual void PlaceBlock(int3 int3)
     {
         this.isPlacing = true;
-        SFXMaster.instance.PlayBlockPlace();
         this.blockPos = int3;
         this.blockOffset = new Vector3(0, 50, 0);
-        DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, 0, 0), 0.5f).onComplete += () =>
+        UpdateWorldPos();
+        if (Mathf.Abs(transform.position.x) < 100)
         {
+            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, 0, 0), 0.5f).onComplete += () =>
+            {
+                this.isPlacing = false;
+            };
+            SFXMaster.instance.PlayBlockPlace();
+        } else 
+        {
+            blockOffset = Vector3.zero;
             this.isPlacing = false;
-        };
-        // UpdateWorldPos();
+        }
     }
     public void RemoveBlock()
     {
         isPlacing = true;
-        DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 1f).onComplete += () => Destroy(gameObject);
-        SFXMaster.instance.PlayBlockDestroy();
+        if (Mathf.Abs(transform.position.x) < 100)
+        {
+            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 1f).onComplete += () => Destroy(gameObject);
+            SFXMaster.instance.PlayBlockDestroy();
+        } else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetLightPos(int3 LightPos)

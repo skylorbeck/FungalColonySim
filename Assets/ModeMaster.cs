@@ -24,6 +24,8 @@ public class ModeMaster : MonoBehaviour
     public TextMeshProUGUI modeText;
     public Button nextButton;
     public Button previousButton;
+
+    public Image[] dots;
     private void Start()
     {
         SetMode(Gamemode.BrownFarm);
@@ -40,6 +42,7 @@ public class ModeMaster : MonoBehaviour
     
     public void NextMode()
     {
+        SFXMaster.instance.PlayMenuClick();
         Gamemode mode = currentMode;
         mode++;
         
@@ -66,6 +69,7 @@ public class ModeMaster : MonoBehaviour
     
     public void PreviousMode()
     {
+        SFXMaster.instance.PlayMenuClick();
         Gamemode mode = currentMode;
         mode--;
         
@@ -94,7 +98,6 @@ public class ModeMaster : MonoBehaviour
     {
         lastMode = currentMode;
         currentMode = gamemode;
-        modeText.text = gamemode.ToString();
         BrownFarm.transform.DOComplete();
         RedFarm.transform.DOComplete();
         BlueFarm.transform.DOComplete();
@@ -103,6 +106,12 @@ public class ModeMaster : MonoBehaviour
         BrownFarmUpgrades.SetActive(false);
         RedFarmUpgrades.SetActive(false);
         BlueFarmUpgrades.SetActive(false);
+
+        dots[1].gameObject.SetActive(GameMaster.instance.SaveSystem.redUnlocked);
+        dots[2].gameObject.SetActive(GameMaster.instance.SaveSystem.blueUnlocked);
+        
+        dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
+        dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);
 
         int dist = left ? -distance : distance;
         
@@ -123,40 +132,35 @@ public class ModeMaster : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
+
+        modeText.DOComplete();
+        modeText.alpha = 1;
         switch (currentMode)
         {
             case Gamemode.BrownFarm:
-                /*if (!GameMaster.instance.brownBlockMaster.isWorldCreated)
-                {
-                    GameMaster.instance.brownBlockMaster.CreateWorld();
-                }*/
+                modeText.text = "Brown Mushroom Farm";
                 BrownFarm.transform.position = new Vector3(-dist, 0, 0);
                 BrownFarm.transform.DOMoveX(0, duration).onComplete = () => BrownFarmUpgrades.SetActive(true);
                 break;
             case Gamemode.RedFarm:
-                /*if (!GameMaster.instance.redBlockMaster.isWorldCreated)
-                {
-                    GameMaster.instance.redBlockMaster.CreateWorld();
-                }*/
+                modeText.text = "Red Mushroom Farm";
                 RedFarm.transform.position = new Vector3(-dist, 0, 0);
                 RedFarm.transform.DOMoveX(0, duration).onComplete = () => RedFarmUpgrades.SetActive(true);
                 break;
             case Gamemode.BlueFarm:
-                /*if (!GameMaster.instance.blueBlockMaster.isWorldCreated)
-                {
-                    GameMaster.instance.blueBlockMaster.CreateWorld();
-                }*/
+                modeText.text = "Blue Mushroom Farm";
                 BlueFarm.transform.position = new Vector3(-dist, 0, 0);
                 BlueFarm.transform.DOMoveX(0, duration).onComplete = () => BlueFarmUpgrades.SetActive(true);
                 break;
             case Gamemode.Hivemind:
+                modeText.text = "Hivemind Core";
                 Hivemind.transform.position = new Vector3(-dist, 0, 0);
                 Hivemind.transform.DOMoveX(0, duration);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");
         }
+        modeText.DOFade(0, 0.5f).SetDelay(1.5f);
     }
 
     public enum Gamemode

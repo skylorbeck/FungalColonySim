@@ -44,7 +44,7 @@ public class BlockMaster : MonoBehaviour
         mushroomBlocks = new List<MushroomBlock>();
         allBlocks = new List<Block>();
         dirtBlocks = new List<BiomeBlock>();
-        await CreateWorld();//TODO figure out why this isn't working.
+        await CreateWorld();
     }
 
     void Update()
@@ -260,3 +260,4 @@ public class BlockMaster : MonoBehaviour
         
     }
 }
+
