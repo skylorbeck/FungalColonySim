@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SaveSystem: MonoBehaviour
 {
@@ -22,6 +23,12 @@ public class SaveSystem: MonoBehaviour
     public uint hivemindPoints = 0;
     public bool redUnlocked = false;
     public bool blueUnlocked = false;
+    //hivemind skills
+    [FormerlySerializedAs("brownValue")] public float brownMultiplier;
+    [FormerlySerializedAs("redValue")] public float redMultiplier;
+    [FormerlySerializedAs("blueValue")] public float blueMultiplier;
+    //hivemind meta
+    public float hivemindPointValue;
 
     public void WipeSave()
     {

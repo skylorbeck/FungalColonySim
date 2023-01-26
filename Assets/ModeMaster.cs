@@ -18,6 +18,7 @@ public class ModeMaster : MonoBehaviour
     public GameObject BlueFarm;
     public GameObject BlueFarmUpgrades;
     public GameObject Hivemind;
+    public GameObject HivemindUpgrades;
     public Gamemode currentMode;
     public Gamemode lastMode;
 
@@ -106,6 +107,7 @@ public class ModeMaster : MonoBehaviour
         BrownFarmUpgrades.SetActive(false);
         RedFarmUpgrades.SetActive(false);
         BlueFarmUpgrades.SetActive(false);
+        HivemindUpgrades.SetActive(false);
 
         dots[1].gameObject.SetActive(GameMaster.instance.SaveSystem.redUnlocked);
         dots[2].gameObject.SetActive(GameMaster.instance.SaveSystem.blueUnlocked);
@@ -113,7 +115,7 @@ public class ModeMaster : MonoBehaviour
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);
 
-        int dist = left ? -distance : distance;
+        int dist = left ? distance : -distance;
         
         switch (lastMode)
         {
@@ -155,7 +157,7 @@ public class ModeMaster : MonoBehaviour
             case Gamemode.Hivemind:
                 modeText.text = "Hivemind Core";
                 Hivemind.transform.position = new Vector3(-dist, 0, 0);
-                Hivemind.transform.DOMoveX(0, duration);
+                Hivemind.transform.DOMoveX(0, duration).onComplete = () => HivemindUpgrades.SetActive(true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");

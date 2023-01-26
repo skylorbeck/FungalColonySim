@@ -39,6 +39,9 @@ public class ConvergenceMaster : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mushroomSpeedText;
     [SerializeField] private int mushroomSpeedCost = 100;
     [SerializeField] private TextMeshProUGUI mushroomSpeedCostText;
+    
+    [SerializeField] private TextMeshProUGUI convergencePointCostText;
+    [SerializeField] private TextMeshProUGUI convergenceSkillPointCostText;
 
     [Header("convergence menu")]
     [SerializeField] private TextMeshProUGUI rewardText;
@@ -200,6 +203,7 @@ public class ConvergenceMaster : MonoBehaviour
     {
         CalculateSporeReward();
         CalculateHivemindPointsReward();
+        
         totalSporeText.text = "+" + reward;
         spendableSporeText.text = GameMaster.instance.SaveSystem.sporeCount + " Spores";
         rewardText.text = "+"+reward + " spores";
@@ -220,11 +224,19 @@ public class ConvergenceMaster : MonoBehaviour
     private void CalculateSporeReward()
     {
         double sporeCost = Math.Pow(1.1, GameMaster.instance.SaveSystem.sporeCountTotal);
-        uint mushValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Brown], 1.5f);
-        mushValue += (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Red], 1.6f);
-        mushValue += (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Blue], 1.7f);
+        float brownMultiplier = 1 + (GameMaster.instance.SaveSystem.brownMultiplier * 0.01f);//TODO make this a skillpoint Upgrade
+        uint brownValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Brown]*brownMultiplier, 1.1f);
+
+        float redMultiplier = 1 + (GameMaster.instance.SaveSystem.redMultiplier * 0.01f);//TODO make this a skillpoint Upgrade
+        uint redValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Red]*redMultiplier, 1.3f);
+
+        float blueMultiplier = 1 + (GameMaster.instance.SaveSystem.blueMultiplier * 0.01f);//TODO make this a skillpoint Upgrade
+        uint blueValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Blue]*blueMultiplier, 1.5f);
+        
+        convergencePointCostText.text = "(" +brownValue + "+" + redValue + "+" + blueValue + ")\n" + sporeCost.ToString("0.00");
+
         // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(mushValue/sporeCost)));
-        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(mushValue / sporeCost)));
+        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)((brownValue+redValue+blueValue) / sporeCost)));
         uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);
         reward = rewardLog;
     }
@@ -232,7 +244,9 @@ public class ConvergenceMaster : MonoBehaviour
     private void CalculateHivemindPointsReward()
     {
         double pointCost = Math.Pow(1.1, GameMaster.instance.SaveSystem.hivemindPointsTotal);
-        uint pointValue = (uint)Mathf.Pow(GameMaster.instance.SaveSystem.sporeCountTotal+reward, 1.5f);
+        float pointMultiplier = 1 + (GameMaster.instance.SaveSystem.hivemindPointValue * 0.1f);//TODO make this a meta meta upgrade
+        uint pointValue = (uint)Mathf.Pow(reward*pointMultiplier, 1.5f);
+        convergenceSkillPointCostText.text = pointCost.ToString("0.00")+"\n"+pointValue.ToString("0.00");
         // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(pointValue/sporeCost)));
         int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(pointValue / pointCost)));
         uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);

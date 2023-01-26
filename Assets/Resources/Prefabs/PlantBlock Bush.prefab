@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2357791807472234534}
   - component: {fileID: 2357791807472234533}
+  - component: {fileID: 434934288888178411}
   m_Layer: 0
   m_Name: PlantBlock Bush
   m_TagString: Untagged
@@ -53,12 +54,38 @@ MonoBehaviour:
   blockDistance: 2.75
   spriteRenderer: {fileID: 2357791808781066723}
   shadowDistance: 7.5
+  tooltipText: 
+  lightPos:
+    x: 0
+    y: 0
+    z: 0
+  lastLightPos:
+    x: 0
+    y: 0
+    z: 0
+  isPlacing: 0
   plantType: 2
   isDead: 0
   isGrowing: 0
   growthTimer: 0
   growthTime: 10
   verticalOffset: 2
+--- !u!58 &434934288888178411
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357791807472234536}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.1}
+  serializedVersion: 2
+  m_Radius: 2.5
 --- !u!1 &2357791808781066724
 GameObject:
   m_ObjectHideFlags: 0

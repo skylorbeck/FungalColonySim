@@ -26,6 +26,7 @@ public class GameMaster : MonoBehaviour
     public UpgradeMaster blueUpgradeMaster;
     
     //TODO Unlocks for red and blue mushrooms
+    //TODO Red and Blue Mushrooms have different growth times
 
     void Start()
     {

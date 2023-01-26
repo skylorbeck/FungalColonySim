@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -23,6 +24,8 @@ public class MushroomBlock : Block
     void Start()
     {
         UpdateSprite();
+        UpdateGrowthTime();
+
         if (mushroomPop==null)
         {
             mushroomPop = new GameObject();
@@ -71,6 +74,7 @@ public class MushroomBlock : Block
         {
             plantTypePrevious = mushroomType;
             UpdateSprite();
+            UpdateGrowthTime();
         }
         
         base.Update();
@@ -86,6 +90,24 @@ public class MushroomBlock : Block
         }
         this.name = "Mushroom " + mushroomType +" "+ blockPos;
 
+    }
+
+    private void UpdateGrowthTime()
+    {
+        switch (mushroomType)
+        {
+            case MushroomType.Brown:
+                growthTime = 5;
+                break;
+            case MushroomType.Red:
+                growthTime = 7;
+                break;
+            case MushroomType.Blue:
+                growthTime = 12;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     public override void OnPointerClick(PointerEventData eventData)

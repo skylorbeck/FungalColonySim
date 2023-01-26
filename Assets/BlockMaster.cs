@@ -69,6 +69,21 @@ public class BlockMaster : MonoBehaviour
     private float GetMushPerSec()
     {
         float mushPerSec = 0;
+        float growthTimeWithHarvestTime;
+        switch (currentMushroomType)
+        {
+            case MushroomBlock.MushroomType.Brown:
+                growthTimeWithHarvestTime = 6f;
+                break;
+            case MushroomBlock.MushroomType.Red:
+                growthTimeWithHarvestTime = 8f;
+                break;
+            case MushroomBlock.MushroomType.Blue:
+                growthTimeWithHarvestTime = 13f;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         if (GameMaster.instance.SaveSystem.autoHarvest[(int)currentMushroomType])
         {
             mushPerSec = ((GameMaster.instance.SaveSystem.autoHarvestSpeed[(int)currentMushroomType]*0.1f)
@@ -77,7 +92,7 @@ public class BlockMaster : MonoBehaviour
                           
                           +(1 + GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType])
                           
-                          * GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]) / 6f;
+                          * GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]) / growthTimeWithHarvestTime;
         }
         //truncate to 2 decimal places
         return (float) Math.Round(mushPerSec, 2);
