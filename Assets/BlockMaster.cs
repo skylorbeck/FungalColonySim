@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Task = System.Threading.Tasks.Task;
 
@@ -33,9 +36,14 @@ public class BlockMaster : MonoBehaviour
     public GameObject enrichButton;
     
     public TextMeshProUGUI MushPerSecText;
-    
-    
-    
+    public Image mushPerSecTimerImage;
+    public float timer = 0;
+    public float seconds = 0;
+    public float mushPerSec = 0;
+    public float mushPerTenSec = 0;
+    public uint mushOneSecondAgo = 0;
+    public uint mushTenSecondAgo = 0;
+
     public MushroomBlock.MushroomType currentMushroomType = MushroomBlock.MushroomType.Brown;
 
     async void Start()
@@ -45,6 +53,8 @@ public class BlockMaster : MonoBehaviour
         allBlocks = new List<Block>();
         dirtBlocks = new List<BiomeBlock>();
         await CreateWorld();
+        UpdateMushPerSec();
+        UpdateMushPerTenSec();
     }
 
     void Update()
@@ -62,8 +72,38 @@ public class BlockMaster : MonoBehaviour
             selectionBlock.SetBlockPos(mousePos);
 
         }
-        
-        MushPerSecText.text = "MPS: " + GetMushPerSec();
+
+        if (timer>1f)
+        {
+            timer = 0;
+            seconds++;
+            if (seconds>10)
+            {
+                seconds = 0;
+                UpdateMushPerTenSec();
+            }
+            UpdateMushPerSec();
+        }
+        else
+        {
+            timer += Time.deltaTime;
+        }
+        DOTween.To(()=>mushPerSecTimerImage.fillAmount, x=>mushPerSecTimerImage.fillAmount = x, (seconds/10f)*0.725f, 1f);
+            
+        // MushPerSecText.text = "MPS: " + GetMushPerSec();
+    }
+
+    private void UpdateMushPerSec()
+    {
+        mushPerSec = (GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType] - mushOneSecondAgo);
+        mushOneSecondAgo = GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType];
+        MushPerSecText.text = "MPS: " + mushPerTenSec + " (" + mushPerSec + ")";
+    }
+
+    public void UpdateMushPerTenSec()
+    {
+        mushPerTenSec = (GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType] - mushTenSecondAgo)/10f;
+        mushTenSecondAgo = GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType];
     }
 
     private float GetMushPerSec()
@@ -94,7 +134,6 @@ public class BlockMaster : MonoBehaviour
                           
                           * GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]) / growthTimeWithHarvestTime;
         }
-        //truncate to 2 decimal places
         return (float) Math.Round(mushPerSec, 2);
     }
 

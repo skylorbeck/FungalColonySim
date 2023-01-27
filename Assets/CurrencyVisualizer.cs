@@ -9,10 +9,22 @@ using UnityEngine.UI;
 public class CurrencyVisualizer : MonoBehaviour
 {
     public Currency currency;
-    public int amount;
     [SerializeField] private TextMeshProUGUI text;
     [FormerlySerializedAs("spriteRenderer")] [SerializeField] private Image image;
+
     void Start()
+    {
+        SetCurrencyAndUpdateVisuals(currency);
+    }
+    
+    
+    public void SetCurrencyAndUpdateVisuals(Currency currency)
+    {
+        SetCurrency(currency);
+        UpdateVisuals();
+    }
+
+    private void FixedUpdate()
     {
         SetCurrency(currency);
     }
@@ -40,7 +52,6 @@ public class CurrencyVisualizer : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
         }
-        UpdateVisuals();
     }
 
     private void UpdateVisuals()

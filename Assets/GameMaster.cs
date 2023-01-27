@@ -25,8 +25,15 @@ public class GameMaster : MonoBehaviour
     public UpgradeMaster redUpgradeMaster;
     public UpgradeMaster blueUpgradeMaster;
     
-    //TODO Unlocks for red and blue mushrooms
-    //TODO Red and Blue Mushrooms have different growth times
+    public ConvergenceMaster convergenceMaster;
+    [SerializeField] private bool isConverging;
+
+    public Hivemind Hivemind;
+
+    public int saveTimer = 0;
+
+    //TODO reset button
+    //TODO red and blue upgrades have different scaling?
 
     void Start()
     {
@@ -68,6 +75,7 @@ public class GameMaster : MonoBehaviour
     
     public async Task Prestige()
     {
+        isConverging = true;
         await Task.WhenAll(brownBlockMaster.DissolveWorld(), redBlockMaster.DissolveWorld(), blueBlockMaster.DissolveWorld());
         ScoreMaster.instance.Reset();
         brownUpgradeMaster.Reset();
@@ -77,11 +85,17 @@ public class GameMaster : MonoBehaviour
         SaveSystem.totalConverges++;
         SaveSystem.Save();
         ModeMaster.UpdateButton();
+        isConverging = false;
     }
 
     void FixedUpdate()
     {
-        
+        saveTimer++;
+        if (saveTimer>300 && !convergenceMaster.inStore && !isConverging)
+        {
+            saveTimer = 0;
+            SaveSystem.Save();
+        }
     }
 
     public void OnDestroy()

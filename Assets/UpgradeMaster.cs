@@ -18,7 +18,7 @@ public class UpgradeMaster : MonoBehaviour
     [SerializeField] private Button autoHarvestSpeedButton;
     [SerializeField] private TextMeshProUGUI autoHarvestSpeedText;
     [SerializeField] private uint autoHarvestSpeedCost = 50;
-    [SerializeField] private uint autoHarvestSpeedRatio = 3;
+    [SerializeField] private uint autoHarvestSpeedRatio = 2;
     [SerializeField] private bool autoHarvestSpeedVisible = false;
 
     [Header("Growth Speed")]
@@ -63,8 +63,6 @@ public class UpgradeMaster : MonoBehaviour
             autoHarvestButton.gameObject.SetActive(false);
         }
     }
-    
-   
     
     public void PurchaseAutoHarvestSpeed()
     {

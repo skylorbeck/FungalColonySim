@@ -109,11 +109,7 @@ public class ModeMaster : MonoBehaviour
         BlueFarmUpgrades.SetActive(false);
         HivemindUpgrades.SetActive(false);
 
-        dots[1].gameObject.SetActive(GameMaster.instance.SaveSystem.redUnlocked);
-        dots[2].gameObject.SetActive(GameMaster.instance.SaveSystem.blueUnlocked);
-        
-        dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
-        dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);
+        UpdateDots();
 
         int dist = left ? distance : -distance;
         
@@ -172,4 +168,12 @@ public class ModeMaster : MonoBehaviour
         BlueFarm,
         Hivemind,
     }
+
+    public void UpdateDots()
+    {
+        dots[1].gameObject.SetActive(GameMaster.instance.SaveSystem.redUnlocked);
+        dots[2].gameObject.SetActive(GameMaster.instance.SaveSystem.blueUnlocked);
+        
+        dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
+        dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);    }
 }

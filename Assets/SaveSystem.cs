@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +8,7 @@ using UnityEngine.Serialization;
 
 public class SaveSystem: MonoBehaviour
 {
+    public uint saveVersion = 1;
     public uint[] mushrooms = new uint[3];//per run
     public uint[] mushroomBlockCount = new uint[3];
     public uint[] mushroomCount = new uint[3];//total 
@@ -24,15 +26,26 @@ public class SaveSystem: MonoBehaviour
     public bool redUnlocked = false;
     public bool blueUnlocked = false;
     //hivemind skills
-    [FormerlySerializedAs("brownValue")] public float brownMultiplier;
-    [FormerlySerializedAs("redValue")] public float redMultiplier;
-    [FormerlySerializedAs("blueValue")] public float blueMultiplier;
+    [FormerlySerializedAs("brownValue")] 
+    public uint brownMultiplier;
+    [FormerlySerializedAs("redValue")] 
+    public uint redMultiplier;
+    [FormerlySerializedAs("blueValue")] 
+    public uint blueMultiplier;
     //hivemind meta
     public float hivemindPointValue;
+    public bool goldenSporeUnlocked;
+    //version 1 end
+
+  
 
     public void WipeSave()
     {
-        string json = JsonUtility.ToJson(new SaveFile());
+        SaveFile save = new SaveFile
+        {
+            saveVersion = this.saveVersion
+        };
+        string json = JsonUtility.ToJson(save);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
         Load();
     }
@@ -52,6 +65,13 @@ public class SaveSystem: MonoBehaviour
 
         string json = File.ReadAllText(Application.persistentDataPath + "/savefile.json");
         SaveFile save = JsonUtility.FromJson<SaveFile>(json);
+        
+        if (save.saveVersion <1)
+        {
+            this.WipeSave();
+            return false;
+        }
+        
         mushrooms = save.mushrooms;
         mushroomBlockCount = save.mushroomBlockCount;
         for (var i = 0; i < mushroomBlockCount.Length; i++)
@@ -75,9 +95,27 @@ public class SaveSystem: MonoBehaviour
         hivemindPoints = save.hivemindPoints;
         redUnlocked = save.redUnlocked;
         blueUnlocked = save.blueUnlocked;
+        hivemindPointValue = save.hivemindPointValue;
+        goldenSporeUnlocked = save.goldenSporeUnlocked;
+        brownMultiplier = save.brownMultiplier;
+        redMultiplier = save.redMultiplier;
+        blueMultiplier = save.blueMultiplier;
+        
         return true;
     }
-
+    public bool SpendSpores(uint amount)
+    {
+        if (GameMaster.instance.SaveSystem.sporeCount < amount) return false;
+        GameMaster.instance.SaveSystem.sporeCount-= amount;
+        return true;
+    }
+    
+    public bool SpendHivemindPoints(uint amount)
+    {
+        if (GameMaster.instance.SaveSystem.hivemindPoints < amount) return false;
+        GameMaster.instance.SaveSystem.hivemindPoints-= amount;
+        return true;
+    }
 
     public class SaveFile
     {
@@ -87,6 +125,7 @@ public class SaveSystem: MonoBehaviour
         }
         public SaveFile(SaveSystem save)
         {
+            saveVersion = save.saveVersion;
             mushrooms = save.mushrooms;
             mushroomBlockCount = save.mushroomBlockCount;
             mushroomCount = save.mushroomCount;
@@ -103,8 +142,13 @@ public class SaveSystem: MonoBehaviour
             blueUnlocked = save.blueUnlocked;
             hivemindPointsTotal = save.hivemindPointsTotal;
             hivemindPoints = save.hivemindPoints;
+            hivemindPointValue = save.hivemindPointValue;
+            goldenSporeUnlocked = save.goldenSporeUnlocked;
+            brownMultiplier = save.brownMultiplier;
+            redMultiplier = save.redMultiplier;
+            blueMultiplier = save.blueMultiplier;
         }
-        
+        public uint saveVersion = 0;
         public uint[] mushrooms = new uint[3];
         public uint[] mushroomBlockCount = new uint[3];
         public uint[] mushroomCount = new uint[3];
@@ -121,6 +165,12 @@ public class SaveSystem: MonoBehaviour
         public uint hivemindPoints = 0;
         public bool redUnlocked = false;
         public bool blueUnlocked = false;
+        public uint brownMultiplier;
+        public uint redMultiplier;
+        public uint blueMultiplier;
+        public float hivemindPointValue;
+        public bool goldenSporeUnlocked;
+
         
     }
 }

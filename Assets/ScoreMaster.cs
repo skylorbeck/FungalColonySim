@@ -118,7 +118,6 @@ public class ScoreMaster : MonoBehaviour
         GameMaster.instance.SaveSystem.mushrooms[(int)type] -= amount;
         UpdateMushroomText();
         return true;
-
     }
 
     public void Reset()
