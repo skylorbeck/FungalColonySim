@@ -18,13 +18,13 @@ public class GameMaster : MonoBehaviour
     [SerializeField] private Texture2D cursorTransparent;
     public Camera camera;
     public Tooltip tooltip;
-    
+
     public SaveSystem SaveSystem;
     public ModeMaster ModeMaster;
     public UpgradeMaster brownUpgradeMaster;
     public UpgradeMaster redUpgradeMaster;
     public UpgradeMaster blueUpgradeMaster;
-    
+
     public ConvergenceMaster convergenceMaster;
     [SerializeField] private bool isConverging;
 
@@ -34,6 +34,7 @@ public class GameMaster : MonoBehaviour
 
     //TODO reset button
     //TODO red and blue upgrades have different scaling?
+    //TODO Regenerate, a second layer of prestige that resets hivemind levels and gives a flat bonus to mushroom production
 
     void Start()
     {
@@ -46,6 +47,7 @@ public class GameMaster : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
         SaveSystem.Load();
         camera = Camera.main;
         Cursor.SetCursor(cursorSprite, Vector2.zero, CursorMode.Auto);
@@ -58,25 +60,27 @@ public class GameMaster : MonoBehaviour
         {
             Application.Quit();
         }
-        
+
         if (Input.GetMouseButtonDown(0))
         {
             Cursor.SetCursor(cursorClicking, Vector2.zero, CursorMode.Auto);
-        }/* else if (Input.GetMouseButtonDown(1))
+        } /* else if (Input.GetMouseButtonDown(1))
         {
             Cursor.SetCursor(cursorTransparent, Vector2.zero, CursorMode.Auto);
-        }*/ else if (Input.GetMouseButtonUp(0) /*|| Input.GetMouseButtonUp(1)*/)
+        }*/
+        else if (Input.GetMouseButtonUp(0) /*|| Input.GetMouseButtonUp(1)*/)
         {
             Cursor.SetCursor(cursorSprite, Vector2.zero, CursorMode.Auto);
         }
 
-        
+
     }
-    
+
     public async Task Prestige()
     {
         isConverging = true;
-        await Task.WhenAll(brownBlockMaster.DissolveWorld(), redBlockMaster.DissolveWorld(), blueBlockMaster.DissolveWorld());
+        await Task.WhenAll(brownBlockMaster.DissolveWorld(), redBlockMaster.DissolveWorld(),
+            blueBlockMaster.DissolveWorld());
         ScoreMaster.instance.Reset();
         brownUpgradeMaster.Reset();
         redUpgradeMaster.Reset();
@@ -91,7 +95,7 @@ public class GameMaster : MonoBehaviour
     void FixedUpdate()
     {
         saveTimer++;
-        if (saveTimer>300 && !convergenceMaster.inStore && !isConverging)
+        if (saveTimer > 300 && !convergenceMaster.inStore && !isConverging)
         {
             saveTimer = 0;
             SaveSystem.Save();

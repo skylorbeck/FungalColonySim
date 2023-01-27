@@ -1,95 +1,118 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Tooltip : MonoBehaviour
 {
     
-    [SerializeField] private GameObject target;
-    [SerializeField] private float waitTimer;
-    [SerializeField] private float fadeTimer;
     [SerializeField] private float waitTimerMax = 1f;
     [SerializeField] private float fadeTimerMax = 1f;
+    [SerializeField] private Vector2 offset;
 
     [SerializeField] private Image background;
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private RectTransform rectTransform;
     
-    [SerializeField] private Vector2 offset;
+    [SerializeField] private LayoutElement layoutElement;
+    [SerializeField] private TextMeshProUGUI header;
+    [SerializeField] private TextMeshProUGUI content;
+    public int characterWrapLimit = 30;
+    
 
     void Start()
     {
+        rectTransform = GetComponent<RectTransform>();    
+    }
+
+    private void Update()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        if (mousePos.x > Screen.width * 0.5f)
+        {
+            mousePos.x += offset.x;
+        }
+        else
+        {
+            mousePos.x -= offset.x;
+        }
+
+        if (mousePos.y > Screen.height * 0.5f)
+        {
+            mousePos.y += offset.y;
+        }
+        else
+        {
+            mousePos.y -= offset.y;
+        }
+
+        if (mousePos.x + rectTransform.rect.width * 0.5f > Screen.width)
+        {
+            mousePos.x = Screen.width - rectTransform.rect.width * 0.5f;
+        }
+        else if (mousePos.x - rectTransform.rect.width * 0.5f < 0)
+        {
+            mousePos.x = rectTransform.rect.width * 0.5f;
+        }
+
+        if (mousePos.y + rectTransform.rect.height * 0.5f > Screen.height)
+        {
+            mousePos.y = Screen.height - rectTransform.rect.height * 0.5f;
+        }
+        else if (mousePos.y - rectTransform.rect.height * 0.5f < 0)
+        {
+            mousePos.y = rectTransform.rect.height * 0.5f;
+        }
+
+        // rectTransform.pivot = new Vector2(mousePos.x / Screen.width, mousePos.y / Screen.height);
+        rectTransform.position = mousePos;
+    }
+
+    public void ShowToolTip(string headerText, string contentText)
+    {
+        gameObject.SetActive(true);//TODO make fade instead of instant
+        background.DOComplete();
+        header.DOComplete();
+        content.DOComplete();
+        
+        background.DOFade(0, 0);
+        header.DOFade(0, 0);
+        content.DOFade(0, 0);
+        layoutElement.enabled = content.text.Length > characterWrapLimit;
+        if (string.IsNullOrEmpty(headerText))
+        {
+            header.gameObject.SetActive(false);
+        } else
+        {
+            header.gameObject.SetActive(true);
+            header.text = headerText;
+            header.DOFade(1, fadeTimerMax).SetDelay(waitTimerMax);
+        }
+
+        if (string.IsNullOrEmpty(contentText))
+        {
+            content.gameObject.SetActive(false);
+        }
+        else
+        {
+            content.gameObject.SetActive(true);
+            content.text = contentText;
+            content.DOFade(1, fadeTimerMax).SetDelay(waitTimerMax);
+        }
+        
+        background.DOFade(1, fadeTimerMax).SetDelay(waitTimerMax);
         
     }
-
-    void Update()
-    {
-        if (target != null)
-        {
-            if (waitTimer < waitTimerMax)
-            {
-                waitTimer += Time.deltaTime;
-                if (waitTimer >= 0)
-                {
-                    fadeTimer = 0;
-                }
-            }
-            else
-            {
-                Vector3 targetPosition = GameMaster.instance.camera.WorldToScreenPoint(target.transform.position);
-                transform.position = targetPosition + (Vector3)offset;
-
-                if (fadeTimer < fadeTimerMax)
-                {
-                    fadeTimer += Time.deltaTime;
-                    Color color = Color.gray;
-                    color.a = fadeTimer / fadeTimerMax;
-                    background.color = color;
-                    color = Color.white;
-                    color.a = fadeTimer / fadeTimerMax;
-                    text.color = color;
-                }
-            }
-        }
-    }
-
-    public void SetTarget(GameObject target)
-    {
-        if (this.target== target)
-        {
-            ClearTarget();
-            return;
-        }
-        ToolTipData data = target.GetComponent<ToolTipData>();
-        if (data != null)
-        {
-            text.text = data.GetToolTipText();
-        } else {
-            text.text = target.name;
-        }
-        this.target = target;
-        waitTimer = 0;
-        fadeTimer = 0;
-        background.color = Color.clear;
-            text.color = new Color(1, 1, 1, 0);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(text.rectTransform);
-            // Canvas.ForceUpdateCanvases();
-            background.rectTransform.sizeDelta = new Vector2(text.preferredWidth + 10, text.preferredHeight + 10);
-    }
-    public void ClearTarget()
-    {
-        transform.position = new Vector3(-10000, -10000, 0);
-        target = null;
-    }
-    
-    public void ToggleTooltip(bool toggle)
-    {
-        gameObject.SetActive(toggle);
-    }
-
     void FixedUpdate()
     {
         
+    }
+
+    public void HideToolTip()
+    {
+        gameObject.SetActive(false);
     }
 }

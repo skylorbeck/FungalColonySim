@@ -314,7 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -455,7 +455,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Brown Value +5%
+  m_text: Brown Value +50%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
   m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
@@ -482,7 +482,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.85
+  m_fontSize: 19.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -584,7 +584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -721,7 +721,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1241,7 +1241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2977,6 +2977,7 @@ GameObject:
   - component: {fileID: 222787402}
   - component: {fileID: 222787401}
   - component: {fileID: 222787400}
+  - component: {fileID: 222787403}
   m_Layer: 5
   m_Name: UnlockBlue
   m_TagString: Untagged
@@ -3101,6 +3102,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 222787398}
   m_CullTransparentMesh: 1
+--- !u!114 &222787403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222787398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Unlocks a Blue Mushroom Farm
 --- !u!1 &235034968
 GameObject:
   m_ObjectHideFlags: 0
@@ -4120,7 +4135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4749,31 +4764,13 @@ GameObject:
   - component: {fileID: 382068364}
   - component: {fileID: 382068363}
   - component: {fileID: 382068362}
-  - component: {fileID: 382068361}
   m_Layer: 5
   m_Name: TooltipCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &382068361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382068360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
+  m_IsActive: 1
 --- !u!114 &382068362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4816,7 +4813,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &382068364
 RectTransform:
@@ -4942,6 +4939,7 @@ GameObject:
   - component: {fileID: 395872544}
   - component: {fileID: 395872543}
   - component: {fileID: 395872542}
+  - component: {fileID: 395872545}
   m_Layer: 5
   m_Name: AutoHarvestButton
   m_TagString: Untagged
@@ -5066,6 +5064,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395872540}
   m_CullTransparentMesh: 1
+--- !u!114 &395872545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395872540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Automagically harvest fully grown mushrooms after 1s
 --- !u!1 &399849518
 GameObject:
   m_ObjectHideFlags: 0
@@ -5289,6 +5301,7 @@ GameObject:
   - component: {fileID: 407311534}
   - component: {fileID: 407311533}
   - component: {fileID: 407311532}
+  - component: {fileID: 407311535}
   m_Layer: 5
   m_Name: UnlockRed
   m_TagString: Untagged
@@ -5413,6 +5426,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407311530}
   m_CullTransparentMesh: 1
+--- !u!114 &407311535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407311530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Unlocks a Red Mushroom Farm
 --- !u!1 &411970497
 GameObject:
   m_ObjectHideFlags: 0
@@ -5601,7 +5628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -5637,6 +5664,7 @@ GameObject:
   - component: {fileID: 423500214}
   - component: {fileID: 423500213}
   - component: {fileID: 423500212}
+  - component: {fileID: 423500215}
   m_Layer: 5
   m_Name: AutoHarvestButton
   m_TagString: Untagged
@@ -5761,6 +5789,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 423500210}
   m_CullTransparentMesh: 1
+--- !u!114 &423500215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423500210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Automagically harvest fully grown mushrooms after 1s
 --- !u!1 &433281713
 GameObject:
   m_ObjectHideFlags: 0
@@ -6758,6 +6800,7 @@ GameObject:
   - component: {fileID: 473426657}
   - component: {fileID: 473426659}
   - component: {fileID: 473426658}
+  - component: {fileID: 473426660}
   m_Layer: 5
   m_Name: RedMushBanner
   m_TagString: Untagged
@@ -6827,6 +6870,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 473426656}
   m_CullTransparentMesh: 1
+--- !u!114 &473426660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473426656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: Red Mushrooms
+  tooltipContent: 'Grows in 7 seconds
+
+    Value Scales at e^1.3'
 --- !u!1 &490749152
 GameObject:
   m_ObjectHideFlags: 0
@@ -8307,6 +8366,142 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 626472056}
+  m_CullTransparentMesh: 1
+--- !u!1 &635941129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 635941130}
+  - component: {fileID: 635941133}
+  - component: {fileID: 635941132}
+  m_Layer: 5
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &635941130
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635941129}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1805973533}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 250, y: -123.494995}
+  m_SizeDelta: {x: 480, y: 132.47}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &635941132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635941129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test
+    Test
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
+  m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4290756543
+  m_fontColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 24
+  m_fontSizeBase: 24
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &635941133
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635941129}
   m_CullTransparentMesh: 1
 --- !u!1 &646568109
 GameObject:
@@ -11378,6 +11573,7 @@ GameObject:
   - component: {fileID: 906842271}
   - component: {fileID: 906842273}
   - component: {fileID: 906842272}
+  - component: {fileID: 906842274}
   m_Layer: 5
   m_Name: BrownMushBanner
   m_TagString: Untagged
@@ -11447,6 +11643,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906842270}
   m_CullTransparentMesh: 1
+--- !u!114 &906842274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906842270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: Brown Mushrooms
+  tooltipContent: 'Grows in 5 seconds
+
+    Value Scales at e^1.1'
 --- !u!1 &910958959
 GameObject:
   m_ObjectHideFlags: 0
@@ -11458,6 +11670,7 @@ GameObject:
   - component: {fileID: 910958960}
   - component: {fileID: 910958962}
   - component: {fileID: 910958961}
+  - component: {fileID: 910958963}
   m_Layer: 5
   m_Name: BlueMushBanner
   m_TagString: Untagged
@@ -11527,6 +11740,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 910958959}
   m_CullTransparentMesh: 1
+--- !u!114 &910958963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910958959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: Blue Mushrooms
+  tooltipContent: 'Grows in 12 seconds
+
+    Value Scales at e^1.5'
 --- !u!1 &914406813
 GameObject:
   m_ObjectHideFlags: 0
@@ -11579,7 +11808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -12279,7 +12508,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Red Value +5%
+  m_text: Red Value +50%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
   m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
@@ -12306,7 +12535,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.85
+  m_fontSize: 20.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -12820,6 +13049,7 @@ GameObject:
   - component: {fileID: 1040989681}
   - component: {fileID: 1040989680}
   - component: {fileID: 1040989679}
+  - component: {fileID: 1040989682}
   m_Layer: 5
   m_Name: BuySoilButton
   m_TagString: Untagged
@@ -12944,6 +13174,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040989677}
   m_CullTransparentMesh: 1
+--- !u!114 &1040989682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040989677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Replace a block of dirt with a block of grass
 --- !u!224 &1045732470 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8887294965721501410, guid: 125601bcb7b77824a9f1059b7c33f169, type: 3}
@@ -14682,7 +14926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -16077,7 +16321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -16595,6 +16839,7 @@ GameObject:
   - component: {fileID: 1289313589}
   - component: {fileID: 1289313588}
   - component: {fileID: 1289313587}
+  - component: {fileID: 1289313590}
   m_Layer: 5
   m_Name: AutoHarvestButton
   m_TagString: Untagged
@@ -16719,6 +16964,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289313585}
   m_CullTransparentMesh: 1
+--- !u!114 &1289313590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289313585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Automagically harvest fully grown mushrooms after 1s
 --- !u!1 &1299323278
 GameObject:
   m_ObjectHideFlags: 0
@@ -17349,7 +17608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -18771,19 +19030,19 @@ MonoBehaviour:
   brownValueCost: 2
   brownValueRatio: 2
   brownValueMax: 100
-  brownValueMultiplierGain: 0.05
+  brownValueMultiplierGain: 0.5
   redValueButton: {fileID: 1064314150}
   redValueText: {fileID: 490749154}
   redValueCost: 3
   redValueRatio: 2
   redValueMax: 100
-  redValueMultiplierGain: 0.05
+  redValueMultiplierGain: 0.5
   blueValueButton: {fileID: 1126756399}
   blueValueText: {fileID: 1537254108}
   blueValueCost: 4
   blueValueRatio: 2
   blueValueMax: 100
-  blueValueMultiplierGain: 0.05
+  blueValueMultiplierGain: 0.5
   goldenSporeButton: {fileID: 2130241132}
   goldenSporeText: {fileID: 2114682587}
   goldenSporeCost: 5
@@ -19904,6 +20163,7 @@ GameObject:
   - component: {fileID: 1675400588}
   - component: {fileID: 1675400587}
   - component: {fileID: 1675400586}
+  - component: {fileID: 1675400589}
   m_Layer: 5
   m_Name: BuySoilButton
   m_TagString: Untagged
@@ -20028,6 +20288,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675400584}
   m_CullTransparentMesh: 1
+--- !u!114 &1675400589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675400584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Replace a block of dirt with a block of grass
 --- !u!1 &1688270896
 GameObject:
   m_ObjectHideFlags: 0
@@ -20733,13 +21007,16 @@ GameObject:
   - component: {fileID: 1805973536}
   - component: {fileID: 1805973535}
   - component: {fileID: 1805973537}
+  - component: {fileID: 1805973539}
+  - component: {fileID: 1805973538}
+  - component: {fileID: 1805973540}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1805973533
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20753,13 +21030,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1998800315}
+  - {fileID: 635941130}
   m_Father: {fileID: 382068364}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -10000, y: -10000}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 199.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1805973535
 MonoBehaviour:
@@ -20774,7 +21052,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.45400003, g: 0.45400003, b: 0.45400003, a: 1}
+  m_Color: {r: 0.25, g: 0.25, b: 0.25, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -20811,14 +21089,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84913ba26aa706e4eaa1263f1840ea62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  waitTimer: 0
-  fadeTimer: 0
   waitTimerMax: 1
   fadeTimerMax: 0.5
+  offset: {x: -150, y: -150}
   background: {fileID: 1805973535}
-  text: {fileID: 1998800316}
-  offset: {x: 0, y: 200}
+  rectTransform: {fileID: 0}
+  layoutElement: {fileID: 1805973540}
+  header: {fileID: 1998800316}
+  content: {fileID: 635941132}
+  characterWrapLimit: 0
+--- !u!114 &1805973538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805973532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
+--- !u!114 &1805973539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805973532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 10
+    m_Right: 10
+    m_Top: 10
+    m_Bottom: 10
+  m_ChildAlignment: 1
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &1805973540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805973532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 400
+  m_MinHeight: 100
+  m_PreferredWidth: 500
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1807839011
 GameObject:
   m_ObjectHideFlags: 0
@@ -21076,7 +21415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -21838,6 +22177,7 @@ GameObject:
   - component: {fileID: 1881378682}
   - component: {fileID: 1881378681}
   - component: {fileID: 1881378680}
+  - component: {fileID: 1881378683}
   m_Layer: 5
   m_Name: BuySoilButton
   m_TagString: Untagged
@@ -21962,6 +22302,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1881378678}
   m_CullTransparentMesh: 1
+--- !u!114 &1881378683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881378678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: 
+  tooltipContent: Replace a block of dirt with a block of grass
 --- !u!1 &1905764041
 GameObject:
   m_ObjectHideFlags: 0
@@ -23588,9 +23942,8 @@ GameObject:
   - component: {fileID: 1998800315}
   - component: {fileID: 1998800317}
   - component: {fileID: 1998800316}
-  - component: {fileID: 1998800318}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23611,9 +23964,9 @@ RectTransform:
   m_Father: {fileID: 1805973533}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 250, y: -33.629997}
   m_SizeDelta: {x: 320.63, y: 47.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1998800316
@@ -23713,20 +24066,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1998800314}
   m_CullTransparentMesh: 1
---- !u!114 &1998800318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1998800314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!1 &2014101894
 GameObject:
   m_ObjectHideFlags: 0
@@ -24132,7 +24471,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Golden Mushrooms
+  m_text: Golden Spores
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
   m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
@@ -24159,7 +24498,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17.45
+  m_fontSize: 28.2
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -24267,7 +24606,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Blue Value +5%
+  m_text: Blue Value +50%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
   m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
@@ -24294,7 +24633,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.85
+  m_fontSize: 19.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -24531,7 +24870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -24837,6 +25176,7 @@ GameObject:
   - component: {fileID: 2106908179}
   - component: {fileID: 2106908178}
   - component: {fileID: 2106908177}
+  - component: {fileID: 2106908180}
   m_Layer: 5
   m_Name: ConvergeButton
   m_TagString: Untagged
@@ -24961,6 +25301,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2106908175}
   m_CullTransparentMesh: 1
+--- !u!114 &2106908180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106908175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: Converge With The Hivemind
+  tooltipContent: Abandon your current farm for bonuses to production
 --- !u!1 &2114682585
 GameObject:
   m_ObjectHideFlags: 0
@@ -25108,6 +25462,7 @@ GameObject:
   - component: {fileID: 2130241134}
   - component: {fileID: 2130241133}
   - component: {fileID: 2130241132}
+  - component: {fileID: 2130241135}
   m_Layer: 5
   m_Name: GoldenSpore
   m_TagString: Untagged
@@ -25232,6 +25587,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130241130}
   m_CullTransparentMesh: 1
+--- !u!114 &2130241135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130241130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89827e48343d446c834bb09b72cfb011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipHeader: Golden Spores
+  tooltipContent: Gives each Mushroom a 2% chance to double harvest
 --- !u!1 &2144087954
 GameObject:
   m_ObjectHideFlags: 0

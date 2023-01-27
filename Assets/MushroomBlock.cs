@@ -5,6 +5,7 @@ using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class MushroomBlock : Block
 {
@@ -18,7 +19,9 @@ public class MushroomBlock : Block
     [SerializeField] private float verticalOffset;
     [SerializeField] private float harvestTimer;
     [SerializeField] private float harvestTime =1;
-
+    [SerializeField] private ParticleSystem goldenParticles;
+    public bool isGolden;
+    
     private GameObject mushroomPop;
 
     void Start()
@@ -145,8 +148,21 @@ public class MushroomBlock : Block
         {
             ScoreMaster.instance.AddMushroom(mushroomType);
         }
+
+        if (isGolden)
+        {
+            ScoreMaster.instance.AddMushroom(mushroomType);
+        }
         
-        // Destroy(mushroomPop, 1.5f);
+        isGolden = GameMaster.instance.SaveSystem.goldenSporeUnlocked && Random.value < 0.02f;
+        if (isGolden)
+        {
+            goldenParticles.Play();
+        }
+        else
+        {
+            goldenParticles.Stop();
+        }
 
         isGrowing = true;
         isGrown = false;

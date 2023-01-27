@@ -6,18 +6,19 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ToolTipData : MonoBehaviour
+public class ToolTipData : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public string[] toolTipText;
+    public string tooltipHeader;
+    [TextArea]
+    public string tooltipContent;
 
-    public string GetToolTipText()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        string concat = "";
-        foreach (var text in toolTipText)
-        {
-            concat += text + "\n";
-        }
+        GameMaster.instance.tooltip.ShowToolTip(tooltipHeader, tooltipContent);
+    }
 
-        return concat;
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameMaster.instance.tooltip.HideToolTip();
     }
 }

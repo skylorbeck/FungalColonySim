@@ -77,7 +77,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        GameMaster.instance.tooltip.SetTarget(gameObject);
+        // GameMaster.instance.tooltip.SetTarget(gameObject);
         transform.DOComplete();
         transform.lossyScale.Set(1, 1, 1);
         transform.DOPunchScale(new Vector3(-0.25f, -0.25f, -0.25f), 0.5f, 1, 0.5f);
