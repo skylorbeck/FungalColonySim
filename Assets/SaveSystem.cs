@@ -26,11 +26,8 @@ public class SaveSystem: MonoBehaviour
     public bool redUnlocked = false;
     public bool blueUnlocked = false;
     //hivemind skills
-    [FormerlySerializedAs("brownValue")] 
     public uint brownMultiplier;
-    [FormerlySerializedAs("redValue")] 
     public uint redMultiplier;
-    [FormerlySerializedAs("blueValue")] 
     public uint blueMultiplier;
     //hivemind meta
     public float hivemindPointValue;
@@ -60,13 +57,15 @@ public class SaveSystem: MonoBehaviour
     {
         if (!File.Exists(Application.persistentDataPath + "/savefile.json"))
         {
+            File.Create(Application.persistentDataPath + "/savefile.json").Dispose();
+            this.WipeSave();
             return false;
         }
 
         string json = File.ReadAllText(Application.persistentDataPath + "/savefile.json");
         SaveFile save = JsonUtility.FromJson<SaveFile>(json);
         
-        if (save.saveVersion <1)
+        if (save.saveVersion <2)
         {
             this.WipeSave();
             return false;
@@ -121,8 +120,30 @@ public class SaveSystem: MonoBehaviour
     {
         public SaveFile()
         {
-            
+            saveVersion = 0;
+             mushrooms = new uint[3];
+             mushroomBlockCount = new uint[3];
+             mushroomCount = new uint[3];
+            sporeCountTotal = 0;
+            sporeCount = 0;
+             farmSize = new int2(0, 0);
+            mushroomMultiplier = 0;
+            mushroomSpeed = 0;
+            autoHarvest = new bool[3];
+             growthSpeedBonus = new uint[3];
+             autoHarvestSpeed = new uint[3];
+            totalConverges = 0;
+            hivemindPointsTotal = 0;
+            hivemindPoints = 0;
+             redUnlocked = false;
+             blueUnlocked = false;
+            brownMultiplier = 0;
+            redMultiplier = 0;
+            blueMultiplier= 0;
+             hivemindPointValue= 0;
+             goldenSporeUnlocked = false;
         }
+
         public SaveFile(SaveSystem save)
         {
             saveVersion = save.saveVersion;
