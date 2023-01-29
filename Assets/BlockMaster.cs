@@ -30,6 +30,7 @@ public class BlockMaster : MonoBehaviour
     public float floatDistance = 0.5f;
     public bool floatX = true;
     public bool floatY = true;
+    public bool floatFlipped = false;
     
     public int3 lastMousePos;
 
@@ -67,7 +68,7 @@ public class BlockMaster : MonoBehaviour
             foreach (Block block in allBlocks)
             {
                 block.SetLightPos(mousePos);
-                block.SetBlockOffset(new Vector3(0, Mathf.Sin(Time.time + (floatX?block.blockPos.x:0) + (floatY?block.blockPos.y:0))*floatDistance, 0));
+                block.SetBlockOffset(new Vector3(0, Mathf.Sin(  ((floatFlipped?1:-1)*Time.time) + (floatX?block.blockPos.x:0) + (floatY?block.blockPos.y:0))*floatDistance, 0));
             }
             selectionBlock.SetBlockPos(mousePos);
 
@@ -233,6 +234,8 @@ public class BlockMaster : MonoBehaviour
     {
         floatX = false;
         floatY = false;
+        floatFlipped = Random.value > 0.5f;
+
         while (!floatX && !floatY)
         {
             floatX = Random.value > 0.5f;

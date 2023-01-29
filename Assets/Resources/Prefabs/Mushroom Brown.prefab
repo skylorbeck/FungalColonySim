@@ -157,7 +157,7 @@ MonoBehaviour:
   growthTime: 5
   verticalOffset: 1
   harvestTimer: 0
-  harvestTime: 1
+  harvestTime: 3
   goldenParticles: {fileID: 5764884223871223053}
   isGolden: 0
 --- !u!58 &4776045387412388580

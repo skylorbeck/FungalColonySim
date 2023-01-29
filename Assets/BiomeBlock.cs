@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 
@@ -41,7 +42,13 @@ public class BiomeBlock : Block
         biomePrevious = biome;
         UpdateSprite();
     }
-  
+
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        //TODO harvest the mushroom above
+        base.OnPointerClick(eventData);
+    }
+
     void FixedUpdate()
     {
         

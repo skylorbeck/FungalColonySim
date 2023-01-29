@@ -21,4 +21,9 @@ public class ToolTipData : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         GameMaster.instance.tooltip.HideToolTip();
     }
+
+    private void OnDisable()
+    {
+        OnPointerExit(null);
+    }
 }

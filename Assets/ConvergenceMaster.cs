@@ -54,6 +54,9 @@ public class ConvergenceMaster : MonoBehaviour
     
     public uint reward= 0;
     public uint skillReward= 0;
+    
+    public float convergeWarningTimer = 0;
+    public uint convergeWarningTimerMax = 5;
     void Start()
     {
         convergenceStoreMenu.SetActive(false);
@@ -217,6 +220,17 @@ public class ConvergenceMaster : MonoBehaviour
         CalculateHivemindPointsReward();
 
         totalSporeText.text = "+" + reward +" : +"+ skillReward;
+
+        if (reward>5)
+        {
+            convergeWarningTimer += Time.fixedDeltaTime;
+        }
+        if (convergeWarningTimer > convergeWarningTimerMax)
+        {
+            convergeWarningTimer = 0;
+            totalSporeText.transform.DOPunchScale(Vector3.one*0.5f, 1f, 1, 0.25f);
+        }
+
         spendableSporeText.text = GameMaster.instance.SaveSystem.sporeCount + " Spores";
         rewardText.text = "+"+reward + " spores";
         skillRewardText.text = "+"+skillReward + " skill points";
@@ -233,6 +247,8 @@ public class ConvergenceMaster : MonoBehaviour
             return;
         }
     }
+    
+    
 
     private void CalculateSporeReward()
     {

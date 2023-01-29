@@ -32,6 +32,8 @@ public class GameMaster : MonoBehaviour
 
     public int saveTimer = 0;
 
+    //TODO better scaling upgrade
+    //TODO harvest mushrooms by clicking on floor
     //TODO reset button
     //TODO red and blue upgrades have different scaling?
     //TODO Regenerate, a second layer of prestige that resets hivemind levels and gives a flat bonus to mushroom production

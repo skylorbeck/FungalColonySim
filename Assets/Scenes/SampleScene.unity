@@ -6297,6 +6297,7 @@ MonoBehaviour:
   floatDistance: 0.25
   floatX: 1
   floatY: 1
+  floatFlipped: 0
   lastMousePos:
     x: 0
     y: 0
@@ -6370,6 +6371,7 @@ MonoBehaviour:
   floatDistance: 0.25
   floatX: 1
   floatY: 1
+  floatFlipped: 0
   lastMousePos:
     x: 0
     y: 0
@@ -9108,8 +9110,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 0}
-  m_SizeDelta: {x: 400, y: 50}
+  m_AnchoredPosition: {x: -200, y: 50}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &686061721
 MonoBehaviour:
@@ -9131,7 +9133,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (First Time? I suggest getting at least 5 Spores)
+  m_text: '(I suggest converging
+
+    around +5 Spores)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
   m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
@@ -9158,7 +9162,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.05
+  m_fontSize: 16
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9980,7 +9984,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2106908176}
   m_RootOrder: 2
@@ -10124,7 +10128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -68.37}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &767516153
@@ -13704,7 +13708,7 @@ GameObject:
   - component: {fileID: 1058443167}
   - component: {fileID: 1058443166}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Build Debugger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14396,7 +14400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -68.37}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1099959458
@@ -14616,6 +14620,7 @@ MonoBehaviour:
   floatDistance: 0.25
   floatX: 1
   floatY: 1
+  floatFlipped: 0
   lastMousePos:
     x: 0
     y: 0
@@ -17200,6 +17205,8 @@ MonoBehaviour:
   agreeToggle: {fileID: 1860543326}
   reward: 0
   skillReward: 0
+  convergeWarningTimer: 0
+  convergeWarningTimerMax: 5
 --- !u!4 &1299862565
 Transform:
   m_ObjectHideFlags: 0
