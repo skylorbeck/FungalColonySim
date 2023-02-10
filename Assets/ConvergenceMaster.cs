@@ -155,10 +155,10 @@ public class ConvergenceMaster : MonoBehaviour
     public void HideMenuButton()
     {
         rayBlocker.DOFade(0, 0.5f).onComplete += () => rayBlocker.gameObject.SetActive(false);
-        HideMenu();
+        StartCoroutine(HideMenu());
     }
     
-    public async Task HideMenu()
+    public IEnumerator HideMenu()
     {
         SFXMaster.instance.PlayMenuClick();
         float duration = 0.5f;
@@ -166,10 +166,10 @@ public class ConvergenceMaster : MonoBehaviour
         {
             convergenceMenu.SetActive(false);
         };
-        await Task.Delay((int)(duration * 1000));
+        yield return new WaitForSeconds(duration);
     }
     
-    public async void Converge()
+    public IEnumerator Converge()
     {
         // SFXMaster.instance.PlayMenuClick();
         GameMaster.instance.SaveSystem.sporeCountTotal += reward;
@@ -179,7 +179,7 @@ public class ConvergenceMaster : MonoBehaviour
 
         agreeToggle.isOn = false;
         confirmConvergeButton.interactable = false;
-        await HideMenu();
+        yield return StartCoroutine(HideMenu());
         ShowStoreMenu();
 
     }
@@ -195,10 +195,10 @@ public class ConvergenceMaster : MonoBehaviour
 
     public void CloseStoreButton()
     {
-        CloseStoreMenu();
+        StartCoroutine(CloseStoreMenu());
     }
     
-    public async void CloseStoreMenu()
+    public IEnumerator CloseStoreMenu()
     {
         inStore = false;
         exitStoreButton.interactable = false;
@@ -208,8 +208,8 @@ public class ConvergenceMaster : MonoBehaviour
         {
             convergenceStoreMenu.SetActive(false);
         };
-        await Task.Delay((int)(duration * 1000));
-        await GameMaster.instance.Prestige();
+        yield return new WaitForSeconds(duration);
+        yield return StartCoroutine(GameMaster.instance.Prestige());
         convergeButton.interactable = true;
 
     }

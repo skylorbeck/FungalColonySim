@@ -47,15 +47,16 @@ public class BlockMaster : MonoBehaviour
 
     public MushroomBlock.MushroomType currentMushroomType = MushroomBlock.MushroomType.Brown;
 
-    async void Start()
+    IEnumerator Start()
     {
         biomeBlocks = new List<BiomeBlock>();
         mushroomBlocks = new List<MushroomBlock>();
         allBlocks = new List<Block>();
         dirtBlocks = new List<BiomeBlock>();
-        await CreateWorld();
+        yield return StartCoroutine(CreateWorld());
         UpdateMushPerSec();
         UpdateMushPerTenSec();
+        
     }
 
     void Update()
@@ -230,7 +231,7 @@ public class BlockMaster : MonoBehaviour
 
     }
 
-    public async Task CreateWorld()
+    public IEnumerator CreateWorld()
     {
         floatX = false;
         floatY = false;
@@ -268,7 +269,7 @@ public class BlockMaster : MonoBehaviour
                 }
                 allBlocks.Add(block);
                 biomeBlocks.Add(block);
-                await Task.Delay(100);
+                yield return new WaitForSeconds(0.1f);
             }
         }
 
@@ -289,14 +290,14 @@ public class BlockMaster : MonoBehaviour
         if (dirtBlocks.Count ==0)
         {
             enrichButton.SetActive(false);
-            return;
+            yield break;
         }
         enrichButton.SetActive(true);
         isWorldCreated = true;
 
     }
 
-    public async Task DissolveWorld()
+    public IEnumerator DissolveWorld()
     {
         isWorldCreated = false;
         foreach (var block in mushroomBlocks)
@@ -307,7 +308,7 @@ public class BlockMaster : MonoBehaviour
         foreach (var block in allBlocks)
         {
             block.RemoveBlock();
-            await Task.Delay(100);
+            yield return new WaitForSeconds(0.1f);
         }
         biomeBlocks.Clear();
         mushroomBlocks.Clear();

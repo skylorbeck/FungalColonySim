@@ -13,9 +13,6 @@ public class GameMaster : MonoBehaviour
     [FormerlySerializedAs("blockMaster")] public BlockMaster brownBlockMaster;
     public BlockMaster redBlockMaster;
     public BlockMaster blueBlockMaster;
-    [SerializeField] private Texture2D cursorSprite;
-    [SerializeField] private Texture2D cursorClicking;
-    [SerializeField] private Texture2D cursorTransparent;
     public Camera camera;
     public Tooltip tooltip;
 
@@ -52,7 +49,6 @@ public class GameMaster : MonoBehaviour
 
         SaveSystem.Load();
         camera = Camera.main;
-        Cursor.SetCursor(cursorSprite, Vector2.zero, CursorMode.Auto);
     }
 
     void Update()
@@ -63,31 +59,30 @@ public class GameMaster : MonoBehaviour
             Application.Quit();
         }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Cursor.SetCursor(cursorClicking, Vector2.zero, CursorMode.Auto);
-        } /* else if (Input.GetMouseButtonDown(1))
-        {
-            Cursor.SetCursor(cursorTransparent, Vector2.zero, CursorMode.Auto);
-        }*/
-        else if (Input.GetMouseButtonUp(0) /*|| Input.GetMouseButtonUp(1)*/)
-        {
-            Cursor.SetCursor(cursorSprite, Vector2.zero, CursorMode.Auto);
-        }
-
 
     }
 
-    public async Task Prestige()
+    public IEnumerator Prestige()
     {
         isConverging = true;
-        await Task.WhenAll(brownBlockMaster.DissolveWorld(), redBlockMaster.DissolveWorld(),
-            blueBlockMaster.DissolveWorld());
+        Coroutine brown = StartCoroutine(brownBlockMaster.DissolveWorld());
+        Coroutine red = StartCoroutine(redBlockMaster.DissolveWorld());
+        Coroutine blue = StartCoroutine(blueBlockMaster.DissolveWorld());
+        yield return brown;
+        yield return red;
+        yield return blue;
+        
         ScoreMaster.instance.Reset();
         brownUpgradeMaster.Reset();
         redUpgradeMaster.Reset();
         blueUpgradeMaster.Reset();
-        await Task.WhenAll(brownBlockMaster.CreateWorld(), redBlockMaster.CreateWorld(), blueBlockMaster.CreateWorld());
+        Coroutine brown2 = StartCoroutine(brownBlockMaster.CreateWorld());
+        Coroutine red2 = StartCoroutine(redBlockMaster.CreateWorld());
+        Coroutine blue2 = StartCoroutine(blueBlockMaster.CreateWorld());
+        yield return brown2;
+        yield return red2;
+        yield return blue2;
+        
         SaveSystem.totalConverges++;
         SaveSystem.Save();
         ModeMaster.UpdateButton();
