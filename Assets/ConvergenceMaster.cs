@@ -168,6 +168,11 @@ public class ConvergenceMaster : MonoBehaviour
         };
         yield return new WaitForSeconds(duration);
     }
+
+    public void StartConverge()
+    {
+        StartCoroutine(Converge());
+    }
     
     public IEnumerator Converge()
     {

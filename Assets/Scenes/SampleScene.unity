@@ -7502,9 +7502,6 @@ MonoBehaviour:
   brownBlockMaster: {fileID: 1112615075}
   redBlockMaster: {fileID: 443011297}
   blueBlockMaster: {fileID: 440484631}
-  cursorSprite: {fileID: 2800000, guid: 7699d7fcaca7e4240802290135f92825, type: 3}
-  cursorClicking: {fileID: 2800000, guid: 1b5e3c7aebdd8e04f862b2c6e8538b55, type: 3}
-  cursorTransparent: {fileID: 2800000, guid: 1b5e3c7aebdd8e04f862b2c6e8538b55, type: 3}
   camera: {fileID: 519420031}
   tooltip: {fileID: 1805973537}
   SaveSystem: {fileID: 556978896}
@@ -23492,7 +23489,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1299862564}
         m_TargetAssemblyTypeName: ConvergenceMaster, Assembly-CSharp
-        m_MethodName: Converge
+        m_MethodName: StartConverge
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

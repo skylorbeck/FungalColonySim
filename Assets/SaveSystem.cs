@@ -33,7 +33,7 @@ public class SaveSystem: MonoBehaviour
     public float hivemindPointValue;
     public bool goldenSporeUnlocked;
     //version 1 end
-
+    
   
 
     public void WipeSave()
@@ -43,26 +43,33 @@ public class SaveSystem: MonoBehaviour
             saveVersion = this.saveVersion
         };
         string json = JsonUtility.ToJson(save);
+        
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+
+        
         Load();
     }
     
     public void Save()
     {
         string json = JsonUtility.ToJson(new SaveFile(this));
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+        string path = Application.persistentDataPath + "/savefile.json";
+
+        File.WriteAllText(path, json);
     }
 
     public bool Load() //returns success
     {
-        if (!File.Exists(Application.persistentDataPath + "/savefile.json"))
+        string path = Application.persistentDataPath + "/savefile.json";
+
+        if (!File.Exists(path))
         {
-            File.Create(Application.persistentDataPath + "/savefile.json").Dispose();
+            File.Create(path).Dispose();
             this.WipeSave();
             return false;
         }
 
-        string json = File.ReadAllText(Application.persistentDataPath + "/savefile.json");
+        string json = File.ReadAllText(path);
         SaveFile save = JsonUtility.FromJson<SaveFile>(json);
         
         if (save.saveVersion <2)
