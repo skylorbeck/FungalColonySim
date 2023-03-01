@@ -107,7 +107,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
         isPlacing = true;
         if (Mathf.Abs(transform.position.x) < 100)
         {
-            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 1f).onComplete += () => Destroy(gameObject);
+            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 0.5f).onComplete += () => Destroy(gameObject);
             SFXMaster.instance.PlayBlockDestroy();
         } else
         {

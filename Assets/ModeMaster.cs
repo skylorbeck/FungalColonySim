@@ -173,6 +173,8 @@ public class ModeMaster : MonoBehaviour
     {
         dots[1].gameObject.SetActive(GameMaster.instance.SaveSystem.redUnlocked);
         dots[2].gameObject.SetActive(GameMaster.instance.SaveSystem.blueUnlocked);
+        dots[3].gameObject.SetActive(GameMaster.instance.SaveSystem.sporeCountTotal > 0);
+        dots[0].gameObject.SetActive(GameMaster.instance.SaveSystem.sporeCountTotal > 0);
         
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);    }

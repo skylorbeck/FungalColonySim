@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 public class SaveSystem: MonoBehaviour
 {
-    public uint saveVersion = 1;
+    public uint saveVersion = 3;
     public uint[] mushrooms = new uint[3];//per run
     public uint[] mushroomBlockCount = new uint[3];
     public uint[] mushroomCount = new uint[3];//total 
@@ -52,10 +52,35 @@ public class SaveSystem: MonoBehaviour
     
     public void Save()
     {
-        string json = JsonUtility.ToJson(new SaveFile(this));
-        string path = Application.persistentDataPath + "/savefile.json";
-
-        File.WriteAllText(path, json);
+        SaveFile save = new SaveFile();
+        save.saveVersion = saveVersion;
+        save.mushrooms = mushrooms;
+        save.mushroomBlockCount = mushroomBlockCount;
+        save.mushroomCount = mushroomCount;
+        save.sporeCountTotal = sporeCountTotal;
+        save.sporeCount = sporeCount;
+        save.farmSize = farmSize;
+        save.mushroomMultiplier = mushroomMultiplier;
+        save.mushroomSpeed = mushroomSpeed;
+        save.autoHarvest = autoHarvest;
+        save.growthSpeedBonus = growthSpeedBonus;
+        save.autoHarvestSpeed = autoHarvestSpeed;
+        save.totalConverges = totalConverges;
+        save.hivemindPointsTotal = hivemindPointsTotal;
+        save.hivemindPoints = hivemindPoints;
+        save.redUnlocked = redUnlocked;
+        save.blueUnlocked = blueUnlocked;
+        //hivemind skills
+        save.brownMultiplier = brownMultiplier;
+        save.redMultiplier = redMultiplier;
+        save.blueMultiplier = blueMultiplier;
+        //hivemind meta
+        save.hivemindPointValue = hivemindPointValue;
+        save.goldenSporeUnlocked = goldenSporeUnlocked;
+        //version 1 end
+        
+        string json = JsonUtility.ToJson(save);
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
     public bool Load() //returns success
@@ -122,7 +147,7 @@ public class SaveSystem: MonoBehaviour
         GameMaster.instance.SaveSystem.hivemindPoints-= amount;
         return true;
     }
-
+[Serializable]
     public class SaveFile
     {
         public SaveFile()

@@ -2,15 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DG.Tweening;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class GameMaster : MonoBehaviour
 {
     public static GameMaster instance;
-    [FormerlySerializedAs("blockMaster")] public BlockMaster brownBlockMaster;
+    public BlockMaster brownBlockMaster;
     public BlockMaster redBlockMaster;
     public BlockMaster blueBlockMaster;
     public Camera camera;
@@ -28,6 +31,8 @@ public class GameMaster : MonoBehaviour
     public Hivemind Hivemind;
 
     public int saveTimer = 0;
+    public Image saveIcon;
+    public TextMeshProUGUI saveText;
 
     //TODO better scaling upgrade
     //TODO harvest mushrooms by clicking on floor
@@ -91,11 +96,18 @@ public class GameMaster : MonoBehaviour
 
     void FixedUpdate()
     {
+        TickSaver();
+    }
+
+    private void TickSaver()
+    {
         saveTimer++;
-        if (saveTimer > 300 && !convergenceMaster.inStore && !isConverging)
+        if (saveTimer > 500 && !convergenceMaster.inStore && !isConverging && (brownBlockMaster.isWorldCreated && redBlockMaster.isWorldCreated && blueBlockMaster.isWorldCreated))
         {
             saveTimer = 0;
             SaveSystem.Save();
+            saveIcon.DOFade(1, 0.1f).OnComplete(() => saveIcon.DOFade(0, 1f).SetEase(Ease.OutFlash));
+            saveText.DOFade(1, 0.1f).OnComplete(() => saveText.DOFade(0, 1f).SetEase(Ease.OutFlash));
         }
     }
 
