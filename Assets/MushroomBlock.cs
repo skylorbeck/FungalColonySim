@@ -159,10 +159,10 @@ public class MushroomBlock : Block
 
         if (isGolden)
         {
-            ScoreMaster.instance.AddMushroom(mushroomType);
+            ScoreMaster.instance.AddMushroom(mushroomType ,SaveSystem.instance.GetSaveFile().goldenMultiplier);
         }
 
-        isGolden = SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && Random.value < 0.02f;
+        isGolden = SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().goldenChanceMultiplier;//TODO make this an upgrade
         if (isGolden)
         {
             goldenParticles.Play();

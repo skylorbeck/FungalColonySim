@@ -66,6 +66,14 @@ public class SaveSystem : MonoBehaviour
         {
             Reset();
         }
+
+        if (saveFile.saveVersion < 3)
+        {
+            saveFile.saveVersion = 3;
+            saveFile.goldenMultiplier = 1;
+            saveFile.goldenChanceMultiplier = 1;
+        }
+        
         loaded = true;
     }
 
@@ -140,6 +148,8 @@ public class SaveSystem : MonoBehaviour
             blueMultiplier = 0;
             hivemindPointValue = 0;
             goldenSporeUnlocked = false;
+            goldenMultiplier = 1;
+            goldenChanceMultiplier = 1;
         }
 
         public uint saveVersion = 0;
@@ -164,5 +174,7 @@ public class SaveSystem : MonoBehaviour
         public uint blueMultiplier;
         public float hivemindPointValue;
         public bool goldenSporeUnlocked;
+        public uint goldenMultiplier;
+        public uint goldenChanceMultiplier;
     }
 }

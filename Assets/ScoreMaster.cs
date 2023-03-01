@@ -59,16 +59,12 @@ public class ScoreMaster : MonoBehaviour
 
     }
 
-    public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool silent = false)
+    public void AddMushroom(MushroomBlock.MushroomType mushroomType, uint amt = 1)
     {
         SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] +=
-            1 + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
+            amt + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
         SaveSystem.instance.GetSaveFile().mushroomCount[(int)mushroomType] +=
-            1 + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
-        if (silent)
-        {
-            return;
-        }
+            amt + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
 
         switch (mushroomType)
         {

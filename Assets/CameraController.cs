@@ -47,13 +47,13 @@ public class CameraController : MonoBehaviour
             grabCursor.enabled = true;
             grabCursor.transform.position = Input.mousePosition;
             grabCursorPointer.enabled = true;
-            Cursor.visible = false;
+            // Cursor.visible = false;
         } else if (Input.GetMouseButtonUp(1))
         {
             isDragging = false;
             grabCursor.enabled =false;
             grabCursorPointer.enabled = false;
-            Cursor.visible = true;
+            // Cursor.visible = true;
         }
 
         if (isDragging)

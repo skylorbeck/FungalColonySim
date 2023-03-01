@@ -51,6 +51,20 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     public Button goldenSporeButton;
     public TextMeshProUGUI goldenSporeText;
     public uint goldenSporeCost = 5;
+    
+    [Header("GoldenMulti")]
+    public Button goldenMultiButton;
+    public TextMeshProUGUI goldenMultiText;
+    public uint goldenMultiCost = 5;
+    public uint goldenMultiRatio = 2;
+    public uint goldenMultiMax = 5;
+    
+    [Header("GoldenChance")]
+    public Button goldenChanceButton;
+    public TextMeshProUGUI goldenChanceText;
+    public uint goldenChanceCost = 5;
+    public uint goldenChanceRatio = 2;
+    public uint goldenChanceMax = 25;
 
     void Start()
     {
@@ -60,6 +74,8 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         UpdateRedValueText();
         UpdateBlueValueText();
         goldenSporeText.text = goldenSporeCost + "x";
+        UpdateGoldenChanceText();
+        UpdateGoldenMultiText();
     }
 
     void Update()
@@ -155,6 +171,40 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             goldenSporeButton.gameObject.SetActive(false);
         }
     }
+    
+    public void UpdateGoldenMultiText()
+    {
+        goldenMultiCost = (uint)(Mathf.Pow(goldenMultiRatio, SaveSystem.instance.GetSaveFile().goldenMultiplier));
+        goldenMultiText.text = goldenMultiCost + "x";
+    }
+    
+    public void GoldenMulti()
+    {
+        if (SaveSystem.instance.SpendHivemindPoints(goldenMultiCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().goldenMultiplier++;
+            SaveSystem.instance.Save();
+            UpdateGoldenMultiText();
+        }
+    }
+    
+    public void UpdateGoldenChanceText()
+    {
+        goldenChanceCost = (uint)(Mathf.Pow(goldenChanceRatio, SaveSystem.instance.GetSaveFile().goldenChanceMultiplier));
+        goldenChanceText.text = goldenChanceCost + "x";
+    }
+    
+    public void GoldenChance()
+    {
+        if (SaveSystem.instance.SpendHivemindPoints(goldenChanceCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().goldenChanceMultiplier++;
+            SaveSystem.instance.Save();
+            UpdateGoldenChanceText();
+        }
+    }
 
     void FixedUpdate()
     {
@@ -213,6 +263,26 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         else
         {
             goldenSporeButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost;
+        }
+
+        if (goldenChanceButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax)|| !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        {
+            goldenChanceButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            goldenChanceButton.gameObject.SetActive(true);
+            goldenChanceButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost;
+        }
+
+        if (goldenMultiButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax)|| !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        {
+            goldenMultiButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            goldenMultiButton.gameObject.SetActive(true);
+            goldenMultiButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenMultiCost;
         }
     }
 
