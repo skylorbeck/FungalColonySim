@@ -19,7 +19,6 @@ public class GameMaster : MonoBehaviour
     public Camera camera;
     public Tooltip tooltip;
 
-    public SaveSystem SaveSystem;
     public ModeMaster ModeMaster;
     public UpgradeMaster brownUpgradeMaster;
     public UpgradeMaster redUpgradeMaster;
@@ -31,8 +30,7 @@ public class GameMaster : MonoBehaviour
     public Hivemind Hivemind;
 
     public int saveTimer = 0;
-    public Image saveIcon;
-    public TextMeshProUGUI saveText;
+
 
     //TODO better scaling upgrade
     //TODO harvest mushrooms by clicking on floor
@@ -40,7 +38,7 @@ public class GameMaster : MonoBehaviour
     //TODO red and blue upgrades have different scaling?
     //TODO Regenerate, a second layer of prestige that resets hivemind levels and gives a flat bonus to mushroom production
 
-    void Start()
+    IEnumerator Start()
     {
         if (instance == null)
         {
@@ -51,9 +49,9 @@ public class GameMaster : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        SaveSystem.Load();
         camera = Camera.main;
+        yield return new WaitUntil(() => SaveSystem.instance != null);
+        SaveSystem.instance.Load();
     }
 
     void Update()
@@ -88,8 +86,8 @@ public class GameMaster : MonoBehaviour
         yield return red2;
         yield return blue2;
         
-        SaveSystem.totalConverges++;
-        SaveSystem.Save();
+        SaveSystem.instance.GetSaveFile().totalConverges++;
+        SaveSystem.instance.Save();
         ModeMaster.UpdateButton();
         isConverging = false;
     }
@@ -105,14 +103,13 @@ public class GameMaster : MonoBehaviour
         if (saveTimer > 500 && !convergenceMaster.inStore && !isConverging && (brownBlockMaster.isWorldCreated && redBlockMaster.isWorldCreated && blueBlockMaster.isWorldCreated))
         {
             saveTimer = 0;
-            SaveSystem.Save();
-            saveIcon.DOFade(1, 0.1f).OnComplete(() => saveIcon.DOFade(0, 1f).SetEase(Ease.OutFlash));
-            saveText.DOFade(1, 0.1f).OnComplete(() => saveText.DOFade(0, 1f).SetEase(Ease.OutFlash));
+            SaveSystem.instance.Save();
+            
         }
     }
 
     public void OnDestroy()
     {
-        SaveSystem.Save();
+        SaveSystem.instance.Save();
     }
 }

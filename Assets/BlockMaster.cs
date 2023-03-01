@@ -97,15 +97,15 @@ public class BlockMaster : MonoBehaviour
 
     private void UpdateMushPerSec()
     {
-        mushPerSec = (GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType] - mushOneSecondAgo);
-        mushOneSecondAgo = GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType];
+        mushPerSec = (SaveSystem.instance.GetSaveFile().mushroomCount[(int)currentMushroomType] - mushOneSecondAgo);
+        mushOneSecondAgo = SaveSystem.instance.GetSaveFile().mushroomCount[(int)currentMushroomType];
         MushPerSecText.text = "MPS: " + mushPerTenSec + " (" + mushPerSec + ")";
     }
 
     public void UpdateMushPerTenSec()
     {
-        mushPerTenSec = (GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType] - mushTenSecondAgo)/10f;
-        mushTenSecondAgo = GameMaster.instance.SaveSystem.mushroomCount[(int)currentMushroomType];
+        mushPerTenSec = (SaveSystem.instance.GetSaveFile().mushroomCount[(int)currentMushroomType] - mushTenSecondAgo)/10f;
+        mushTenSecondAgo = SaveSystem.instance.GetSaveFile().mushroomCount[(int)currentMushroomType];
     }
 
     private float GetMushPerSec()
@@ -126,15 +126,15 @@ public class BlockMaster : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        if (GameMaster.instance.SaveSystem.autoHarvest[(int)currentMushroomType])
+        if (SaveSystem.instance.GetSaveFile().autoHarvest[(int)currentMushroomType])
         {
-            mushPerSec = ((GameMaster.instance.SaveSystem.autoHarvestSpeed[(int)currentMushroomType]*0.1f)
-                          +(GameMaster.instance.SaveSystem.growthSpeedBonus[(int)currentMushroomType]*5*0.1f)
-                          +(GameMaster.instance.SaveSystem.mushroomSpeed*0.05f)
+            mushPerSec = ((SaveSystem.instance.GetSaveFile().autoHarvestSpeed[(int)currentMushroomType]*0.1f)
+                          +(SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)currentMushroomType]*5*0.1f)
+                          +(SaveSystem.instance.GetSaveFile().mushroomSpeed*0.05f)
                           
-                          +(1 + GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType])
+                          +(1 + SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)currentMushroomType])
                           
-                          * GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]) / growthTimeWithHarvestTime;
+                          * SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)currentMushroomType]) / growthTimeWithHarvestTime;
         }
         return (float) Math.Round(mushPerSec, 2);
     }
@@ -165,9 +165,9 @@ public class BlockMaster : MonoBehaviour
 
     public void EnrichBlock()
     {
-        uint cost = (uint)Math.Pow(GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType], 2);
+        uint cost = (uint)Math.Pow(SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)currentMushroomType], 2);
         // Debug.Log(cost);
-        if (GameMaster.instance.SaveSystem.mushrooms[(int)currentMushroomType] < cost)
+        if (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentMushroomType] < cost)
         {
             return;
         }
@@ -205,7 +205,7 @@ public class BlockMaster : MonoBehaviour
         }
         // SFXMaster.instance.PlayBlockReplace();
         ScoreMaster.instance.SpendMushrooms(currentMushroomType,cost);
-        GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]++;
+        SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)currentMushroomType]++;
         switch (currentMushroomType)
         {
             case MushroomBlock.MushroomType.Brown:
@@ -243,16 +243,16 @@ public class BlockMaster : MonoBehaviour
             floatY = Random.value > 0.5f;
         }
         int blockCount = 0;
-        for (int x = 0; x < xMax+GameMaster.instance.SaveSystem.farmSize.x; x++)
+        for (int x = 0; x < xMax+SaveSystem.instance.GetSaveFile().farmSize.x; x++)
         {
-            for (int y = 0; y < yMax+GameMaster.instance.SaveSystem.farmSize.y; y++)
+            for (int y = 0; y < yMax+SaveSystem.instance.GetSaveFile().farmSize.y; y++)
             {
                 BiomeBlock block = Instantiate(biomeBlockPrefab, new Vector3(-10000,-10000, 0), Quaternion.identity, transform);
                 Biome biome = Biome.Dirt;
-                if (x == 0 || y == 0 || x == xMax+GameMaster.instance.SaveSystem.farmSize.x - 1 || y == yMax+GameMaster.instance.SaveSystem.farmSize.y - 1)
+                if (x == 0 || y == 0 || x == xMax+SaveSystem.instance.GetSaveFile().farmSize.x - 1 || y == yMax+SaveSystem.instance.GetSaveFile().farmSize.y - 1)
                 {
                     biome = Biome.Rock;
-                } else if (GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType]>blockCount)
+                } else if (SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)currentMushroomType]>blockCount)
                 {
                     biome = Biome.Grass;                    
                     blockCount++;
@@ -314,7 +314,7 @@ public class BlockMaster : MonoBehaviour
         mushroomBlocks.Clear();
         allBlocks.Clear();
         dirtBlocks.Clear();
-        GameMaster.instance.SaveSystem.mushroomBlockCount[(int)currentMushroomType] = 1;
+        SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)currentMushroomType] = 1;
         
     }
 }

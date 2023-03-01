@@ -52,8 +52,8 @@ public class MushroomBlock : Block
         if (isGrowing)
         {
             growthTimer += Time.deltaTime +
-                           (GameMaster.instance.SaveSystem.growthSpeedBonus[(int)mushroomType] * Time.deltaTime *
-                            0.1f) + (GameMaster.instance.SaveSystem.mushroomSpeed * Time.deltaTime * 0.05f);
+                           (SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)mushroomType] * Time.deltaTime *
+                            0.1f) + (SaveSystem.instance.GetSaveFile().mushroomSpeed * Time.deltaTime * 0.05f);
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
             spriteRenderer.transform.localPosition =
@@ -66,10 +66,10 @@ public class MushroomBlock : Block
                 UpdateSprite();
             }
         }
-        else if (isGrown && GameMaster.instance.SaveSystem.autoHarvest[(int)mushroomType])
+        else if (isGrown && SaveSystem.instance.GetSaveFile().autoHarvest[(int)mushroomType])
         {
             harvestTimer += Time.deltaTime +
-                            (GameMaster.instance.SaveSystem.autoHarvestSpeed[(int)mushroomType] * Time.deltaTime *
+                            (SaveSystem.instance.GetSaveFile().autoHarvestSpeed[(int)mushroomType] * Time.deltaTime *
                              0.1f);
             if (harvestTimer >= harvestTime)
             {
@@ -162,7 +162,7 @@ public class MushroomBlock : Block
             ScoreMaster.instance.AddMushroom(mushroomType);
         }
 
-        isGolden = GameMaster.instance.SaveSystem.goldenSporeUnlocked && Random.value < 0.02f;
+        isGolden = SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && Random.value < 0.02f;
         if (isGolden)
         {
             goldenParticles.Play();

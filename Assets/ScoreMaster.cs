@@ -35,19 +35,19 @@ public class ScoreMaster : MonoBehaviour
 
     void Update()
     {
-        if (!brownShowing && GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Brown] > 0)
+        if (!brownShowing && SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown] > 0)
         {
             brownShowing = true;
             brownMushroomBanner.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBounce);
         }
 
-        if (!redShowing && GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Red] > 0)
+        if (!redShowing && SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red] > 0)
         {
             redShowing = true;
             redMushroomBanner.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBounce);
         }
 
-        if (!blueShowing && GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Blue] > 0)
+        if (!blueShowing && SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue] > 0)
         {
             blueShowing = true;
             blueMushroomBanner.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBounce);
@@ -61,10 +61,10 @@ public class ScoreMaster : MonoBehaviour
 
     public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool silent = false)
     {
-        GameMaster.instance.SaveSystem.mushrooms[(int)mushroomType] +=
-            1 + GameMaster.instance.SaveSystem.mushroomMultiplier;
-        GameMaster.instance.SaveSystem.mushroomCount[(int)mushroomType] +=
-            1 + GameMaster.instance.SaveSystem.mushroomMultiplier;
+        SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] +=
+            1 + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
+        SaveSystem.instance.GetSaveFile().mushroomCount[(int)mushroomType] +=
+            1 + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
         if (silent)
         {
             return;
@@ -96,26 +96,26 @@ public class ScoreMaster : MonoBehaviour
 
     public void UpdateBlueText()
     {
-        blueMushroomText.text = "x" + GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Blue];
+        blueMushroomText.text = "x" + SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue];
         GameMaster.instance.blueUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateRedText()
     {
-        redMushroomText.text = "x" + GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Red];
+        redMushroomText.text = "x" + SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red];
         GameMaster.instance.redUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateBrownText()
     {
-        brownMushroomText.text = "x" + GameMaster.instance.SaveSystem.mushrooms[(int)MushroomBlock.MushroomType.Brown];
+        brownMushroomText.text = "x" + SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown];
         GameMaster.instance.brownUpgradeMaster.UpdateButtons();
     }
 
     public bool SpendMushrooms(MushroomBlock.MushroomType type, uint amount)
     {
-        if (GameMaster.instance.SaveSystem.mushrooms[(int)type] < amount) return false;
-        GameMaster.instance.SaveSystem.mushrooms[(int)type] -= amount;
+        if (SaveSystem.instance.GetSaveFile().mushrooms[(int)type] < amount) return false;
+        SaveSystem.instance.GetSaveFile().mushrooms[(int)type] -= amount;
         UpdateMushroomText();
         return true;
     }
@@ -123,7 +123,7 @@ public class ScoreMaster : MonoBehaviour
     public void Reset()
     {
         
-        GameMaster.instance.SaveSystem.mushrooms = new uint[3];
+        SaveSystem.instance.GetSaveFile().mushrooms = new uint[3];
         UpdateMushroomText();
     }
 }

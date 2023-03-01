@@ -2,205 +2,146 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using DG.Tweening;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-public class SaveSystem: MonoBehaviour
+public class SaveSystem : MonoBehaviour
 {
-    public uint saveVersion = 3;
-    public uint[] mushrooms = new uint[3];//per run
-    public uint[] mushroomBlockCount = new uint[3];
-    public uint[] mushroomCount = new uint[3];//total 
-    public uint sporeCountTotal = 0;
-    public uint sporeCount = 0;
-    public int2 farmSize = new int2(0, 0);
-    public uint mushroomMultiplier = 0;
-    public uint mushroomSpeed = 0;
-    public bool[] autoHarvest = new bool[3];
-    public uint[] growthSpeedBonus = new uint[3];
-    public uint[] autoHarvestSpeed = new uint[3];
-    public uint totalConverges = 0;
-    public uint hivemindPointsTotal = 0;
-    public uint hivemindPoints = 0;
-    public bool redUnlocked = false;
-    public bool blueUnlocked = false;
-    //hivemind skills
-    public uint brownMultiplier;
-    public uint redMultiplier;
-    public uint blueMultiplier;
-    //hivemind meta
-    public float hivemindPointValue;
-    public bool goldenSporeUnlocked;
-    //version 1 end
-    
-  
+    public static SaveSystem instance;
+    public Image saveIcon;
+    public TextMeshProUGUI saveText;
+    public bool loaded = false;
+    [SerializeField] private SaveFile saveFile;
 
-    public void WipeSave()
+    public void Awake()
     {
-        SaveFile save = new SaveFile
+        if (instance == null)
         {
-            saveVersion = this.saveVersion
-        };
-        string json = JsonUtility.ToJson(save);
-        
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
-
-        
-        Load();
+            instance = this;
+            Load();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    
+
+    public SaveFile GetSaveFile()
+    {
+        return saveFile;
+    }
+
+
+    public bool SpendSpores(uint amount)
+    {
+        if (instance.saveFile.sporeCount < amount) return false;
+        instance.saveFile.sporeCount -= amount;
+        return true;
+    }
+
+    public bool SpendHivemindPoints(uint amount)
+    {
+        if (instance.saveFile.hivemindPoints < amount) return false;
+        instance.saveFile.hivemindPoints -= amount;
+        return true;
+    }
+
     public void Save()
     {
-        SaveFile save = new SaveFile();
-        save.saveVersion = saveVersion;
-        save.mushrooms = mushrooms;
-        save.mushroomBlockCount = mushroomBlockCount;
-        save.mushroomCount = mushroomCount;
-        save.sporeCountTotal = sporeCountTotal;
-        save.sporeCount = sporeCount;
-        save.farmSize = farmSize;
-        save.mushroomMultiplier = mushroomMultiplier;
-        save.mushroomSpeed = mushroomSpeed;
-        save.autoHarvest = autoHarvest;
-        save.growthSpeedBonus = growthSpeedBonus;
-        save.autoHarvestSpeed = autoHarvestSpeed;
-        save.totalConverges = totalConverges;
-        save.hivemindPointsTotal = hivemindPointsTotal;
-        save.hivemindPoints = hivemindPoints;
-        save.redUnlocked = redUnlocked;
-        save.blueUnlocked = blueUnlocked;
-        //hivemind skills
-        save.brownMultiplier = brownMultiplier;
-        save.redMultiplier = redMultiplier;
-        save.blueMultiplier = blueMultiplier;
-        //hivemind meta
-        save.hivemindPointValue = hivemindPointValue;
-        save.goldenSporeUnlocked = goldenSporeUnlocked;
-        //version 1 end
-        
-        string json = JsonUtility.ToJson(save);
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+        Save("savefile", saveFile);
+        saveIcon.DOKill();
+        saveText.DOKill();
+        saveIcon.DOFade(1, 0.1f).OnComplete(() => saveIcon.DOFade(0, 1f).SetEase(Ease.OutFlash));
+        saveText.DOFade(1, 0.1f).OnComplete(() => saveText.DOFade(0, 1f).SetEase(Ease.OutFlash));
     }
 
-    public bool Load() //returns success
+    public void Load()
     {
-        string path = Application.persistentDataPath + "/savefile.json";
+        Load("savefile", out saveFile);
+        if (saveFile.saveVersion<2)
+        {
+            Reset();
+        }
+        loaded = true;
+    }
 
+    public void Load<T>(string path, out T data) where T : new()
+    {
+        path = Application.persistentDataPath + "/" + path + ".json";
         if (!File.Exists(path))
         {
             File.Create(path).Dispose();
-            this.WipeSave();
-            return false;
+            data = new T();
+            string json = JsonUtility.ToJson(data);
+            File.WriteAllText(path, json);
         }
-
-        string json = File.ReadAllText(path);
-        SaveFile save = JsonUtility.FromJson<SaveFile>(json);
-        
-        if (save.saveVersion <2)
+        else
         {
-            this.WipeSave();
-            return false;
-        }
-        
-        mushrooms = save.mushrooms;
-        mushroomBlockCount = save.mushroomBlockCount;
-        for (var i = 0; i < mushroomBlockCount.Length; i++)
-        {
-            if (mushroomBlockCount[i]<1)
+            string json = File.ReadAllText(path);
+            if (json == "")
             {
-                mushroomBlockCount[i] = 1;
+                Debug.Log("File" + path + " is empty");
+                data = new T();
+                json = JsonUtility.ToJson(data);
+                File.WriteAllText(path, json);
+            }
+            else
+            {
+                data = JsonUtility.FromJson<T>(json);
             }
         }
-        mushroomCount = save.mushroomCount;
-        sporeCountTotal = save.sporeCountTotal;
-        sporeCount = save.sporeCount;
-        farmSize = save.farmSize;
-        mushroomMultiplier = save.mushroomMultiplier;
-        mushroomSpeed = save.mushroomSpeed;
-        autoHarvest = save.autoHarvest;
-        growthSpeedBonus = save.growthSpeedBonus;
-        autoHarvestSpeed = save.autoHarvestSpeed;
-        totalConverges = save.totalConverges;
-        hivemindPointsTotal = save.hivemindPointsTotal;
-        hivemindPoints = save.hivemindPoints;
-        redUnlocked = save.redUnlocked;
-        blueUnlocked = save.blueUnlocked;
-        hivemindPointValue = save.hivemindPointValue;
-        goldenSporeUnlocked = save.goldenSporeUnlocked;
-        brownMultiplier = save.brownMultiplier;
-        redMultiplier = save.redMultiplier;
-        blueMultiplier = save.blueMultiplier;
-        
-        return true;
     }
-    public bool SpendSpores(uint amount)
+
+    public void Save<T>(string path, T data)
     {
-        if (GameMaster.instance.SaveSystem.sporeCount < amount) return false;
-        GameMaster.instance.SaveSystem.sporeCount-= amount;
-        return true;
+        path = Application.persistentDataPath + "/" + path + ".json";
+        if (!File.Exists(path))
+        {
+            File.Create(path).Dispose();
+        }
+
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(path, json);
     }
-    
-    public bool SpendHivemindPoints(uint amount)
+
+    public void Reset()
     {
-        if (GameMaster.instance.SaveSystem.hivemindPoints < amount) return false;
-        GameMaster.instance.SaveSystem.hivemindPoints-= amount;
-        return true;
+        saveFile = new SaveFile();
     }
-[Serializable]
+
+    [Serializable]
     public class SaveFile
     {
         public SaveFile()
         {
-            saveVersion = 0;
-             mushrooms = new uint[3];
-             mushroomBlockCount = new uint[3];
-             mushroomCount = new uint[3];
+            saveVersion = 3;
+            mushrooms = new uint[3];
+            mushroomBlockCount = new uint[3];
+            mushroomCount = new uint[3];
             sporeCountTotal = 0;
             sporeCount = 0;
-             farmSize = new int2(0, 0);
+            farmSize = new int2(0, 0);
             mushroomMultiplier = 0;
             mushroomSpeed = 0;
             autoHarvest = new bool[3];
-             growthSpeedBonus = new uint[3];
-             autoHarvestSpeed = new uint[3];
+            growthSpeedBonus = new uint[3];
+            autoHarvestSpeed = new uint[3];
             totalConverges = 0;
             hivemindPointsTotal = 0;
             hivemindPoints = 0;
-             redUnlocked = false;
-             blueUnlocked = false;
+            redUnlocked = false;
+            blueUnlocked = false;
             brownMultiplier = 0;
             redMultiplier = 0;
-            blueMultiplier= 0;
-             hivemindPointValue= 0;
-             goldenSporeUnlocked = false;
+            blueMultiplier = 0;
+            hivemindPointValue = 0;
+            goldenSporeUnlocked = false;
         }
 
-        public SaveFile(SaveSystem save)
-        {
-            saveVersion = save.saveVersion;
-            mushrooms = save.mushrooms;
-            mushroomBlockCount = save.mushroomBlockCount;
-            mushroomCount = save.mushroomCount;
-            sporeCountTotal = save.sporeCountTotal;
-            sporeCount = save.sporeCount;
-            farmSize = save.farmSize;
-            mushroomMultiplier = save.mushroomMultiplier;
-            mushroomSpeed = save.mushroomSpeed;
-            autoHarvest = save.autoHarvest;
-            growthSpeedBonus = save.growthSpeedBonus;
-            autoHarvestSpeed = save.autoHarvestSpeed;
-            totalConverges = save.totalConverges;
-            redUnlocked = save.redUnlocked;
-            blueUnlocked = save.blueUnlocked;
-            hivemindPointsTotal = save.hivemindPointsTotal;
-            hivemindPoints = save.hivemindPoints;
-            hivemindPointValue = save.hivemindPointValue;
-            goldenSporeUnlocked = save.goldenSporeUnlocked;
-            brownMultiplier = save.brownMultiplier;
-            redMultiplier = save.redMultiplier;
-            blueMultiplier = save.blueMultiplier;
-        }
         public uint saveVersion = 0;
         public uint[] mushrooms = new uint[3];
         public uint[] mushroomBlockCount = new uint[3];
@@ -223,7 +164,5 @@ public class SaveSystem: MonoBehaviour
         public uint blueMultiplier;
         public float hivemindPointValue;
         public bool goldenSporeUnlocked;
-
-        
     }
 }

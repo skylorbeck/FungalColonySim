@@ -69,11 +69,11 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     
     public void UnlockRed()
     {
-        if (GameMaster.instance.SaveSystem.SpendHivemindPoints(unlockRedCost))
+        if (SaveSystem.instance.SpendHivemindPoints(unlockRedCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            GameMaster.instance.SaveSystem.redUnlocked = true;
-            GameMaster.instance.SaveSystem.Save();
+            SaveSystem.instance.GetSaveFile().redUnlocked = true;
+            SaveSystem.instance.Save();
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockRedButton.interactable = false;
             unlockRedButton.gameObject.SetActive(false);
@@ -82,11 +82,11 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     
     public void UnlockBlue()
     {
-        if (GameMaster.instance.SaveSystem.SpendHivemindPoints(unlockBlueCost))
+        if (SaveSystem.instance.SpendHivemindPoints(unlockBlueCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            GameMaster.instance.SaveSystem.blueUnlocked = true;
-            GameMaster.instance.SaveSystem.Save();
+            SaveSystem.instance.GetSaveFile().blueUnlocked = true;
+            SaveSystem.instance.Save();
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockBlueButton.interactable = false;
             unlockBlueButton.gameObject.SetActive(false);
@@ -95,62 +95,62 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     
     public void BrownValue()
     {
-        if (GameMaster.instance.SaveSystem.SpendHivemindPoints(brownValueCost))
+        if (SaveSystem.instance.SpendHivemindPoints(brownValueCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            GameMaster.instance.SaveSystem.brownMultiplier++;
-            GameMaster.instance.SaveSystem.Save();
+            SaveSystem.instance.GetSaveFile().brownMultiplier++;
+            SaveSystem.instance.Save();
             UpdateBrownValueText();
         }
     }
 
     private void UpdateBrownValueText()
     {
-        brownValueCost = (uint)(Mathf.Pow(brownValueRatio, GameMaster.instance.SaveSystem.brownMultiplier));
+        brownValueCost = (uint)(Mathf.Pow(brownValueRatio, SaveSystem.instance.GetSaveFile().brownMultiplier));
         brownValueText.text = brownValueCost + "x";
     }
 
     public void RedValue()
     {
-        if (GameMaster.instance.SaveSystem.SpendHivemindPoints(redValueCost))
+        if (SaveSystem.instance.SpendHivemindPoints(redValueCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            GameMaster.instance.SaveSystem.redMultiplier++;
-            GameMaster.instance.SaveSystem.Save();
+            SaveSystem.instance.GetSaveFile().redMultiplier++;
+            SaveSystem.instance.Save();
             UpdateRedValueText();
         }
     }
 
     private void UpdateRedValueText()
     {
-        redValueCost = (uint)(Mathf.Pow(redValueRatio, GameMaster.instance.SaveSystem.redMultiplier));
+        redValueCost = (uint)(Mathf.Pow(redValueRatio, SaveSystem.instance.GetSaveFile().redMultiplier));
         redValueText.text = redValueCost + "x";
     }
 
     public void BlueValue()
     {
-        if (GameMaster.instance.SaveSystem.SpendHivemindPoints(blueValueCost))
+        if (SaveSystem.instance.SpendHivemindPoints(blueValueCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            GameMaster.instance.SaveSystem.blueMultiplier++;
-            GameMaster.instance.SaveSystem.Save();
+            SaveSystem.instance.GetSaveFile().blueMultiplier++;
+            SaveSystem.instance.Save();
             UpdateBlueValueText();
         }
     }
 
     private void UpdateBlueValueText()
     {
-        blueValueCost = (uint)(Mathf.Pow(blueValueRatio, GameMaster.instance.SaveSystem.blueMultiplier));
+        blueValueCost = (uint)(Mathf.Pow(blueValueRatio, SaveSystem.instance.GetSaveFile().blueMultiplier));
         blueValueText.text = blueValueCost + "x";
     }
 
     public void GoldenSpore()
     {
-        if (GameMaster.instance.SaveSystem.SpendHivemindPoints(goldenSporeCost))
+        if (SaveSystem.instance.SpendHivemindPoints(goldenSporeCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            GameMaster.instance.SaveSystem.goldenSporeUnlocked = true;
-            GameMaster.instance.SaveSystem.Save();
+            SaveSystem.instance.GetSaveFile().goldenSporeUnlocked = true;
+            SaveSystem.instance.Save();
             goldenSporeButton.interactable = false;
             goldenSporeButton.gameObject.SetActive(false);
         }
@@ -158,61 +158,61 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
 
     void FixedUpdate()
     {
-        float size = 0.1f+ Mathf.Clamp01(GameMaster.instance.SaveSystem.hivemindPointsTotal / 1000f) * 5;
+        float size = 0.1f+ Mathf.Clamp01(SaveSystem.instance.GetSaveFile().hivemindPointsTotal / 1000f) * 5;
         spriteRenderer.transform.localScale = new Vector3(size, size,size);
         
-        if (unlockRedButton.isActiveAndEnabled && GameMaster.instance.SaveSystem.redUnlocked)
+        if (unlockRedButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().redUnlocked)
         {
             unlockRedButton.gameObject.SetActive(false);
         }
         else
         {
-            unlockRedButton.interactable = GameMaster.instance.SaveSystem.hivemindPoints >= unlockRedCost;
+            unlockRedButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockRedCost;
         }
         
-        if (unlockBlueButton.isActiveAndEnabled && GameMaster.instance.SaveSystem.blueUnlocked)
+        if (unlockBlueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().blueUnlocked)
         {
             unlockBlueButton.gameObject.SetActive(false);
         } 
         else
         {
-            unlockBlueButton.interactable = GameMaster.instance.SaveSystem.hivemindPoints >= unlockBlueCost;
+            unlockBlueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockBlueCost;
         }
 
-        if (brownValueButton.isActiveAndEnabled && GameMaster.instance.SaveSystem.brownMultiplier >= brownValueMax)
+        if (brownValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().brownMultiplier >= brownValueMax)
         {
             brownValueButton.gameObject.SetActive(false);
         }
         else
         {
-            brownValueButton.interactable = GameMaster.instance.SaveSystem.hivemindPoints >= brownValueCost;
+            brownValueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= brownValueCost;
         }
         
-        if (redValueButton.isActiveAndEnabled && GameMaster.instance.SaveSystem.redMultiplier >= redValueMax)
+        if (redValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().redMultiplier >= redValueMax)
         {
             redValueButton.gameObject.SetActive(false);
         }
         else
         {
-            redValueButton.interactable = GameMaster.instance.SaveSystem.hivemindPoints >= redValueCost && GameMaster.instance.SaveSystem.redUnlocked;
+            redValueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= redValueCost && SaveSystem.instance.GetSaveFile().redUnlocked;
         }
         
-        if (blueValueButton.isActiveAndEnabled && GameMaster.instance.SaveSystem.blueMultiplier >= blueValueMax)
+        if (blueValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().blueMultiplier >= blueValueMax)
         {
             blueValueButton.gameObject.SetActive(false);
         }
         else
         {
-            blueValueButton.interactable = GameMaster.instance.SaveSystem.hivemindPoints >= blueValueCost && GameMaster.instance.SaveSystem.blueUnlocked;
+            blueValueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= blueValueCost && SaveSystem.instance.GetSaveFile().blueUnlocked;
         }
         
-        if (goldenSporeButton.isActiveAndEnabled && GameMaster.instance.SaveSystem.goldenSporeUnlocked)
+        if (goldenSporeButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
         {
             goldenSporeButton.gameObject.SetActive(false);
         }
         else
         {
-            goldenSporeButton.interactable = GameMaster.instance.SaveSystem.hivemindPoints >= goldenSporeCost;
+            goldenSporeButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost;
         }
     }
 

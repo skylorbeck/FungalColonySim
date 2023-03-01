@@ -35,19 +35,19 @@ public class CurrencyVisualizer : MonoBehaviour
         switch (currency)
         {
             case Currency.BrownMushroom:
-                text.text = GameMaster.instance.SaveSystem.mushrooms[0].ToString();
+                text.text = SaveSystem.instance.GetSaveFile().mushrooms[0].ToString();
                 break;
             case Currency.RedMushroom:
-                text.text = GameMaster.instance.SaveSystem.mushrooms[1].ToString();
+                text.text = SaveSystem.instance.GetSaveFile().mushrooms[1].ToString();
                 break;
             case Currency.BlueMushroom:
-                text.text = GameMaster.instance.SaveSystem.mushrooms[2].ToString();
+                text.text = SaveSystem.instance.GetSaveFile().mushrooms[2].ToString();
                 break;
             case Currency.Spore:
-                text.text = GameMaster.instance.SaveSystem.sporeCount.ToString();
+                text.text = SaveSystem.instance.GetSaveFile().sporeCount.ToString();
                 break;
             case Currency.SkillPoint:
-                text.text = GameMaster.instance.SaveSystem.hivemindPoints.ToString();
+                text.text = SaveSystem.instance.GetSaveFile().hivemindPoints.ToString();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);

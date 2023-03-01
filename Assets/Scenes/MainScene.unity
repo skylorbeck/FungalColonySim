@@ -7505,7 +7505,6 @@ MonoBehaviour:
   blueBlockMaster: {fileID: 440484631}
   camera: {fileID: 519420031}
   tooltip: {fileID: 1805973537}
-  SaveSystem: {fileID: 556978896}
   ModeMaster: {fileID: 1473126409}
   brownUpgradeMaster: {fileID: 20327884}
   redUpgradeMaster: {fileID: 315418730}
@@ -7514,8 +7513,6 @@ MonoBehaviour:
   isConverging: 0
   Hivemind: {fileID: 1521564854}
   saveTimer: 0
-  saveIcon: {fileID: 1988139192}
-  saveText: {fileID: 569266772}
 --- !u!4 &556978894
 Transform:
   m_ObjectHideFlags: 0
@@ -7572,30 +7569,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1c95c36d3a2514c8bfd0a08fa7dc31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveVersion: 3
-  mushrooms: 000000000000000000000000
-  mushroomBlockCount: 
-  mushroomCount: 000000000000000000000000
-  sporeCountTotal: 0
-  sporeCount: 0
-  farmSize:
-    x: 0
-    y: 0
-  mushroomMultiplier: 0
-  mushroomSpeed: 0
-  autoHarvest: 
-  growthSpeedBonus: 
-  autoHarvestSpeed: 
-  totalConverges: 0
-  hivemindPointsTotal: 0
-  hivemindPoints: 0
-  redUnlocked: 0
-  blueUnlocked: 0
-  brownMultiplier: 0
-  redMultiplier: 0
-  blueMultiplier: 0
-  hivemindPointValue: 0
-  goldenSporeUnlocked: 0
+  saveIcon: {fileID: 1988139192}
+  saveText: {fileID: 569266772}
+  loaded: 0
+  saveFile:
+    saveVersion: 3
+    mushrooms: 000000000000000000000000
+    mushroomBlockCount: 000000000000000000000000
+    mushroomCount: 000000000000000000000000
+    sporeCountTotal: 0
+    sporeCount: 0
+    farmSize:
+      x: 0
+      y: 0
+    mushroomMultiplier: 0
+    mushroomSpeed: 0
+    autoHarvest: 000000
+    growthSpeedBonus: 000000000000000000000000
+    autoHarvestSpeed: 000000000000000000000000
+    totalConverges: 0
+    hivemindPointsTotal: 0
+    hivemindPoints: 0
+    redUnlocked: 0
+    blueUnlocked: 0
+    brownMultiplier: 0
+    redMultiplier: 0
+    blueMultiplier: 0
+    hivemindPointValue: 0
+    goldenSporeUnlocked: 0
 --- !u!1 &569266770
 GameObject:
   m_ObjectHideFlags: 0

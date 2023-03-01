@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        int larger = Mathf.Max(GameMaster.instance.SaveSystem.farmSize.x, GameMaster.instance.SaveSystem.farmSize.y);
+        int larger = Mathf.Max(SaveSystem.instance.GetSaveFile().farmSize.x, SaveSystem.instance.GetSaveFile().farmSize.y);
         bounds = new Vector3(larger, larger, 0);
         if (Input.mouseScrollDelta.y > 0)
         {
