@@ -34,7 +34,7 @@ public class MushroomBlock : Block
             mushroomPop = new GameObject();
             mushroomPop.transform.SetParent(transform);
             SpriteRenderer mushSprite = mushroomPop.AddComponent<SpriteRenderer>();
-            mushSprite.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
+            mushSprite.sprite =  GetMushroomSprite(mushroomType);
             mushSprite.sortingOrder = 100;
             if (mushroomType is MushroomType.Blue or MushroomType.Red)
             {
@@ -91,7 +91,7 @@ public class MushroomBlock : Block
 
     private void UpdateSprite()
     {
-        spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
+        spriteRenderer.sprite = GetMushroomSprite(mushroomType);
         if (mushroomType == MushroomType.Blue || mushroomType == MushroomType.Red)
         {
             spriteRenderer.transform.rotation = Quaternion.Euler(0, 0, -20);
@@ -190,5 +190,10 @@ public class MushroomBlock : Block
         Brown,
         Red,
         Blue
+    }
+
+    public static Sprite GetMushroomSprite(MushroomType mushroomType)
+    {
+        return Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
     }
 }

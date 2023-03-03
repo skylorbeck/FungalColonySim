@@ -32,7 +32,7 @@ public class GameMaster : MonoBehaviour
     public int saveTimer = 0;
 
 
-    //TODO better scaling upgrade
+    //TODO better scaling upgrade to increase gains from convergence
     //TODO harvest mushrooms by clicking on floor
     //TODO reset button
     //TODO red and blue upgrades have different scaling?

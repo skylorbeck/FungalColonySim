@@ -19,6 +19,7 @@ public class ModeMaster : MonoBehaviour
     public GameObject BlueFarmUpgrades;
     public GameObject Hivemind;
     public GameObject HivemindUpgrades;
+    public GameObject Potions;
     public Gamemode currentMode;
     public Gamemode lastMode;
 
@@ -59,9 +60,13 @@ public class ModeMaster : MonoBehaviour
         if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Hivemind)
         {
             mode++;
+        } 
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Potions)
+        {
+            mode++;
         }
-        
-        if (mode > Gamemode.Hivemind)
+
+        if (mode > Gamemode.Potions)
         {
             mode = Gamemode.BrownFarm;
         }
@@ -74,6 +79,10 @@ public class ModeMaster : MonoBehaviour
         Gamemode mode = currentMode;
         mode--;
         
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Potions)
+        {
+            mode--;
+        }
         if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Hivemind)
         {
             mode--;
@@ -90,7 +99,7 @@ public class ModeMaster : MonoBehaviour
         
         if (mode < Gamemode.BrownFarm)
         {
-            mode = Gamemode.Hivemind;
+            mode = Gamemode.Potions;
         }
         SetMode(mode,true);
     }
@@ -103,12 +112,13 @@ public class ModeMaster : MonoBehaviour
         RedFarm.transform.DOComplete();
         BlueFarm.transform.DOComplete();
         Hivemind.transform.DOComplete();
+        Potions.transform.DOComplete();
         
         BrownFarmUpgrades.SetActive(false);
         RedFarmUpgrades.SetActive(false);
         BlueFarmUpgrades.SetActive(false);
         HivemindUpgrades.SetActive(false);
-
+        
         UpdateDots();
 
         int dist = left ? distance : -distance;
@@ -126,6 +136,9 @@ public class ModeMaster : MonoBehaviour
                 break;
             case Gamemode.Hivemind:
                 Hivemind.transform.DOMoveX(dist, duration);
+                break;
+            case Gamemode.Potions:
+                Potions.transform.DOMoveX(dist, duration);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -155,6 +168,11 @@ public class ModeMaster : MonoBehaviour
                 Hivemind.transform.position = new Vector3(-dist, 0, 0);
                 Hivemind.transform.DOMoveX(0, duration).onComplete = () => HivemindUpgrades.SetActive(true);
                 break;
+            case Gamemode.Potions:
+                modeText.text = "Potions";
+                Potions.transform.position = new Vector3(-dist, 0, 0);
+                Potions.transform.DOMoveX(0, duration);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");
         }
@@ -167,6 +185,7 @@ public class ModeMaster : MonoBehaviour
         RedFarm,
         BlueFarm,
         Hivemind,
+        Potions,
     }
 
     public void UpdateDots()
@@ -175,6 +194,7 @@ public class ModeMaster : MonoBehaviour
         dots[2].gameObject.SetActive(SaveSystem.instance.GetSaveFile().blueUnlocked);
         dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
+        dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);    }
