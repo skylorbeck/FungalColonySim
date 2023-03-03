@@ -17,7 +17,6 @@ public class Block : MonoBehaviour, IPointerClickHandler
     [SerializeField] protected SpriteRenderer spriteRenderer; 
     [SerializeField] private float shadowDistance = 7.5f;
     
-    [SerializeField] private String tooltipText;
     [SerializeField] private int3 lightPos;
     [SerializeField] private int3 lastLightPos;
     [SerializeField] private bool isPlacing = false;

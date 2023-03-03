@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 5000247415860204988}
   - component: {fileID: 5000247415860204990}
   - component: {fileID: 4776045387412388580}
+  - component: {fileID: 7366661033970897975}
   m_Layer: 6
   m_Name: Mushroom Brown
   m_TagString: Untagged
@@ -176,6 +177,27 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.25
+--- !u!114 &7366661033970897975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5000247415860204978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167bc993d365a824e8de3fb7ce0ce430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 0
+  checkTime: 500
+  checkTimeBase: 100
+  checkTimeRandomAdd: 400
+  wiggleRandomMin: 0.5
+  wiggleRandomMax: 1.5
+  wiggleAmount: 25
+  wiggleTime: 1
+  wiggleChance: 0.1
 --- !u!1 &6117256802799003450
 GameObject:
   m_ObjectHideFlags: 0

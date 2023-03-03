@@ -57,12 +57,17 @@ public class ConvergenceMaster : MonoBehaviour
     
     public float convergeWarningTimer = 0;
     public uint convergeWarningTimerMax = 5;
-    void Start()
+
+    IEnumerator Start()
     {
         convergenceStoreMenu.SetActive(false);
         convergenceMenu.SetActive(false);
-        convergeButton.gameObject.SetActive(unlocked);
-            confirmConvergeButton.interactable = false;
+        confirmConvergeButton.interactable = false;
+        yield return new WaitUntil(() => GameMaster.instance.brownBlockMaster.isWorldCreated);
+        yield return new WaitUntil(() => GameMaster.instance.redBlockMaster.isWorldCreated);
+        yield return new WaitUntil(() => GameMaster.instance.blueBlockMaster.isWorldCreated);
+        convergeButton.gameObject.SetActive(unlocked=(SaveSystem.instance.GetSaveFile().mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().totalConverges >= 1));
+        convergeButton.interactable = unlocked;
     }
 
     void Update()

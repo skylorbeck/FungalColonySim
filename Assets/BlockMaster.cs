@@ -49,6 +49,9 @@ public class BlockMaster : MonoBehaviour
 
     IEnumerator Start()
     {
+        yield return new WaitUntil(() => SaveSystem.instance != null);
+        // yield return new WaitUntil(() => SaveSystem.instance.GetSaveFile() != null);
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         biomeBlocks = new List<BiomeBlock>();
         mushroomBlocks = new List<MushroomBlock>();
         allBlocks = new List<Block>();
@@ -287,14 +290,9 @@ public class BlockMaster : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        if (dirtBlocks.Count ==0)
-        {
-            enrichButton.SetActive(false);
-            yield break;
-        }
-        enrichButton.SetActive(true);
+        yield return new WaitForSeconds(blockCount*0.5f);
         isWorldCreated = true;
-
+        enrichButton.SetActive(dirtBlocks.Count >0);
     }
 
     public IEnumerator DissolveWorld()
@@ -305,6 +303,80 @@ public class BlockMaster : MonoBehaviour
             block.isGrowing = false;
             block.isGrown = false;
         }
+
+        switch (Random.Range(0, 5))
+        {
+            case 0:
+                //sort random
+                allBlocks.Sort((x, y) => Random.value > 0.5f ? 1 : -1);
+                break;
+            case 1:
+                //sort by smallest y, then random x, then smallest z 
+                allBlocks.Sort((x, y) =>
+                {
+                    if (x.blockPos.y == y.blockPos.y)
+                    {
+                        if (x.blockPos.x == y.blockPos.x)
+                        {
+                            return x.blockPos.z.CompareTo(y.blockPos.z);
+                        }
+                        return Random.value > 0.5f ? 1 : -1;
+                    }
+                    return x.blockPos.y.CompareTo(y.blockPos.y);
+                });
+                break;
+            case 2:
+                //sort by smallest x, then random y, then smallest z
+                allBlocks.Sort((x, y) =>
+                {
+                    if (x.blockPos.x == y.blockPos.x)
+                    {
+                        if (x.blockPos.y == y.blockPos.y)
+                        {
+                            return x.blockPos.z.CompareTo(y.blockPos.z);
+                        }
+                        return Random.value > 0.5f ? 1 : -1;
+                    }
+                    return x.blockPos.x.CompareTo(y.blockPos.x);
+                });
+                break;
+            case 3:
+                //sort smallest x, then smallest y, then smallest z 
+                allBlocks.Sort((x, y) =>
+                {
+                    if (x.blockPos.x == y.blockPos.x)
+                    {
+                        if (x.blockPos.y == y.blockPos.y)
+                        {
+                            return x.blockPos.z.CompareTo(y.blockPos.z);
+                        }
+                        return x.blockPos.y.CompareTo(y.blockPos.y);
+                    }
+                    return x.blockPos.x.CompareTo(y.blockPos.x);
+                });
+            break;
+            case 4:
+                //sort by smallest y, then smallest x, then smallest z
+                allBlocks.Sort((x, y) =>
+                {
+                    if (x.blockPos.y == y.blockPos.y)
+                    {
+                        if (x.blockPos.x == y.blockPos.x)
+                        {
+                            return x.blockPos.z.CompareTo(y.blockPos.z);
+                        }
+                        return x.blockPos.x.CompareTo(y.blockPos.x);
+                    }
+                    return x.blockPos.y.CompareTo(y.blockPos.y);
+                });
+                break;
+        }
+
+        if (Random.value > 0.5f)
+        {
+            allBlocks.Reverse();
+        }
+
         foreach (var block in allBlocks)
         {
             block.RemoveBlock();
