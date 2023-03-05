@@ -10,7 +10,7 @@ public class CurrencyVisualizer : MonoBehaviour
 {
     public Currency currency;
     [SerializeField] private TextMeshProUGUI text;
-    [FormerlySerializedAs("spriteRenderer")] [SerializeField] private Image image;
+    [SerializeField] private Image image;
 
     void Start()
     {
@@ -49,6 +49,15 @@ public class CurrencyVisualizer : MonoBehaviour
             case Currency.SkillPoint:
                 text.text = SaveSystem.instance.GetSaveFile().hivemindPoints.ToString();
                 break;
+            case Currency.BrownPotion:
+                text.text = SaveSystem.instance.GetSaveFile().potionsCount[0].ToString();
+                break;
+            case Currency.RedPotion:
+                text.text = SaveSystem.instance.GetSaveFile().potionsCount[1].ToString();
+                break;
+            case Currency.BluePotion:
+                text.text = SaveSystem.instance.GetSaveFile().potionsCount[2].ToString();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
         }
@@ -59,19 +68,28 @@ public class CurrencyVisualizer : MonoBehaviour
         switch (currency)
         {
             case Currency.BrownMushroom:
-                image.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + MushroomBlock.MushroomType.Brown);
+                image.sprite = MushroomBlock.GetMushroomSprite(MushroomBlock.MushroomType.Brown);
                 break;
             case Currency.RedMushroom:
-                image.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + MushroomBlock.MushroomType.Red);
+                image.sprite = MushroomBlock.GetMushroomSprite(MushroomBlock.MushroomType.Red);
                 break;
             case Currency.BlueMushroom:
-                image.sprite = Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + MushroomBlock.MushroomType.Blue);
+                image.sprite = MushroomBlock.GetMushroomSprite(MushroomBlock.MushroomType.Blue);
                 break;
             case Currency.Spore:
                 image.sprite = Resources.Load<Sprite>("Sprites/Spore");
                 break;
             case Currency.SkillPoint:
                 image.sprite = Resources.Load<Sprite>("Sprites/SkillPoint");
+                break;
+            case Currency.BrownPotion:
+                image.sprite = Cauldron.GetPotionSprite(MushroomBlock.MushroomType.Brown);
+                break;
+            case Currency.RedPotion:
+                image.sprite = Cauldron.GetPotionSprite(MushroomBlock.MushroomType.Red);
+                break;
+            case Currency.BluePotion:
+                image.sprite = Cauldron.GetPotionSprite(MushroomBlock.MushroomType.Blue);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
@@ -84,6 +102,9 @@ public class CurrencyVisualizer : MonoBehaviour
     RedMushroom,
     BlueMushroom,
     Spore,
-    SkillPoint
+    SkillPoint,
+    BrownPotion,
+    RedPotion,
+    BluePotion
 }
 }

@@ -9,7 +9,7 @@ public class RatioBar : MonoBehaviour
     public float maxWidth = 450f;
     public Image[] bars;
     public List<int> amounts = new List<int>();
-    public Color[] colors;
+    public Color[] colors => GameMaster.instance.mushroomColors;
     public TextMeshProUGUI[] texts;
     public TextMeshProUGUI[] percentTexts;
     public TextMeshProUGUI totalText;
@@ -53,7 +53,9 @@ public class RatioBar : MonoBehaviour
             else
             {
                 bars[i].color = colors[(int) types[i]];
-                texts[i].text = amounts[i].ToString();
+                texts[i].text = amounts[i].ToString("N0");
+                texts[i].color = colors[(int) types[i]];
+                percentTexts[i].color = colors[(int) types[i]];
             }
         }
         int total = 0;

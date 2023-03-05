@@ -59,6 +59,11 @@ public class SaveSystem : MonoBehaviour
         saveText.DOFade(1, 0.1f).OnComplete(() => saveText.DOFade(0, 1f).SetEase(Ease.OutFlash));
     }
 
+    public static void SaveS()
+    {
+        instance.Save();
+    }
+
     public void Load()
     {
         Load("savefile", out saveFile);
@@ -72,6 +77,13 @@ public class SaveSystem : MonoBehaviour
             saveFile.saveVersion = 3;
             saveFile.goldenMultiplier = 1;
             saveFile.goldenChanceMultiplier = 1;
+        }
+
+        if (saveFile.saveVersion < 4)
+        {
+            saveFile.saveVersion = 4;
+            saveFile.cauldronSave = new CauldronSave();
+            saveFile.potionsCount = new uint[3];
         }
         
         loaded = true;
@@ -150,6 +162,8 @@ public class SaveSystem : MonoBehaviour
             goldenSporeUnlocked = false;
             goldenMultiplier = 1;
             goldenChanceMultiplier = 1;
+            cauldronSave = new CauldronSave();
+            potionsCount = new uint[3];
         }
 
         public uint saveVersion = 0;
@@ -176,5 +190,7 @@ public class SaveSystem : MonoBehaviour
         public bool goldenSporeUnlocked;
         public uint goldenMultiplier;
         public uint goldenChanceMultiplier;
+        public CauldronSave cauldronSave = new CauldronSave();
+        public uint[] potionsCount = new uint[3];
     }
 }

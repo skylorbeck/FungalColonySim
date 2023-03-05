@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ModeMaster : MonoBehaviour
@@ -30,7 +31,7 @@ public class ModeMaster : MonoBehaviour
     public Button previousButton;
 
     public Image[] dots;
-    
+    public UnityAction OnModeChange;
     [SerializeField] private Gamemode[] modesToDisableCamera;
     private void Start()
     {
@@ -183,6 +184,7 @@ public class ModeMaster : MonoBehaviour
         }
         modeText.DOFade(0, 0.5f).SetDelay(1.5f);
         CameraCheck();
+        OnModeChange?.Invoke();
     }
 
     public enum Gamemode

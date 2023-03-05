@@ -9,6 +9,8 @@ using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 
+
+
 public class Cauldron : MonoBehaviour
 {
     public SpriteRenderer cauldronSprite;
@@ -21,7 +23,6 @@ public class Cauldron : MonoBehaviour
     public SpriteRenderer potionSprite;
     public SpriteMask progressMask;
     public float progressSpeed = 1f;
-    public float progressMax = 3f;
     public float maskOffset = 2.25f;
     public float rotationSpeed = 5f;
     public float rotationDegree = 35f;
@@ -43,30 +44,13 @@ public class Cauldron : MonoBehaviour
     public RatioBar ingredientBar;
     public TextMeshProUGUI timeLeftText;
 
-    //TODO extract this to a saveable class for save file
-    public float progress = 0f;
-    public bool hasFuel = false;
-    public bool isOn = false;
-    public bool isDone = false;
-    public List<MushroomBlock.MushroomType> ingredients = new List<MushroomBlock.MushroomType>();
-    public List<int> ingredientAmounts = new List<int>();
-    public int ingredientTotal = 0;
+    private CauldronSave cauldronSave => SaveSystem.instance.GetSaveFile().cauldronSave;
+    private uint[] potions => SaveSystem.instance.GetSaveFile().potionsCount;
 
-    void Start()
+    IEnumerator Start()
     {
-        fuelButton.interactable = true;
-        onButton.interactable = false;
-        gatherButton.interactable = false;
-        foreach (var renderer in fire)
-        {
-            renderer.enabled = false;
-        }
-
-        foreach (var renderer in wood)
-        {
-            renderer.enabled = false;
-        }
-
+        GameMaster.instance.ModeMaster.OnModeChange += ChangeScreen;
+        
         ingredientPool = new ObjectPool<SpriteRenderer>(() =>
         {
             var ingredient = Instantiate(ingredientSprite, ingredientSprite.transform.parent);
@@ -82,13 +66,31 @@ public class Cauldron : MonoBehaviour
             ingredient.gameObject.SetActive(true);
         }, ingredient => { ingredient.gameObject.SetActive(false); });
 
+        yield return new WaitUntil(()=> SaveSystem.instance != null);
+        yield return new WaitUntil(()=> SaveSystem.instance.loaded);
+        
         foreach (CauldronIngredient preview in ingredientPreviews)
         {
             preview.Disable();
         }
-        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
+        foreach (MushroomBlock.MushroomType saveIngredient in cauldronSave.ingredients)
+        {
+            ingredientPreviews[(int)saveIngredient].Enable();
+            ingredientPreviews[(int)saveIngredient].SetIngredient(saveIngredient);
+        }
+        
+        foreach (var renderer in fire)
+        {
+            renderer.enabled = cauldronSave.isOn;
+        }
+
+        foreach (var renderer in wood)
+        {
+            renderer.enabled = cauldronSave.hasFuel;
+        }
+        ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
         UpdateIngredient();
-        CheckIngredientButton();
+        UpdateButtons();
     }
 
     void Update()
@@ -98,33 +100,28 @@ public class Cauldron : MonoBehaviour
 
     public void AddFuel()
     {
-        hasFuel = true;
+        cauldronSave.hasFuel = true;
         foreach (var renderer in wood)
         {
             renderer.enabled = true;
             renderer.transform.DOPunchScale(Vector3.one * punchSize, 0.5f, 1, 0.5f);
         }
-
-        fuelButton.interactable = false;
-        CheckFueledAndReady();
-
+        UpdateButtons();
     }
 
     private void CheckFueledAndReady()
     {
-        ingredientTotal = 0;
-        foreach (int amount in ingredientAmounts)
+        cauldronSave.ingredientTotal = 0;
+        foreach (int amount in cauldronSave.ingredientAmounts)
         {
-            ingredientTotal += amount;
+            cauldronSave.ingredientTotal += amount;
         }
-        onButton.interactable = ingredients.Count > 0 && hasFuel && ingredientTotal >= 100;
-        removeIngredientsButton.interactable = ingredients.Count > 0;
     }
 
     public void TurnOn()
     {
-        if (!hasFuel) return;
-        isOn = true;
+        if (!cauldronSave.hasFuel) return;
+        cauldronSave.isOn = true;
         foreach (var renderer in fire)
         {
             renderer.enabled = true;
@@ -136,23 +133,20 @@ public class Cauldron : MonoBehaviour
             preview.hopping = true;
         }
         
-        foreach (MushroomBlock.MushroomType mushroomType in ingredients)
+        foreach (MushroomBlock.MushroomType mushroomType in cauldronSave.ingredients)
         {
-            SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] -= (uint)ingredientAmounts[ingredients.IndexOf(mushroomType)];
+            SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] -= (uint)cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(mushroomType)];
+            ScoreMaster.instance.UpdateMushroomText();
         }
-        removeIngredientsButton.interactable = false;
-        onButton.interactable = false;
-        CheckIngredientButton();
+        UpdateButtons();
+        SaveSystem.SaveS();
     }
 
-    private void CheckIngredientButton()
-    {
-        addIngredientButton.interactable = !isOn && !isDone && int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
-    }
+ 
 
     public void TurnOff()
     {
-        isOn = false;
+        cauldronSave.isOn = false;
         foreach (var renderer in fire)
         {
             renderer.enabled = false;
@@ -165,7 +159,7 @@ public class Cauldron : MonoBehaviour
 
     public void RemoveFuel()
     {
-        hasFuel = false;
+        cauldronSave.hasFuel = false;
         foreach (var renderer in wood)
         {
             renderer.enabled = false;
@@ -186,14 +180,14 @@ public class Cauldron : MonoBehaviour
             return;
         }
         
-        if (ingredients.Contains(ingredient))
+        if (cauldronSave.ingredients.Contains(ingredient))
         {
-            ingredientAmounts[ingredients.IndexOf(ingredient)] += amount;
+            cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)] += amount;
         }
         else
         {
-            ingredients.Add(ingredient);
-            ingredientAmounts.Add(amount);
+            cauldronSave.ingredients.Add(ingredient);
+            cauldronSave.ingredientAmounts.Add(amount);
             
         }
         
@@ -207,8 +201,8 @@ public class Cauldron : MonoBehaviour
             {
                 cauldronSprite.transform.DOComplete();
                 cauldronSprite.transform.DOPunchPosition(Vector3.down, 0.5f, 1, 0.5f);
-                ingredientPreviews[ingredients.IndexOf(ingredient)].Enable();
-                ingredientPreviews[ingredients.IndexOf(ingredient)].SetIngredient(ingredient);
+                ingredientPreviews[cauldronSave.ingredients.IndexOf(ingredient)].Enable();
+                ingredientPreviews[cauldronSave.ingredients.IndexOf(ingredient)].SetIngredient(ingredient);
             };
             ingredientSpriteTransform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).onComplete += () =>
             {
@@ -217,37 +211,36 @@ public class Cauldron : MonoBehaviour
         };
 
         CheckFueledAndReady();
-        progressMax = baseBrewTime + (baseBrewTime * (ingredientTotal-100) * 0.01f*additionalBrewRatio);//TODO good place for upgrades
-        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
-        timeLeftText.text =(progressMax).ToString("F");
+        cauldronSave.progressMax = baseBrewTime + (baseBrewTime * (cauldronSave.ingredientTotal-100) * 0.01f*additionalBrewRatio);//TODO good place for upgrades
+        ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
+        timeLeftText.text =(cauldronSave.progressMax).ToString("F");
     }
 
     public void RemoveIngredient(MushroomBlock.MushroomType ingredient, int amount = 1)
     {
-        if (ingredients.Contains(ingredient))
+        if (cauldronSave.ingredients.Contains(ingredient))
         {
-            ingredientAmounts[ingredients.IndexOf(ingredient)] -= amount;
-            if (ingredientAmounts[ingredients.IndexOf(ingredient)] <= 0)
+            cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)] -= amount;
+            if (cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)] <= 0)
             {
-                ingredients.Remove(ingredient);
-                ingredientAmounts.Remove(ingredientAmounts[ingredients.IndexOf(ingredient)]);
+                cauldronSave.ingredients.Remove(ingredient);
+                cauldronSave.ingredientAmounts.Remove(cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)]);
             }
         }
     }
 
     public void ChangeScreen()
     {
-        if (!isOn)
-        {
-            RemoveAllIngredients();
-        }
+        if (cauldronSave.isOn) return;
+        RemoveAllIngredients();
+        UpdateButtons();
     }
     
     public void RemoveAllIngredients()
     {
-        ingredients.Clear();
-        ingredientAmounts.Clear();
-        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
+        cauldronSave.ingredients.Clear();
+        cauldronSave.ingredientAmounts.Clear();
+        ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
         timeLeftText.text = "";
         foreach (CauldronIngredient preview in ingredientPreviews)
         {
@@ -260,22 +253,22 @@ public class Cauldron : MonoBehaviour
     void FixedUpdate()
     {
         ProgressState();
-        progressMask.transform.localPosition = new Vector3(0, maskOffset * (progress / progressMax), 0);
+        progressMask.transform.localPosition = new Vector3(0, maskOffset * (cauldronSave.progress / cauldronSave.progressMax), 0);
     }
 
     private void ProgressState()
     {
-        if (hasFuel && isOn && !isDone)
+        if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
-            progress += Time.fixedDeltaTime * progressSpeed; //TODO good place for upgrades
-            timeLeftText.text =(progressMax - progress).ToString("F");
+            cauldronSave.progress += Time.fixedDeltaTime * progressSpeed; //TODO good place for upgrades
+            timeLeftText.text =(cauldronSave.progressMax - cauldronSave.progress).ToString("F");
             cauldronSprite.transform.rotation = Quaternion.Euler(0, 0,
-                Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) * (progress / progressMax));
-            if (progress >= progressMax) //TODO good place for upgrades
+                Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) * (cauldronSave.progress / cauldronSave.progressMax));
+            if (cauldronSave.progress >= cauldronSave.progressMax) //TODO good place for upgrades
             {
-                isDone = true;
+                cauldronSave.isDone = true;
                 timeLeftText.text = "!";
-                gatherButton.interactable = true;
+                UpdateButtons();
                 foreach (CauldronIngredient preview in ingredientPreviews)
                 {
                     preview.hopping = false;
@@ -286,23 +279,25 @@ public class Cauldron : MonoBehaviour
 
     public void TakePotion()
     {
-        //TODO add potion to inventory
-        
         potionSprite.enabled = true;
         
-        int random = Random.Range(0, ingredientTotal);
+        int random = Random.Range(0, cauldronSave.ingredientTotal);
+        MushroomBlock.MushroomType potionType = MushroomBlock.MushroomType.Brown;
         int current = 0;
-        for (int i = 0; i < ingredients.Count; i++)
+        for (int i = 0; i < cauldronSave.ingredients.Count; i++)
         {
-            current += ingredientAmounts[i];
+            current += cauldronSave.ingredientAmounts[i];
             if (random < current)
             {
-                potionSprite.sprite = GetPotionSprite(ingredients[i]);
+                potionType = cauldronSave.ingredients[i];
+                potionSprite.sprite = GetPotionSprite(cauldronSave.ingredients[i]);
                 break;
             }
         }
 
-        int potionAmount = ingredientTotal / 100;//TODO good place for upgrades
+        int potionAmount = cauldronSave.ingredientTotal / 100;//TODO good place for upgrades
+        
+        potions[(int)potionType] += (uint)potionAmount;
         
         potionSprite.transform.DOComplete();
         timeLeftText.text = "+" + potionAmount.ToString();
@@ -318,18 +313,27 @@ public class Cauldron : MonoBehaviour
         TurnOff();
         RemoveFuel();
         cauldronSprite.transform.DOPunchScale(Vector3.one * punchSize, 0.5f, 1, 0.5f);
-        isDone = false;
-        progress = 0f;
-        ingredients.Clear();
-        ingredientAmounts.Clear();
-        gatherButton.interactable = false;
-        fuelButton.interactable = true;
-        CheckIngredientButton();
+        cauldronSave.isDone = false;
+        cauldronSave.progress = 0f;
+        cauldronSave.ingredients.Clear();
+        cauldronSave.ingredientAmounts.Clear();
+        UpdateButtons();
         foreach (var ingredientPreview in ingredientPreviews)
         {
             ingredientPreview.Disable();
         }
-        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
+        ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
+    }
+    
+    public void UpdateButtons()
+    {
+        CheckFueledAndReady();
+        fuelButton.interactable = !cauldronSave.hasFuel && !cauldronSave.isOn;
+        onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel && cauldronSave.ingredientTotal >= 100 && !cauldronSave.isOn;
+        gatherButton.interactable = cauldronSave.isDone;
+        removeIngredientsButton.interactable = cauldronSave.ingredients.Count > 0 && !cauldronSave.isOn;
+        addIngredientButton.interactable = !cauldronSave.isOn && !cauldronSave.isDone && int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
+
     }
 
     public void NextIngredient()
@@ -369,37 +373,49 @@ public class Cauldron : MonoBehaviour
             if (value > 0)
             {
                 int alreadyHave = 0;
-                if (ingredients.Contains(currentIngredient))
+                if (cauldronSave.ingredients.Contains(currentIngredient))
                 {
-                    alreadyHave = ingredientAmounts[ingredients.IndexOf(currentIngredient)];
+                    alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
                 }
                 if (value > SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave)
                 {
                     ingredientAmountText.text = (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave).ToString();
                 }
-                CheckIngredientButton();
+                UpdateButtons();
                 return;
             }
         }
 
         ingredientAmountText.text = "0";
-        CheckIngredientButton();
+        UpdateButtons();
     }
 
     public void SetPercent(float percent)
     {
         int alreadyHave = 0;
-        if (ingredients.Contains(currentIngredient))
+        if (cauldronSave.ingredients.Contains(currentIngredient))
         {
-            alreadyHave = ingredientAmounts[ingredients.IndexOf(currentIngredient)];
+            alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
         }
         ingredientAmountText.text = Mathf.RoundToInt(
             (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
         ValidateValue();
     }
     
-    public Sprite GetPotionSprite(MushroomBlock.MushroomType type)
+    public static Sprite GetPotionSprite(MushroomBlock.MushroomType type)
     {
         return Resources.Load<Sprite>("Sprites/Potions/" + type + "Potion");
     }
+}
+[Serializable]
+public class CauldronSave
+{
+    public float progressMax = 30f;
+    public float progress = 0f;
+    public bool hasFuel = false;
+    public bool isOn = false;
+    public bool isDone = false;
+    public List<MushroomBlock.MushroomType> ingredients = new List<MushroomBlock.MushroomType>();
+    public List<int> ingredientAmounts = new List<int>();
+    public int ingredientTotal = 0;
 }

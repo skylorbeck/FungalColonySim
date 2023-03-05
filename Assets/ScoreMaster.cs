@@ -83,7 +83,7 @@ public class ScoreMaster : MonoBehaviour
 
     }
 
-    private void UpdateMushroomText()
+    public void UpdateMushroomText()
     {
         UpdateBrownText();
         UpdateRedText();

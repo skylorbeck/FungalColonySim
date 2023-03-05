@@ -31,6 +31,7 @@ public class GameMaster : MonoBehaviour
 
     public int saveTimer = 0;
 
+    public Color[] mushroomColors = new Color[3];
 
     //TODO better scaling upgrade to increase gains from convergence
     //TODO harvest mushrooms by clicking on floor
