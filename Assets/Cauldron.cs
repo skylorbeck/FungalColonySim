@@ -26,6 +26,8 @@ public class Cauldron : MonoBehaviour
     public float rotationSpeed = 5f;
     public float rotationDegree = 35f;
     public float punchSize = 1.5f;
+    public float baseBrewTime = 30f;
+    public float additionalBrewRatio = 0.25f;
 
     public SpriteRenderer ingredientSprite;
     public Image ingredientPreviewImage;
@@ -35,6 +37,7 @@ public class Cauldron : MonoBehaviour
     public Button addIngredientButton;
     public Button nextIngredientButton;
     public Button previousIngredientButton;
+    public Button removeIngredientsButton;
     public MushroomBlock.MushroomType currentIngredient;
     public List<CauldronIngredient> ingredientPreviews;
     public RatioBar ingredientBar;
@@ -47,6 +50,7 @@ public class Cauldron : MonoBehaviour
     public bool isDone = false;
     public List<MushroomBlock.MushroomType> ingredients = new List<MushroomBlock.MushroomType>();
     public List<int> ingredientAmounts = new List<int>();
+    public int ingredientTotal = 0;
 
     void Start()
     {
@@ -108,12 +112,13 @@ public class Cauldron : MonoBehaviour
 
     private void CheckFueledAndReady()
     {
-        int total = 0;
+        ingredientTotal = 0;
         foreach (int amount in ingredientAmounts)
         {
-            total += amount;
+            ingredientTotal += amount;
         }
-        onButton.interactable = ingredients.Count > 0 && hasFuel && total > 100;
+        onButton.interactable = ingredients.Count > 0 && hasFuel && ingredientTotal >= 100;
+        removeIngredientsButton.interactable = ingredients.Count > 0;
     }
 
     public void TurnOn()
@@ -131,6 +136,11 @@ public class Cauldron : MonoBehaviour
             preview.hopping = true;
         }
         
+        foreach (MushroomBlock.MushroomType mushroomType in ingredients)
+        {
+            SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] -= (uint)ingredientAmounts[ingredients.IndexOf(mushroomType)];
+        }
+        removeIngredientsButton.interactable = false;
         onButton.interactable = false;
         CheckIngredientButton();
     }
@@ -165,9 +175,8 @@ public class Cauldron : MonoBehaviour
     public void AddIngredient()
     {
         ValidateValue();
-        //TODO check for ingredient amount before inserting
         AddIngredient(currentIngredient, int.Parse(ingredientAmountText.text));
-        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
+        ValidateValue();
     }
 
     public void AddIngredient(MushroomBlock.MushroomType ingredient, int amount = 1)
@@ -206,10 +215,11 @@ public class Cauldron : MonoBehaviour
                 ingredientPool.Release(ingredientSprite);
             };
         };
-        // timeLeftText.text = "Ready";
 
         CheckFueledAndReady();
-
+        progressMax = baseBrewTime + (baseBrewTime * (ingredientTotal-100) * 0.01f*additionalBrewRatio);//TODO good place for upgrades
+        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
+        timeLeftText.text =(progressMax).ToString("F");
     }
 
     public void RemoveIngredient(MushroomBlock.MushroomType ingredient, int amount = 1)
@@ -223,6 +233,27 @@ public class Cauldron : MonoBehaviour
                 ingredientAmounts.Remove(ingredientAmounts[ingredients.IndexOf(ingredient)]);
             }
         }
+    }
+
+    public void ChangeScreen()
+    {
+        if (!isOn)
+        {
+            RemoveAllIngredients();
+        }
+    }
+    
+    public void RemoveAllIngredients()
+    {
+        ingredients.Clear();
+        ingredientAmounts.Clear();
+        ingredientBar.SetAmounts(ingredientAmounts, ingredients);
+        timeLeftText.text = "";
+        foreach (CauldronIngredient preview in ingredientPreviews)
+        {
+            preview.Disable();
+        }
+        CheckFueledAndReady();
     }
 
 
@@ -258,13 +289,8 @@ public class Cauldron : MonoBehaviour
         //TODO add potion to inventory
         
         potionSprite.enabled = true;
-        //weighted random based on ingredients
-        int total = 0;
-        foreach (var ingredient in ingredients)
-        {
-            total += ingredientAmounts[ingredients.IndexOf(ingredient)];
-        }
-        int random = Random.Range(0, total);
+        
+        int random = Random.Range(0, ingredientTotal);
         int current = 0;
         for (int i = 0; i < ingredients.Count; i++)
         {
@@ -276,7 +302,7 @@ public class Cauldron : MonoBehaviour
             }
         }
 
-        int potionAmount = total / 100;
+        int potionAmount = ingredientTotal / 100;//TODO good place for upgrades
         
         potionSprite.transform.DOComplete();
         timeLeftText.text = "+" + potionAmount.ToString();
@@ -342,10 +368,14 @@ public class Cauldron : MonoBehaviour
         {
             if (value > 0)
             {
-                if (value > SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient])
+                int alreadyHave = 0;
+                if (ingredients.Contains(currentIngredient))
                 {
-                    ingredientAmountText.text =
-                        SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient].ToString();
+                    alreadyHave = ingredientAmounts[ingredients.IndexOf(currentIngredient)];
+                }
+                if (value > SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave)
+                {
+                    ingredientAmountText.text = (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave).ToString();
                 }
                 CheckIngredientButton();
                 return;
@@ -358,7 +388,13 @@ public class Cauldron : MonoBehaviour
 
     public void SetPercent(float percent)
     {
-        ingredientAmountText.text = Mathf.RoundToInt(SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] * percent).ToString();
+        int alreadyHave = 0;
+        if (ingredients.Contains(currentIngredient))
+        {
+            alreadyHave = ingredientAmounts[ingredients.IndexOf(currentIngredient)];
+        }
+        ingredientAmountText.text = Mathf.RoundToInt(
+            (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
         ValidateValue();
     }
     

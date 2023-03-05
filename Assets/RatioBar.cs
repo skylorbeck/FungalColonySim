@@ -13,6 +13,8 @@ public class RatioBar : MonoBehaviour
     public TextMeshProUGUI[] texts;
     public TextMeshProUGUI[] percentTexts;
     public TextMeshProUGUI totalText;
+    public TextMeshProUGUI potionTotalText;
+    public TextMeshProUGUI potionRatioText;
     void FixedUpdate()
     {
         float total = 0;
@@ -59,7 +61,18 @@ public class RatioBar : MonoBehaviour
         {
             total += amount;
         }
-        totalText.text = total>0?total + " /100= "+ total/100:"";
+
+        if (total > 0)
+        {
+            totalText.text = total.ToString("N0");
+            potionTotalText.text = (total / 100).ToString("N0");
+            potionRatioText.enabled = true;
+        } else {
+            totalText.text = "";
+            potionTotalText.text = "";
+            potionRatioText.enabled = false;
+        }
+
         
         for (int i = 0; i < percentTexts.Length; i++)
         {
