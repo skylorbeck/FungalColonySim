@@ -73,7 +73,7 @@ public class Tooltip : MonoBehaviour
 
     public void ShowToolTip(string headerText, string contentText)
     {
-        gameObject.SetActive(true);//TODO make fade instead of instant
+        gameObject.SetActive(true);
         background.DOComplete();
         header.DOComplete();
         content.DOComplete();

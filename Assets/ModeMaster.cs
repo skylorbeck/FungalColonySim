@@ -20,6 +20,7 @@ public class ModeMaster : MonoBehaviour
     public GameObject Hivemind;
     public GameObject HivemindUpgrades;
     public GameObject Potions;
+    public GameObject PotionsUpgrades;
     public Gamemode currentMode;
     public Gamemode lastMode;
 
@@ -118,6 +119,7 @@ public class ModeMaster : MonoBehaviour
         RedFarmUpgrades.SetActive(false);
         BlueFarmUpgrades.SetActive(false);
         HivemindUpgrades.SetActive(false);
+        PotionsUpgrades.SetActive(false);
         
         UpdateDots();
 
@@ -171,7 +173,7 @@ public class ModeMaster : MonoBehaviour
             case Gamemode.Potions:
                 modeText.text = "Potions";
                 Potions.transform.position = new Vector3(-dist, 0, 0);
-                Potions.transform.DOMoveX(0, duration);
+                Potions.transform.DOMoveX(0, duration).onComplete = () => PotionsUpgrades.SetActive(true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");

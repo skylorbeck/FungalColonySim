@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
+    //TODO disable this in certain modes
     private Camera camera;
 
     public int minCamDist = 5;
