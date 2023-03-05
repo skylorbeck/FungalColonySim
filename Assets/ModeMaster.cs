@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -29,6 +30,8 @@ public class ModeMaster : MonoBehaviour
     public Button previousButton;
 
     public Image[] dots;
+    
+    [SerializeField] private Gamemode[] modesToDisableCamera;
     private void Start()
     {
         SetMode(Gamemode.BrownFarm);
@@ -179,6 +182,7 @@ public class ModeMaster : MonoBehaviour
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");
         }
         modeText.DOFade(0, 0.5f).SetDelay(1.5f);
+        CameraCheck();
     }
 
     public enum Gamemode
@@ -200,4 +204,15 @@ public class ModeMaster : MonoBehaviour
         
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);    }
+
+    public void CameraCheck()
+    {
+        if (modesToDisableCamera.Contains(currentMode))
+        {
+            GameMaster.instance.camera.GetComponent<CameraController>().Disable();
+        } else
+        {
+            GameMaster.instance.camera.GetComponent<CameraController>().Enable();
+        }
+    }
 }

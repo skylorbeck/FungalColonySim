@@ -12,15 +12,17 @@ public class CameraController : MonoBehaviour
     public int minCamDist = 5;
     public int maxCamDist = 20;
     public int camDist = 10;
-    
+
     public bool isDragging = false;
     public Vector3 dragOrigin;
     public Vector3 bounds;
-    
+
     [SerializeField] private Image grabCursor;
     [SerializeField] private Image grabCursorPointer;
-    
     public float dragSpeed = 2;
+
+    [SerializeField] private int camDistLast = 10;
+    [SerializeField] private bool isDisabled = false;
     void Start()
     {
         camera = GameMaster.instance.camera;
@@ -28,6 +30,13 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (isDisabled)
+        {
+            transform.position =new Vector3(0, -5, -10);
+            camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, camDist, Time.deltaTime * 10);
+            return;
+        }
+        
         int larger = Mathf.Max(SaveSystem.instance.GetSaveFile().farmSize.x, SaveSystem.instance.GetSaveFile().farmSize.y);
         bounds = new Vector3(larger, larger, 0);
         if (Input.mouseScrollDelta.y > 0)
@@ -70,8 +79,18 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    public void Disable()
     {
-        
+        if (isDisabled)return;
+        isDisabled = true;
+        camDistLast = camDist;
+        camDist = 10;
+    }
+    
+    public void Enable()
+    {
+        if (!isDisabled)return;
+        isDisabled = false;
+        camDist = camDistLast;
     }
 }

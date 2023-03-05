@@ -137,7 +137,7 @@ public class Cauldron : MonoBehaviour
 
     private void CheckIngredientButton()
     {
-        addIngredientButton.interactable = !isOn && !isDone && int.Parse(ingredientAmountText.text) > 0;
+        addIngredientButton.interactable = !isOn && !isDone && int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
     }
 
     public void TurnOff()
