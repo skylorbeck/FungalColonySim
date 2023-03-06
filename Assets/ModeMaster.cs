@@ -12,7 +12,7 @@ public class ModeMaster : MonoBehaviour
 {
     public int distance = 500;
     public float duration = 0.5f;
-    
+
     public GameObject BrownFarm;
     public GameObject BrownFarmUpgrades;
     public GameObject RedFarm;
@@ -33,6 +33,7 @@ public class ModeMaster : MonoBehaviour
     public Image[] dots;
     public UnityAction OnModeChange;
     [SerializeField] private Gamemode[] modesToDisableCamera;
+
     private void Start()
     {
         SetMode(Gamemode.BrownFarm);
@@ -46,27 +47,29 @@ public class ModeMaster : MonoBehaviour
         nextButton.gameObject.SetActive(unlocked);
         previousButton.gameObject.SetActive(unlocked);
     }
-    
+
     public void NextMode()
     {
         SFXMaster.instance.PlayMenuClick();
         Gamemode mode = currentMode;
         mode++;
-        
+
         if (!SaveSystem.instance.GetSaveFile().redUnlocked && mode == Gamemode.RedFarm)
         {
             mode++;
         }
+
         if (!SaveSystem.instance.GetSaveFile().blueUnlocked && mode == Gamemode.BlueFarm)
         {
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Hivemind)
         {
             mode++;
-        } 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Potions)
+        }
+
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Potions)
         {
             mode++;
         }
@@ -75,38 +78,43 @@ public class ModeMaster : MonoBehaviour
         {
             mode = Gamemode.BrownFarm;
         }
+
         SetMode(mode);
     }
-    
+
     public void PreviousMode()
     {
         SFXMaster.instance.PlayMenuClick();
         Gamemode mode = currentMode;
         mode--;
-        
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Potions)
+
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Potions)
         {
             mode--;
         }
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal>0) && mode == Gamemode.Hivemind)
+
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Hivemind)
         {
             mode--;
         }
+
         if (!SaveSystem.instance.GetSaveFile().blueUnlocked && mode == Gamemode.BlueFarm)
         {
             mode--;
         }
+
         if (!SaveSystem.instance.GetSaveFile().redUnlocked && mode == Gamemode.RedFarm)
         {
             mode--;
         }
-       
-        
+
+
         if (mode < Gamemode.BrownFarm)
         {
             mode = Gamemode.Potions;
         }
-        SetMode(mode,true);
+
+        SetMode(mode, true);
     }
 
     private void SetMode(Gamemode gamemode, bool left = false)
@@ -118,17 +126,17 @@ public class ModeMaster : MonoBehaviour
         BlueFarm.transform.DOComplete();
         Hivemind.transform.DOComplete();
         Potions.transform.DOComplete();
-        
+
         BrownFarmUpgrades.SetActive(false);
         RedFarmUpgrades.SetActive(false);
         BlueFarmUpgrades.SetActive(false);
         HivemindUpgrades.SetActive(false);
         PotionsUpgrades.SetActive(false);
-        
+
         UpdateDots();
 
         int dist = left ? distance : -distance;
-        
+
         switch (lastMode)
         {
             case Gamemode.BrownFarm:
@@ -182,6 +190,7 @@ public class ModeMaster : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");
         }
+
         modeText.DOFade(0, 0.5f).SetDelay(1.5f);
         CameraCheck();
         OnModeChange?.Invoke();
@@ -203,16 +212,18 @@ public class ModeMaster : MonoBehaviour
         dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
-        
+
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
-        dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);    }
+        dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);
+    }
 
     public void CameraCheck()
     {
         if (modesToDisableCamera.Contains(currentMode))
         {
             GameMaster.instance.camera.GetComponent<CameraController>().Disable();
-        } else
+        }
+        else
         {
             GameMaster.instance.camera.GetComponent<CameraController>().Enable();
         }

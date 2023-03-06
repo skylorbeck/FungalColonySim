@@ -17,7 +17,7 @@ public class Cauldron : MonoBehaviour
     public SpriteRenderer progressSprite;
     public SpriteRenderer[] fire;
     public SpriteRenderer[] wood;
-    public Button fuelButton;
+    public Button fuelButton;//TODO turn off when has auto-fuel upgrade
     public Button onButton;
     public Button gatherButton;
     public SpriteRenderer potionSprite;
@@ -29,6 +29,14 @@ public class Cauldron : MonoBehaviour
     public float punchSize = 1.5f;
     public float baseBrewTime = 30f;
     public float additionalBrewRatio = 0.25f;
+    public int neededIngredients = 100;
+    public int neededIngredientsBase = 100;
+    public int desiredPotions = 0;
+    public TMP_InputField desiredPotionsText;
+    public Button decreaseDesiredPotionsButton;
+    public Button increaseDesiredPotionsButton;
+    public GameObject percentButtons;//TODO turn on when has upgrade
+    public GameObject evenPotionButtons;//TODO turn on when has upgrade
 
     public SpriteRenderer ingredientSprite;
     public Image ingredientPreviewImage;
@@ -90,6 +98,7 @@ public class Cauldron : MonoBehaviour
         }
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
         UpdateIngredient();
+        UpdateNeededIngredients();
         UpdateButtons();
     }
 
@@ -211,9 +220,16 @@ public class Cauldron : MonoBehaviour
         };
 
         CheckFueledAndReady();
-        cauldronSave.progressMax = baseBrewTime + (baseBrewTime * (cauldronSave.ingredientTotal-100) * 0.01f*additionalBrewRatio);//TODO good place for upgrades
+        UpdateNeededIngredients();
+        cauldronSave.progressMax = baseBrewTime + (baseBrewTime * ((cauldronSave.ingredientTotal-neededIngredients) /neededIngredients) *additionalBrewRatio);//TODO good place for upgrades
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
         timeLeftText.text =(cauldronSave.progressMax).ToString("F");
+    }
+
+    private void UpdateNeededIngredients()
+    {
+        neededIngredients = neededIngredientsBase; //TODO good place for upgrades //TODO finish this
+        ingredientBar.ratio = neededIngredients;
     }
 
     public void RemoveIngredient(MushroomBlock.MushroomType ingredient, int amount = 1)
@@ -260,11 +276,11 @@ public class Cauldron : MonoBehaviour
     {
         if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
-            cauldronSave.progress += Time.fixedDeltaTime * progressSpeed; //TODO good place for upgrades
+            cauldronSave.progress += Time.fixedDeltaTime * progressSpeed;//TODO good place for upgrades
             timeLeftText.text =(cauldronSave.progressMax - cauldronSave.progress).ToString("F");
             cauldronSprite.transform.rotation = Quaternion.Euler(0, 0,
                 Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) * (cauldronSave.progress / cauldronSave.progressMax));
-            if (cauldronSave.progress >= cauldronSave.progressMax) //TODO good place for upgrades
+            if (cauldronSave.progress >= cauldronSave.progressMax)
             {
                 cauldronSave.isDone = true;
                 timeLeftText.text = "!";
@@ -295,7 +311,7 @@ public class Cauldron : MonoBehaviour
             }
         }
 
-        int potionAmount = cauldronSave.ingredientTotal / 100;//TODO good place for upgrades
+        int potionAmount = cauldronSave.ingredientTotal / neededIngredients;//TODO good place for upgrades
         
         potions[(int)potionType] += (uint)potionAmount;
         
@@ -329,7 +345,7 @@ public class Cauldron : MonoBehaviour
     {
         CheckFueledAndReady();
         fuelButton.interactable = !cauldronSave.hasFuel && !cauldronSave.isOn;
-        onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel && cauldronSave.ingredientTotal >= 100 && !cauldronSave.isOn;
+        onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel && cauldronSave.ingredientTotal >= neededIngredients && !cauldronSave.isOn;
         gatherButton.interactable = cauldronSave.isDone;
         removeIngredientsButton.interactable = cauldronSave.ingredients.Count > 0 && !cauldronSave.isOn;
         addIngredientButton.interactable = !cauldronSave.isOn && !cauldronSave.isDone && int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
@@ -381,6 +397,7 @@ public class Cauldron : MonoBehaviour
                 {
                     ingredientAmountText.text = (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave).ToString();
                 }
+                
                 UpdateButtons();
                 return;
             }
@@ -400,6 +417,52 @@ public class Cauldron : MonoBehaviour
         ingredientAmountText.text = Mathf.RoundToInt(
             (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
         ValidateValue();
+    }
+
+    public void IncreasePotionAmount()
+    {
+        desiredPotions++;
+        ProcessDesiredPotions();
+        ValidateValue();
+    }
+    
+    public void DecreasePotionAmount()
+    {
+        desiredPotions--;
+        ProcessDesiredPotions();
+        ValidateValue();
+    }
+
+    public void ValidateDesiredPotionAmount()
+    {
+        if (int.TryParse(desiredPotionsText.text, out var value))
+        {
+            if (value > 0)
+            {
+                desiredPotions = value;
+                ProcessDesiredPotions();
+                return;
+            }
+        }
+
+        desiredPotions = 1;
+        ProcessDesiredPotions();
+    }
+
+    public void ProcessDesiredPotions()
+    {
+        if (desiredPotions > SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] / neededIngredients)
+        {
+            desiredPotions = Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] / (float)neededIngredients);
+        }
+        if (desiredPotions < 1)
+        {
+            desiredPotions = 1;
+        }
+        ingredientAmountText.text = neededIngredients * desiredPotions + "";
+        increaseDesiredPotionsButton.interactable = desiredPotions < SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] / neededIngredients;
+        decreaseDesiredPotionsButton.interactable = desiredPotions > 1;
+        desiredPotionsText.text = desiredPotions + "";
     }
     
     public static Sprite GetPotionSprite(MushroomBlock.MushroomType type)

@@ -15,6 +15,8 @@ public class RatioBar : MonoBehaviour
     public TextMeshProUGUI totalText;
     public TextMeshProUGUI potionTotalText;
     public TextMeshProUGUI potionRatioText;
+
+    public float ratio = 100;
     void FixedUpdate()
     {
         float total = 0;
@@ -67,7 +69,8 @@ public class RatioBar : MonoBehaviour
         if (total > 0)
         {
             totalText.text = total.ToString("N0");
-            potionTotalText.text = (total / 100).ToString("N0");
+            potionTotalText.text = (total / ratio).ToString("N0");
+            potionRatioText.text = "/" + ratio.ToString("N0") + "=";
             potionRatioText.enabled = true;
         } else {
             totalText.text = "";
