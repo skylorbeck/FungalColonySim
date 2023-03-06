@@ -23,6 +23,8 @@ public class ModeMaster : MonoBehaviour
     public GameObject HivemindUpgrades;
     public GameObject Potions;
     public GameObject PotionsUpgrades;
+    public GameObject Marketplace;
+    public GameObject MarketplaceUpgrades;
     public Gamemode currentMode;
     public Gamemode lastMode;
 
@@ -73,8 +75,13 @@ public class ModeMaster : MonoBehaviour
         {
             mode++;
         }
+        
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Marketplace)
+        {
+            mode++;
+        }
 
-        if (mode > Gamemode.Potions)
+        if (mode > Gamemode.Marketplace)
         {
             mode = Gamemode.BrownFarm;
         }
@@ -87,6 +94,11 @@ public class ModeMaster : MonoBehaviour
         SFXMaster.instance.PlayMenuClick();
         Gamemode mode = currentMode;
         mode--;
+
+        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Marketplace)
+        {
+            mode--;
+        }
 
         if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Potions)
         {
@@ -111,7 +123,7 @@ public class ModeMaster : MonoBehaviour
 
         if (mode < Gamemode.BrownFarm)
         {
-            mode = Gamemode.Potions;
+            mode = Gamemode.Marketplace;
         }
 
         SetMode(mode, true);
@@ -126,12 +138,14 @@ public class ModeMaster : MonoBehaviour
         BlueFarm.transform.DOComplete();
         Hivemind.transform.DOComplete();
         Potions.transform.DOComplete();
+        Marketplace.transform.DOComplete();
 
         BrownFarmUpgrades.SetActive(false);
         RedFarmUpgrades.SetActive(false);
         BlueFarmUpgrades.SetActive(false);
         HivemindUpgrades.SetActive(false);
         PotionsUpgrades.SetActive(false);
+        MarketplaceUpgrades.SetActive(false);
 
         UpdateDots();
 
@@ -153,6 +167,9 @@ public class ModeMaster : MonoBehaviour
                 break;
             case Gamemode.Potions:
                 Potions.transform.DOMoveX(dist, duration);
+                break;
+            case Gamemode.Marketplace:
+                Marketplace.transform.DOMoveX(dist, duration);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -187,6 +204,11 @@ public class ModeMaster : MonoBehaviour
                 Potions.transform.position = new Vector3(-dist, 0, 0);
                 Potions.transform.DOMoveX(0, duration).onComplete = () => PotionsUpgrades.SetActive(true);
                 break;
+            case Gamemode.Marketplace:
+                modeText.text = "Marketplace";
+                Marketplace.transform.position = new Vector3(-dist, 0, 0);
+                Marketplace.transform.DOMoveX(0, duration).onComplete = () => MarketplaceUpgrades.SetActive(true);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");
         }
@@ -203,6 +225,7 @@ public class ModeMaster : MonoBehaviour
         BlueFarm,
         Hivemind,
         Potions,
+        Marketplace,
     }
 
     public void UpdateDots()
@@ -212,6 +235,7 @@ public class ModeMaster : MonoBehaviour
         dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
+        dots[5].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
 
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);
