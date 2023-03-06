@@ -84,6 +84,7 @@ public class SaveSystem : MonoBehaviour
             saveFile.saveVersion = 4;
             saveFile.cauldronSave = new CauldronSave();
             saveFile.potionsCount = new uint[3];
+            saveFile.coins = 0;
         }
         
         loaded = true;
@@ -164,6 +165,7 @@ public class SaveSystem : MonoBehaviour
             goldenChanceMultiplier = 1;
             cauldronSave = new CauldronSave();
             potionsCount = new uint[3];
+            coins = 0;
         }
 
         public uint saveVersion = 0;
@@ -192,5 +194,6 @@ public class SaveSystem : MonoBehaviour
         public uint goldenChanceMultiplier;
         public CauldronSave cauldronSave = new CauldronSave();
         public uint[] potionsCount = new uint[3];
+        public uint coins = 0;
     }
 }

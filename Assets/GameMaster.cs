@@ -30,6 +30,8 @@ public class GameMaster : MonoBehaviour
     public Hivemind Hivemind;
 
     public int saveTimer = 0;
+    
+    public float inputDelay = 1f;
 
     public Color[] mushroomColors = new Color[3];
 
@@ -62,8 +64,22 @@ public class GameMaster : MonoBehaviour
         {
             Application.Quit();
         }
+        if(inputDelay > 0)
+        {
+            inputDelay -= Time.deltaTime;
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            ModeMaster.PreviousMode();
+            inputDelay = 1f;
+        }
 
-
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            ModeMaster.NextMode();
+            inputDelay = 1f;
+        }
     }
 
     public IEnumerator Prestige()

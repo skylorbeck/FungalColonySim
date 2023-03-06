@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 public class ModeMaster : MonoBehaviour
 {
+    //TODO check for current mode and enable/disable processing intensive things
     public int distance = 500;
     public float duration = 0.5f;
 
