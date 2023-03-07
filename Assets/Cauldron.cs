@@ -223,7 +223,12 @@ public class Cauldron : MonoBehaviour
         UpdateNeededIngredients();
         cauldronSave.progressMax = baseBrewTime + (baseBrewTime * ((cauldronSave.ingredientTotal-neededIngredients) /neededIngredients) *additionalBrewRatio);//TODO good place for upgrades
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
-        timeLeftText.text =(cauldronSave.progressMax).ToString("F");
+        int hours = (int) (cauldronSave.progressMax) / 3600;
+        int minutes = (int) ((cauldronSave.progressMax) % 3600) / 60;
+        int seconds = (int) (cauldronSave.progressMax) % 60;
+        
+        timeLeftText.text = hours.ToString("00") + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
+        // timeLeftText.text =(cauldronSave.progressMax).ToString("F");
     }
 
     private void UpdateNeededIngredients()
@@ -277,7 +282,13 @@ public class Cauldron : MonoBehaviour
         if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
             cauldronSave.progress += Time.fixedDeltaTime * progressSpeed;//TODO good place for upgrades
-            timeLeftText.text =(cauldronSave.progressMax - cauldronSave.progress).ToString("F");
+            //convert to hours, minutes and seconds left
+            int hours = (int) (cauldronSave.progressMax - cauldronSave.progress) / 3600;
+            int minutes = (int) ((cauldronSave.progressMax - cauldronSave.progress) % 3600) / 60;
+            int seconds = (int) (cauldronSave.progressMax - cauldronSave.progress) % 60;
+            
+            timeLeftText.text = hours.ToString("00") + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
+            // timeLeftText.text =(cauldronSave.progressMax - cauldronSave.progress).ToString("F");
             cauldronSprite.transform.rotation = Quaternion.Euler(0, 0,
                 Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) * (cauldronSave.progress / cauldronSave.progressMax));
             if (cauldronSave.progress >= cauldronSave.progressMax)

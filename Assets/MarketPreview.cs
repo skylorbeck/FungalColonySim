@@ -8,14 +8,14 @@ using Random = UnityEngine.Random;
 
 public class MarketPreview : MonoBehaviour
 {
-    public uint price = 10; 
+    public uint price => mode == Mode.Sell ? SaveSystem.instance.GetSaveFile().sellPrice : SaveSystem.instance.GetSaveFile().buyPrice;
     public SpriteRenderer itemSprite;
     public SpriteRenderer shadowSprite;
     public SpriteRenderer rockSprite;
     public TextMeshPro itemName;
     public TextMeshProUGUI itemPrice;
     public Button buySellButton;
-    public CurrencyVisualizer.Currency currency;
+    public CurrencyVisualizer.Currency currency => mode == Mode.Sell ? SaveSystem.instance.GetSaveFile().sellItem : SaveSystem.instance.GetSaveFile().buyItem;
     public Mode mode = Mode.Sell;
     public TMP_InputField inputField;
     
@@ -27,10 +27,13 @@ public class MarketPreview : MonoBehaviour
     public float maxHeight = .1f;
     public float shadowSize = 1f;
     
-    public void Start()
+    public IEnumerator Start()
     {
+        yield return new WaitUntil(() => SaveSystem.instance != null);
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         SetCurrency(currency);
-        UpdatePrice();
+        SetPrice(price);
+        // UpdatePrice();
     }
 
     public void FixedUpdate()
@@ -44,9 +47,9 @@ public class MarketPreview : MonoBehaviour
         // itemPrice.transform.rotation = itemSpriteTransform.rotation;
     }
 
-    public void SetCurrency(CurrencyVisualizer.Currency currency)
+    public void SetCurrency(CurrencyVisualizer.Currency newCurrency)
     {
-        switch (currency)
+        switch (newCurrency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
                 itemSprite.sprite = MushroomBlock.GetMushroomSprite(MushroomBlock.MushroomType.Brown);
@@ -73,15 +76,26 @@ public class MarketPreview : MonoBehaviour
                 itemSprite.sprite = Cauldron.GetPotionSprite(MushroomBlock.MushroomType.Blue);
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
+                throw new ArgumentOutOfRangeException(nameof(newCurrency), newCurrency, null);
         }
 
-        this.currency = currency;
+        switch (mode)
+        {
+            case Mode.Buy:
+                SaveSystem.instance.GetSaveFile().buyItem = newCurrency;
+                break;
+            case Mode.Sell:
+                SaveSystem.instance.GetSaveFile().sellItem = newCurrency;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         itemName.text = currency.ToString();
     }
 
     public void UpdatePrice()
     {
+        uint price = 99999;
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
@@ -118,7 +132,17 @@ public class MarketPreview : MonoBehaviour
     
     public void SetPrice(uint price)
     {
-        this.price = price;
+        switch (mode)
+        {
+            case Mode.Buy:
+                SaveSystem.instance.GetSaveFile().buyPrice = price;
+                break;
+            case Mode.Sell:
+                SaveSystem.instance.GetSaveFile().sellPrice = price;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         itemPrice.text = price.ToString("N0");
         CheckButton();
     }

@@ -85,6 +85,11 @@ public class SaveSystem : MonoBehaviour
             saveFile.cauldronSave = new CauldronSave();
             saveFile.potionsCount = new uint[3];
             saveFile.coins = 0;
+            saveFile.sellItem = CurrencyVisualizer.Currency.BrownMushroom;
+            saveFile.buyItem = CurrencyVisualizer.Currency.Spore;
+            saveFile.sellPrice = 0;
+            saveFile.buyPrice = 99999;
+            saveFile.shopTicks = 2;
         }
         
         loaded = true;
@@ -166,6 +171,11 @@ public class SaveSystem : MonoBehaviour
             cauldronSave = new CauldronSave();
             potionsCount = new uint[3];
             coins = 0;
+            sellItem = CurrencyVisualizer.Currency.BrownMushroom;
+            buyItem = CurrencyVisualizer.Currency.Spore;
+            sellPrice = 0;
+            buyPrice = 99999;
+            shopTicks = 2;
         }
 
         public uint saveVersion = 0;
@@ -195,5 +205,10 @@ public class SaveSystem : MonoBehaviour
         public CauldronSave cauldronSave = new CauldronSave();
         public uint[] potionsCount = new uint[3];
         public uint coins = 0;
+        public CurrencyVisualizer.Currency sellItem = CurrencyVisualizer.Currency.BrownMushroom;
+        public uint sellPrice = 0;
+        public CurrencyVisualizer.Currency buyItem = CurrencyVisualizer.Currency.Spore;
+        public uint buyPrice = 99999;
+        public uint shopTicks = 2;
     }
 }

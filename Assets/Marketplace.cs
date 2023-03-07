@@ -5,11 +5,18 @@ using UnityEngine;
 
 public class Marketplace : MonoBehaviour
 {
-    public int ticksToRefresh = 30000;
-    public int ticksToRefreshDefault = 30000;
-    public int tickRange = 10000;
+    public uint ticksToRefresh
+    {
+        get => SaveSystem.instance.GetSaveFile().shopTicks;
+        set => SaveSystem.instance.GetSaveFile().shopTicks = value;
+    }
+
+    public int ticksToRefreshDefault = 15000;
+    public int tickRange = 5000;
     public MarketPreview buyPreview;
     public MarketPreview sellPreview;
+    
+    public Merchant merchant;
     
     public TextMeshProUGUI timerText;
     
@@ -86,7 +93,7 @@ public class Marketplace : MonoBehaviour
     private void TickTimer()
     {
         ticksToRefresh--;
-        if (ticksToRefresh <= 0)
+        if (ticksToRefresh <= 1)
         {
             Refresh();
         }
@@ -95,14 +102,15 @@ public class Marketplace : MonoBehaviour
         buyPreview.CheckButton();
         sellPreview.CheckButton();
         //format tickstoRefresh to minutes and seconds. 50 ticks = 1 second
-        int minutes = ticksToRefresh / 3000;
-        int seconds = (ticksToRefresh % 3000) / 50;
+        uint minutes = ticksToRefresh / 3000;
+        uint seconds = (ticksToRefresh % 3000) / 50;
         timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
     }
 
     private void Refresh()
     {
-        ticksToRefresh = ticksToRefreshDefault + Random.Range(-tickRange, tickRange);
+        merchant.RandomSaying();
+        ticksToRefresh = (uint)(ticksToRefreshDefault + Random.Range(-tickRange, tickRange));
         do
         {
             buyPreview.Refresh();
