@@ -56,6 +56,7 @@ public class BlockMaster : MonoBehaviour
         mushroomBlocks = new List<MushroomBlock>();
         allBlocks = new List<Block>();
         dirtBlocks = new List<BiomeBlock>();
+        enrichButton.SetActive(false);
         yield return StartCoroutine(CreateWorld());
         UpdateMushPerSec();
         UpdateMushPerTenSec();
@@ -64,21 +65,31 @@ public class BlockMaster : MonoBehaviour
 
     void Update()
     {
-
-        if (Math.Abs(transform.position.x)<100)
+        //Is this more performant than just checking for the absolute x pos?
+        // if (Math.Abs(transform.position.x)<100)
+        var thisMode = currentMushroomType switch
+        {
+            MushroomBlock.MushroomType.Brown => ModeMaster.Gamemode.BrownFarm,
+            MushroomBlock.MushroomType.Red => ModeMaster.Gamemode.RedFarm,
+            MushroomBlock.MushroomType.Blue => ModeMaster.Gamemode.BlueFarm,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        if (thisMode == GameMaster.instance.ModeMaster.currentMode)
         {
             int3 mousePos = GetMousePos();
 
             foreach (Block block in allBlocks)
             {
                 block.SetLightPos(mousePos);
-                block.SetBlockOffset(new Vector3(0, Mathf.Sin(  ((floatFlipped?1:-1)*Time.time) + (floatX?block.blockPos.x:0) + (floatY?block.blockPos.y:0))*floatDistance, 0));
+                block.SetBlockOffset(new Vector3(0,
+                    Mathf.Sin(((floatFlipped ? 1 : -1) * Time.time) + (floatX ? block.blockPos.x : 0) +
+                              (floatY ? block.blockPos.y : 0)) * floatDistance, 0));
             }
-            selectionBlock.SetBlockPos(mousePos);
 
+            selectionBlock.SetBlockPos(mousePos);
         }
 
-        if (timer>1f)
+        if (timer>1f)//TODO make this a time manager class and combine it with the timer in the marketplace
         {
             timer = 0;
             seconds++;

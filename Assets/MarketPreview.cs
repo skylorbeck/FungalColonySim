@@ -177,6 +177,7 @@ public class MarketPreview : MonoBehaviour
         }
         SaveSystem.instance.GetSaveFile().coins += price * amount;
         CheckButton();
+        ValidateAmount();
     }
 
     public void Buy()

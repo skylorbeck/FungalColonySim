@@ -28,6 +28,8 @@ public class GameMaster : MonoBehaviour
     [SerializeField] private bool isConverging;
 
     public Hivemind Hivemind;
+    public Cauldron Cauldron;
+    public Marketplace Marketplace;
 
     public int saveTimer = 0;
     

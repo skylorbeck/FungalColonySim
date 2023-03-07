@@ -14,66 +14,39 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     public Toggle upgradeToggle;
     
     [Header("UnlockRed")]
-    public Button unlockRedButton;
-    public TextMeshProUGUI unlockRedText;
+    public UpgradeContainer unlockRedButton;
     public uint unlockRedCost = 3;
     
     [Header("UnlockBlue")]
-    public Button unlockBlueButton;
-    public TextMeshProUGUI unlockBlueText;
+    public UpgradeContainer unlockBlueButton;
     public uint unlockBlueCost = 5;
-    
-    [Header("BrownValue")]
-    public Button brownValueButton;
-    public TextMeshProUGUI brownValueText;
-    public uint brownValueCost = 5;
-    public uint brownValueRatio = 2;
-    public uint brownValueMax = 100;
-    public float brownValueMultiplierGain = 0.05f;
-    
-    [Header("RedValue")]
-    public Button redValueButton;
-    public TextMeshProUGUI redValueText;
-    public uint redValueCost = 5;
-    public uint redValueRatio = 2;
-    public uint redValueMax = 100;
-    public float redValueMultiplierGain = 0.05f;
-    
-    [Header("BlueValue")]
-    public Button blueValueButton;
-    public TextMeshProUGUI blueValueText;
-    public uint blueValueCost = 5;
-    public uint blueValueRatio = 2;
-    public uint blueValueMax = 100;
-    public float blueValueMultiplierGain = 0.05f;
-    
+
     [Header("GoldenSpore")]
-    public Button goldenSporeButton;
-    public TextMeshProUGUI goldenSporeText;
+    public UpgradeContainer goldenSporeButton;
     public uint goldenSporeCost = 5;
     
     [Header("GoldenMulti")]
-    public Button goldenMultiButton;
-    public TextMeshProUGUI goldenMultiText;
+    public UpgradeContainer goldenMultiButton;
     public uint goldenMultiCost = 5;
     public uint goldenMultiRatio = 2;
     public uint goldenMultiMax = 5;
     
     [Header("GoldenChance")]
-    public Button goldenChanceButton;
-    public TextMeshProUGUI goldenChanceText;
+    public UpgradeContainer goldenChanceButton;
     public uint goldenChanceCost = 5;
     public uint goldenChanceRatio = 2;
     public uint goldenChanceMax = 25;
 
     void Start()
     {
-        unlockRedText.text = unlockRedCost + "x";
-        unlockBlueText.text = unlockBlueCost + "x";
-        UpdateBrownValueText();
-        UpdateRedValueText();
-        UpdateBlueValueText();
-        goldenSporeText.text = goldenSporeCost + "x";
+        unlockRedButton.SetCostText(unlockRedCost.ToString("N0"));
+        unlockBlueButton.SetCostText(unlockBlueCost.ToString("N0"));
+        goldenSporeButton.SetCostText(goldenSporeCost.ToString("N0"));
+        unlockRedButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        unlockBlueButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        goldenSporeButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        goldenMultiButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        goldenChanceButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         UpdateGoldenChanceText();
         UpdateGoldenMultiText();
     }
@@ -91,7 +64,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             SaveSystem.instance.GetSaveFile().redUnlocked = true;
             SaveSystem.instance.Save();
             GameMaster.instance.ModeMaster.UpdateDots();
-            unlockRedButton.interactable = false;
+            unlockRedButton.ToggleButton(false);
             unlockRedButton.gameObject.SetActive(false);
         }
     }
@@ -104,60 +77,9 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             SaveSystem.instance.GetSaveFile().blueUnlocked = true;
             SaveSystem.instance.Save();
             GameMaster.instance.ModeMaster.UpdateDots();
-            unlockBlueButton.interactable = false;
+            unlockBlueButton.ToggleButton(false);
             unlockBlueButton.gameObject.SetActive(false);
         }
-    }
-    
-    public void BrownValue()
-    {
-        if (SaveSystem.instance.SpendHivemindPoints(brownValueCost))
-        {
-            SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().brownMultiplier++;
-            SaveSystem.instance.Save();
-            UpdateBrownValueText();
-        }
-    }
-
-    private void UpdateBrownValueText()
-    {
-        brownValueCost = (uint)(Mathf.Pow(brownValueRatio, SaveSystem.instance.GetSaveFile().brownMultiplier));
-        brownValueText.text = brownValueCost + "x";
-    }
-
-    public void RedValue()
-    {
-        if (SaveSystem.instance.SpendHivemindPoints(redValueCost))
-        {
-            SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().redMultiplier++;
-            SaveSystem.instance.Save();
-            UpdateRedValueText();
-        }
-    }
-
-    private void UpdateRedValueText()
-    {
-        redValueCost = (uint)(Mathf.Pow(redValueRatio, SaveSystem.instance.GetSaveFile().redMultiplier));
-        redValueText.text = redValueCost + "x";
-    }
-
-    public void BlueValue()
-    {
-        if (SaveSystem.instance.SpendHivemindPoints(blueValueCost))
-        {
-            SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().blueMultiplier++;
-            SaveSystem.instance.Save();
-            UpdateBlueValueText();
-        }
-    }
-
-    private void UpdateBlueValueText()
-    {
-        blueValueCost = (uint)(Mathf.Pow(blueValueRatio, SaveSystem.instance.GetSaveFile().blueMultiplier));
-        blueValueText.text = blueValueCost + "x";
     }
 
     public void GoldenSpore()
@@ -167,7 +89,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().goldenSporeUnlocked = true;
             SaveSystem.instance.Save();
-            goldenSporeButton.interactable = false;
+            goldenSporeButton.ToggleButton(false);
             goldenSporeButton.gameObject.SetActive(false);
         }
     }
@@ -175,7 +97,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     public void UpdateGoldenMultiText()
     {
         goldenMultiCost = (uint)(Mathf.Pow(goldenMultiRatio, SaveSystem.instance.GetSaveFile().goldenMultiplier));
-        goldenMultiText.text = goldenMultiCost + "x";
+        goldenMultiButton.SetCostText(goldenMultiCost.ToString("N0"));
     }
     
     public void GoldenMulti()
@@ -192,7 +114,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     public void UpdateGoldenChanceText()
     {
         goldenChanceCost = (uint)(Mathf.Pow(goldenChanceRatio, SaveSystem.instance.GetSaveFile().goldenChanceMultiplier));
-        goldenChanceText.text = goldenChanceCost + "x";
+        goldenChanceButton.SetCostText(goldenChanceCost.ToString("N0"));
     }
     
     public void GoldenChance()
@@ -208,6 +130,8 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
 
     void FixedUpdate()
     {
+        if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind)return;
+        
         float size = 0.1f+ Mathf.Clamp01(SaveSystem.instance.GetSaveFile().hivemindPointsTotal / 1000f) * 5;
         spriteRenderer.transform.localScale = new Vector3(size, size,size);
         
@@ -217,7 +141,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            unlockRedButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockRedCost;
+            unlockRedButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockRedCost);
         }
         
         if (unlockBlueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().blueUnlocked)
@@ -226,35 +150,9 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         } 
         else
         {
-            unlockBlueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockBlueCost;
+            unlockBlueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockBlueCost);
         }
 
-        if (brownValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().brownMultiplier >= brownValueMax)
-        {
-            brownValueButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            brownValueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= brownValueCost;
-        }
-        
-        if (redValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().redMultiplier >= redValueMax)
-        {
-            redValueButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            redValueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= redValueCost && SaveSystem.instance.GetSaveFile().redUnlocked;
-        }
-        
-        if (blueValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().blueMultiplier >= blueValueMax)
-        {
-            blueValueButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            blueValueButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= blueValueCost && SaveSystem.instance.GetSaveFile().blueUnlocked;
-        }
         
         if (goldenSporeButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
         {
@@ -262,7 +160,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            goldenSporeButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost;
+            goldenSporeButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost);
         }
 
         if (goldenChanceButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax)|| !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
@@ -272,7 +170,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         else
         {
             goldenChanceButton.gameObject.SetActive(true);
-            goldenChanceButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost;
+            goldenChanceButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost);
         }
 
         if (goldenMultiButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax)|| !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
@@ -282,7 +180,7 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         else
         {
             goldenMultiButton.gameObject.SetActive(true);
-            goldenMultiButton.interactable = SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenMultiCost;
+            goldenMultiButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenMultiCost);
         }
     }
 
@@ -299,6 +197,6 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     
     public void ToggleShowUpgrades()
     {
-        hivemindPanel.DOLocalMoveX(upgradeToggle.isOn ? 700 : 1500, 0.5f).SetEase(Ease.OutBounce);
+        hivemindPanel.DOLocalMoveX(upgradeToggle.isOn ? 0 : 900, 0.5f).SetEase(Ease.OutBounce);
     }
 }

@@ -263,13 +263,13 @@ public class ConvergenceMaster : MonoBehaviour
     private void CalculateSporeReward()
     {
         double sporeCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().sporeCountTotal);
-        float brownMultiplier = 1 + (SaveSystem.instance.GetSaveFile().brownMultiplier * GameMaster.instance.Hivemind.brownValueMultiplierGain);
+        float brownMultiplier = 1 + (SaveSystem.instance.GetSaveFile().brownMultiplier * GameMaster.instance.Marketplace.brownValueMultiplierGain);
         uint brownValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown]*brownMultiplier, 1.1f);
 
-        float redMultiplier = 1 + (SaveSystem.instance.GetSaveFile().redMultiplier * GameMaster.instance.Hivemind.redValueMultiplierGain);//
+        float redMultiplier = 1 + (SaveSystem.instance.GetSaveFile().redMultiplier * GameMaster.instance.Marketplace.redValueMultiplierGain);//
         uint redValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red]*redMultiplier, 1.3f);
 
-        float blueMultiplier = 1 + (SaveSystem.instance.GetSaveFile().blueMultiplier * GameMaster.instance.Hivemind.blueValueMultiplierGain);
+        float blueMultiplier = 1 + (SaveSystem.instance.GetSaveFile().blueMultiplier * GameMaster.instance.Marketplace.blueValueMultiplierGain);
         uint blueValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue]*blueMultiplier, 1.5f);
         
         convergencePointCostText.text = "(" +brownValue + "+" + redValue + "+" + blueValue + ")\n" + sporeCost.ToString("0.00");

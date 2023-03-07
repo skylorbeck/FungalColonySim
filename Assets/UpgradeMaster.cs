@@ -10,27 +10,23 @@ using UnityEngine.UI;
 public class UpgradeMaster : MonoBehaviour
 {
     [Header("Auto Harvest")]
-    [SerializeField] private Button autoHarvestButton;
-    [SerializeField] private TextMeshProUGUI autoHarvestText;
+    [SerializeField] private UpgradeContainer autoHarvestButton;
     [SerializeField] private uint autoHarvestCost = 5;
     [SerializeField] private bool autoHarvestVisible = false;
     [Header("Auto Harvest Speed")]
-    [SerializeField] private Button autoHarvestSpeedButton;
-    [SerializeField] private TextMeshProUGUI autoHarvestSpeedText;
+    [SerializeField] private UpgradeContainer autoHarvestSpeedButton;
     [SerializeField] private uint autoHarvestSpeedCost = 50;
     [SerializeField] private uint autoHarvestSpeedRatio = 2;
     [SerializeField] private bool autoHarvestSpeedVisible = false;
 
     [Header("Growth Speed")]
-    [SerializeField] private Button growthSpeedButton;
-    [SerializeField] private TextMeshProUGUI growthSpeedText;
+    [SerializeField] private UpgradeContainer growthSpeedButton;
     [SerializeField] private uint growthSpeedCost = 5;
     [SerializeField] private uint growthSpeedRatio= 3;
     [SerializeField] private bool growthSpeedVisible = false;
     
     [Header("Enrich")]
-    [SerializeField] private TextMeshProUGUI enrichCostText;
-    [SerializeField] private Button enrichButton;
+    [SerializeField] private UpgradeContainer enrichButton;
     
     [Header("Meta")]
     [SerializeField] private Toggle showUpgrades;
@@ -40,7 +36,10 @@ public class UpgradeMaster : MonoBehaviour
     void Start()
     {
         UpdateButtons();
-        
+        autoHarvestButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        autoHarvestSpeedButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        growthSpeedButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        enrichButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
     }
 
     public void Awake()
@@ -50,7 +49,7 @@ public class UpgradeMaster : MonoBehaviour
     public void ToggleShowUpgrades()
     {
         // SFXMaster.instance.PlayMenuClick();
-        upgradePanel.DOLocalMoveX(showUpgrades.isOn ? 700 : 1500, 0.5f).SetEase(Ease.OutBounce);
+        upgradePanel.DOLocalMoveX(showUpgrades.isOn ? 0 : 900, 0.5f).SetEase(Ease.OutBounce);
     }
     
     public void PurchaseAutoHarvest()
@@ -59,7 +58,7 @@ public class UpgradeMaster : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().autoHarvest[(int)mushroomType] = true;
-            autoHarvestButton.interactable = false;
+            autoHarvestButton.ToggleButton(false);
             autoHarvestButton.gameObject.SetActive(false);
         }
     }
@@ -97,21 +96,22 @@ public class UpgradeMaster : MonoBehaviour
     private void UpdateEnrichButton()
     {
         uint cost = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().mushroomBlockCount[(int)mushroomType], 2);
-        enrichCostText.text = cost + "x";
-        enrichButton.interactable = SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= cost;
+        enrichButton.SetCostText(cost.ToString("N0"));
+        enrichButton.ToggleButton(SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= cost);
     }
 
     private void UpdateAutoHarvestButton()
     {
-        autoHarvestButton.interactable = SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= autoHarvestCost;
-        autoHarvestText.text = autoHarvestCost + "x";
+        autoHarvestButton.ToggleButton(
+            SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= autoHarvestCost);
+        autoHarvestButton.SetCostText(autoHarvestCost.ToString("N0"));
     }
 
     private void UpdateGrowthSpeedButton()
     {
         growthSpeedCost = (uint)Mathf.Max(Mathf.Pow(growthSpeedRatio, SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)mushroomType]), growthSpeedCost);
-        growthSpeedButton.interactable = SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= growthSpeedCost;
-        growthSpeedText.text = growthSpeedCost + "x";
+        growthSpeedButton.ToggleButton(SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= growthSpeedCost);
+        growthSpeedButton.SetCostText(growthSpeedCost.ToString("N0"));
         if (SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)mushroomType]>=20)
         {
             growthSpeedButton.gameObject.SetActive(false);
@@ -121,8 +121,8 @@ public class UpgradeMaster : MonoBehaviour
     public void UpdateAutoHarvestSpeedButton()
     {
         autoHarvestSpeedCost = (uint)Mathf.Max(Mathf.Pow(autoHarvestSpeedRatio, SaveSystem.instance.GetSaveFile().autoHarvestSpeed[(int)mushroomType]), autoHarvestSpeedCost);
-        autoHarvestSpeedButton.interactable = SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= autoHarvestSpeedCost;
-        autoHarvestSpeedText.text = autoHarvestSpeedCost + "x";
+        autoHarvestSpeedButton.ToggleButton(SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] >= autoHarvestSpeedCost);
+        autoHarvestSpeedButton.SetCostText(autoHarvestSpeedCost.ToString("N0"));
         if (SaveSystem.instance.GetSaveFile().autoHarvestSpeed[(int)mushroomType] >= 20)
         {
             autoHarvestSpeedButton.gameObject.SetActive(false);
