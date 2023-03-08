@@ -256,6 +256,22 @@ public class BlockMaster : MonoBehaviour
             floatX = Random.value > 0.5f;
             floatY = Random.value > 0.5f;
         }
+        
+        switch (currentMushroomType)
+        {
+            case MushroomBlock.MushroomType.Brown:
+                ScoreMaster.instance.UpdateBrownText();
+                break;
+            case MushroomBlock.MushroomType.Red:
+                ScoreMaster.instance.UpdateRedText();
+                break;
+            case MushroomBlock.MushroomType.Blue:
+                ScoreMaster.instance.UpdateBlueText();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
         int blockCount = 0;
         for (int x = 0; x < xMax+SaveSystem.instance.GetSaveFile().farmSize.x; x++)
         {
@@ -287,21 +303,8 @@ public class BlockMaster : MonoBehaviour
             }
         }
 
-        switch (currentMushroomType)
-        {
-            case MushroomBlock.MushroomType.Brown:
-                ScoreMaster.instance.UpdateBrownText();
-                break;
-            case MushroomBlock.MushroomType.Red:
-                ScoreMaster.instance.UpdateRedText();
-                break;
-            case MushroomBlock.MushroomType.Blue:
-                ScoreMaster.instance.UpdateBlueText();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-        yield return new WaitForSeconds(blockCount*0.5f);
+        
+        yield return new WaitForSeconds(1f);
         isWorldCreated = true;
         enrichButton.SetActive(dirtBlocks.Count >0);
     }

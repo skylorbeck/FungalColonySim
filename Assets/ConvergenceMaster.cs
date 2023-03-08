@@ -66,6 +66,8 @@ public class ConvergenceMaster : MonoBehaviour
         yield return new WaitUntil(() => GameMaster.instance.brownBlockMaster.isWorldCreated);
         yield return new WaitUntil(() => GameMaster.instance.redBlockMaster.isWorldCreated);
         yield return new WaitUntil(() => GameMaster.instance.blueBlockMaster.isWorldCreated);
+        yield return new WaitUntil(() => SaveSystem.instance != null);
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         convergeButton.gameObject.SetActive(unlocked=(SaveSystem.instance.GetSaveFile().mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().totalConverges >= 1));
         convergeButton.interactable = unlocked;
     }
@@ -246,8 +248,9 @@ public class ConvergenceMaster : MonoBehaviour
         skillRewardText.text = "+"+skillReward + " skill points";
         if (!unlocked)
         {
-            unlocked = SaveSystem.instance.GetSaveFile().mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().totalConverges >= 1;
+            unlocked = (SaveSystem.instance.GetSaveFile().mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().totalConverges >= 1) && GameMaster.instance.brownBlockMaster.isWorldCreated && GameMaster.instance.redBlockMaster.isWorldCreated && GameMaster.instance.blueBlockMaster.isWorldCreated;
             convergeButton.gameObject.SetActive(unlocked);
+            convergeButton.interactable = unlocked ;
             sporeVisualizer.gameObject.SetActive(unlocked);
             return;
         }

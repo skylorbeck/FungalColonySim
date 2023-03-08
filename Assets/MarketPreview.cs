@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,8 @@ public class MarketPreview : MonoBehaviour
     public CurrencyVisualizer.Currency currency => mode == Mode.Sell ? SaveSystem.instance.GetSaveFile().sellItem : SaveSystem.instance.GetSaveFile().buyItem;
     public Mode mode = Mode.Sell;
     public TMP_InputField inputField;
-    
+    public TextMeshProUGUI goldChangedText;
+
     public bool soldOut = false;
     
     public float speed = 1f;
@@ -127,6 +129,7 @@ public class MarketPreview : MonoBehaviour
         }
         SetPrice(price);
         CheckButton();
+        ValidateAmount();
 
     }
     
@@ -169,7 +172,8 @@ public class MarketPreview : MonoBehaviour
     public void Sell()
     {
         if (soldOut) return;
-        uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 1;
+        uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 0;
+        if (amount == 0) return;
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
@@ -200,6 +204,9 @@ public class MarketPreview : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
         SaveSystem.instance.GetSaveFile().coins += price * amount;
+        goldChangedText.text = "+" + (price * amount).ToString("N0");
+        goldChangedText.DOKill();
+        goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
         CheckButton();
         ValidateAmount();
     }
@@ -238,6 +245,9 @@ public class MarketPreview : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
         SaveSystem.instance.GetSaveFile().coins -= price;
+        goldChangedText.text = "-" + (price).ToString("N0");
+        goldChangedText.DOKill();
+        goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
         soldOut = true;
         itemSprite.color = Color.gray;
         CheckButton();
@@ -276,10 +286,10 @@ public class MarketPreview : MonoBehaviour
     
     public void ValidateAmount()
     {
-        int amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? a : 1;
-        if (amount < 1)
+        int amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? a : 0;
+        if (amount < 0)
         {
-            inputField.text = "1";
+            inputField.text = "0";
         }
 
         if (mode == Mode.Buy)

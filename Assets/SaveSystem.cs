@@ -49,6 +49,13 @@ public class SaveSystem : MonoBehaviour
         instance.saveFile.hivemindPoints -= amount;
         return true;
     }
+    
+    public bool SpendCoins(uint amount)
+    {
+        if (instance.saveFile.coins < amount) return false;
+        instance.saveFile.coins -= amount;
+        return true;
+    }
 
     public void Save()
     {

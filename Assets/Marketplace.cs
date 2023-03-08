@@ -47,6 +47,9 @@ public class Marketplace : MonoBehaviour
         brownValueButton.SetIcon(Resources.Load<Sprite>("Sprites/Coin"));
         redValueButton.SetIcon(Resources.Load<Sprite>("Sprites/Coin"));
         blueValueButton.SetIcon(Resources.Load<Sprite>("Sprites/Coin"));
+        UpdateBrownValueText();
+        UpdateRedValueText();
+        UpdateBlueValueText();
     }
 
     
@@ -66,7 +69,7 @@ public class Marketplace : MonoBehaviour
         }
         else
         {
-            brownValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= brownValueCost);
+            brownValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().coins >= brownValueCost);
         }
 
         if (redValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().redMultiplier >= redValueMax)
@@ -75,7 +78,7 @@ public class Marketplace : MonoBehaviour
         }
         else
         {
-            redValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= redValueCost &&
+            redValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().coins >= redValueCost &&
                                         SaveSystem.instance.GetSaveFile().redUnlocked);
         }
 
@@ -85,7 +88,7 @@ public class Marketplace : MonoBehaviour
         }
         else
         {
-            blueValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= blueValueCost &&
+            blueValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().coins >= blueValueCost &&
                                          SaveSystem.instance.GetSaveFile().blueUnlocked);
         }
     }
@@ -122,7 +125,7 @@ public class Marketplace : MonoBehaviour
       
     public void BrownValue()
     {
-        if (SaveSystem.instance.SpendHivemindPoints(brownValueCost))
+        if (SaveSystem.instance.SpendCoins(brownValueCost))
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().brownMultiplier++;
@@ -139,7 +142,7 @@ public class Marketplace : MonoBehaviour
 
     public void RedValue()
     {
-        if (SaveSystem.instance.SpendHivemindPoints(redValueCost))
+        if (SaveSystem.instance.SpendCoins(redValueCost))
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().redMultiplier++;
@@ -156,7 +159,7 @@ public class Marketplace : MonoBehaviour
 
     public void BlueValue()
     {
-        if (SaveSystem.instance.SpendHivemindPoints(blueValueCost))
+        if (SaveSystem.instance.SpendCoins(blueValueCost))
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().blueMultiplier++;
