@@ -36,17 +36,29 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     public uint goldenChanceCost = 5;
     public uint goldenChanceRatio = 2;
     public uint goldenChanceMax = 25;
+    
+    [Header("Potent Shrooms")]
+    public UpgradeContainer potentShroomsButton;
+    public uint potentShroomsCost = 15;
+    
+    [Header("Enchant Spoon")]
+    public UpgradeContainer enchantSpoonButton;
+    public uint enchantSpoonCost = 15;
 
     void Start()
     {
         unlockRedButton.SetCostText(unlockRedCost.ToString("N0"));
         unlockBlueButton.SetCostText(unlockBlueCost.ToString("N0"));
         goldenSporeButton.SetCostText(goldenSporeCost.ToString("N0"));
+        potentShroomsButton.SetCostText(potentShroomsCost.ToString("N0"));
+        enchantSpoonButton.SetCostText(enchantSpoonCost.ToString("N0"));
         unlockRedButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         unlockBlueButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         goldenSporeButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         goldenMultiButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         goldenChanceButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        potentShroomsButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        enchantSpoonButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         UpdateGoldenChanceText();
         UpdateGoldenMultiText();
     }
@@ -127,6 +139,30 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             UpdateGoldenChanceText();
         }
     }
+    
+    public void EnchantSpoon()
+    {
+        if (SaveSystem.instance.SpendHivemindPoints(enchantSpoonCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().spoonEnchanted = true;
+            SaveSystem.instance.Save();
+            enchantSpoonButton.ToggleButton(false);
+            enchantSpoonButton.gameObject.SetActive(false);
+        }
+    }
+    
+    public void PotentShrooms()
+    {
+        if (SaveSystem.instance.SpendHivemindPoints(potentShroomsCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().potentShrooms = true;
+            SaveSystem.instance.Save();
+            potentShroomsButton.ToggleButton(false);
+            potentShroomsButton.gameObject.SetActive(false);
+        }
+    }
 
     void FixedUpdate()
     {
@@ -135,6 +171,11 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         float size = 0.1f+ Mathf.Clamp01(SaveSystem.instance.GetSaveFile().hivemindPointsTotal / 1000f) * 5;
         spriteRenderer.transform.localScale = new Vector3(size, size,size);
         
+        TickUpgradeButtons();
+    }
+
+    private void TickUpgradeButtons()
+    {
         if (unlockRedButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().redUnlocked)
         {
             unlockRedButton.gameObject.SetActive(false);
@@ -143,17 +184,17 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         {
             unlockRedButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockRedCost);
         }
-        
+
         if (unlockBlueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().blueUnlocked)
         {
             unlockBlueButton.gameObject.SetActive(false);
-        } 
+        }
         else
         {
             unlockBlueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockBlueCost);
         }
 
-        
+
         if (goldenSporeButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
         {
             goldenSporeButton.gameObject.SetActive(false);
@@ -163,7 +204,9 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             goldenSporeButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost);
         }
 
-        if (goldenChanceButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax)|| !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        if (goldenChanceButton.isActiveAndEnabled &&
+            (SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax) ||
+            !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
         {
             goldenChanceButton.gameObject.SetActive(false);
         }
@@ -173,7 +216,9 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
             goldenChanceButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost);
         }
 
-        if (goldenMultiButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax)|| !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        if (goldenMultiButton.isActiveAndEnabled &&
+            (SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax) ||
+            !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
         {
             goldenMultiButton.gameObject.SetActive(false);
         }
@@ -181,6 +226,24 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         {
             goldenMultiButton.gameObject.SetActive(true);
             goldenMultiButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenMultiCost);
+        }
+
+        if (potentShroomsButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().potentShrooms))
+        {
+            potentShroomsButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            potentShroomsButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= potentShroomsCost);
+        }
+
+        if (enchantSpoonButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().spoonEnchanted))
+        {
+            enchantSpoonButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            enchantSpoonButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= enchantSpoonCost);
         }
     }
 

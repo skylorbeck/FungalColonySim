@@ -101,6 +101,8 @@ public class SaveSystem : MonoBehaviour
             {
                 saveFile.goldenMultiplier = 2;
             }
+            saveFile.spoonEnchanted = false;
+            saveFile.potentShrooms = false;
         }
         
         loaded = true;
@@ -187,6 +189,8 @@ public class SaveSystem : MonoBehaviour
             sellPrice = 0;
             buyPrice = 99999;
             shopTicks = 2;
+            spoonEnchanted = false;
+            potentShrooms = false;
         }
 
         public uint saveVersion = 0;
@@ -221,5 +225,7 @@ public class SaveSystem : MonoBehaviour
         public CurrencyVisualizer.Currency buyItem = CurrencyVisualizer.Currency.Spore;
         public uint buyPrice = 99999;
         public uint shopTicks = 2;
+        public bool spoonEnchanted = false;
+        public bool potentShrooms = false;
     }
 }

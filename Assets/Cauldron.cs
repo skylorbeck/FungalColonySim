@@ -232,6 +232,22 @@ public class Cauldron : MonoBehaviour
         CheckFueledAndReady();
         UpdateNeededIngredients();
         cauldronSave.progressMax = baseBrewTime + (baseBrewTime * ((cauldronSave.ingredientTotal-neededIngredients) /neededIngredients) *additionalBrewRatio);//TODO good place for upgrades
+        if (SaveSystem.instance.GetSaveFile().spoonEnchanted)
+        {
+            int total = 0;
+            float percent = 0;
+            for (var i = 0; i < cauldronSave.ingredients.Count; i++)
+            {
+                total += cauldronSave.ingredientAmounts[i];
+            }
+            
+            for (var i = 0; i < cauldronSave.ingredients.Count; i++)
+            {
+                percent += MathF.Min((float)cauldronSave.ingredientAmounts[i]/total,.1f);
+            }
+
+            cauldronSave.progressMax -= cauldronSave.progressMax * percent;
+        }
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
         int hours = (int) (cauldronSave.progressMax) / 3600;
         int minutes = (int) ((cauldronSave.progressMax) % 3600) / 60;
@@ -241,9 +257,9 @@ public class Cauldron : MonoBehaviour
         // timeLeftText.text =(cauldronSave.progressMax).ToString("F");
     }
 
-    private void UpdateNeededIngredients()
+    public void UpdateNeededIngredients()
     {
-        neededIngredients = neededIngredientsBase; //TODO good place for upgrades //TODO finish this
+        neededIngredients = neededIngredientsBase -(SaveSystem.instance.GetSaveFile().potentShrooms?Mathf.FloorToInt(neededIngredientsBase*.25f):0); //TODO good place for upgrades //TODO finish this
         ingredientBar.ratio = neededIngredients;
     }
 
