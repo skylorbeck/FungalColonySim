@@ -51,6 +51,12 @@ public class Cauldron : MonoBehaviour
     public List<CauldronIngredient> ingredientPreviews;
     public RatioBar ingredientBar;
     public TextMeshProUGUI timeLeftText;
+    
+    public AudioClip addIngredientSound;
+    public AudioClip removeIngredientSound;
+    public AudioClip brewSound;
+    public AudioClip gatherSound;
+    public AudioClip finishSound;
 
     private CauldronSave cauldronSave => SaveSystem.instance.GetSaveFile().cauldronSave;
     private uint[] potions => SaveSystem.instance.GetSaveFile().potionsCount;
@@ -89,7 +95,7 @@ public class Cauldron : MonoBehaviour
         
         foreach (var renderer in fire)
         {
-            renderer.enabled = cauldronSave.isOn;
+            renderer.enabled = cauldronSave.isOn && !cauldronSave.isDone;
         }
 
         foreach (var renderer in wood)
@@ -110,6 +116,7 @@ public class Cauldron : MonoBehaviour
     public void AddFuel()
     {
         cauldronSave.hasFuel = true;
+        SFXMaster.instance.PlayBlockReplace();
         foreach (var renderer in wood)
         {
             renderer.enabled = true;
@@ -130,6 +137,7 @@ public class Cauldron : MonoBehaviour
     public void TurnOn()
     {
         if (!cauldronSave.hasFuel) return;
+        SFXMaster.instance.PlayOneShot(brewSound);
         cauldronSave.isOn = true;
         foreach (var renderer in fire)
         {
@@ -204,10 +212,12 @@ public class Cauldron : MonoBehaviour
         ingredientSprite.sprite = MushroomBlock.GetMushroomSprite(ingredient);
         Transform ingredientSpriteTransform;
         (ingredientSpriteTransform = ingredientSprite.transform).DOKill();
+        SFXMaster.instance.PlayMenuClick();
         ingredientSpriteTransform.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutElastic).onComplete += () =>
         {
             ingredientSpriteTransform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InBack).onComplete += () =>
             {
+                SFXMaster.instance.PlayOneShot(addIngredientSound);
                 cauldronSprite.transform.DOComplete();
                 cauldronSprite.transform.DOPunchPosition(Vector3.down, 0.5f, 1, 0.5f);
                 ingredientPreviews[cauldronSave.ingredients.IndexOf(ingredient)].Enable();
@@ -259,6 +269,7 @@ public class Cauldron : MonoBehaviour
     
     public void RemoveAllIngredients()
     {
+        SFXMaster.instance.PlayOneShot(removeIngredientSound);
         cauldronSave.ingredients.Clear();
         cauldronSave.ingredientAmounts.Clear();
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
@@ -293,14 +304,25 @@ public class Cauldron : MonoBehaviour
                 Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) * (cauldronSave.progress / cauldronSave.progressMax));
             if (cauldronSave.progress >= cauldronSave.progressMax)
             {
+                SFXMaster.instance.PlayOneShot(finishSound);
                 cauldronSave.isDone = true;
                 timeLeftText.text = "!";
+                // TurnOff();
+                foreach (SpriteRenderer renderer in fire)
+                {
+                    renderer.enabled = false;
+                }
                 UpdateButtons();
                 foreach (CauldronIngredient preview in ingredientPreviews)
                 {
                     preview.hopping = false;
                 }
             }
+        } else if (cauldronSave.isDone)
+        {
+            timeLeftText.text = "!";
+            cauldronSprite.transform.rotation = Quaternion.Euler(0, 0,
+                Mathf.Sin(Time.fixedTime * rotationSpeed*0.25f) * (rotationDegree*2));
         }
     }
 
@@ -328,6 +350,7 @@ public class Cauldron : MonoBehaviour
         
         potionSprite.transform.DOComplete();
         timeLeftText.text = "+" + potionAmount.ToString();
+        SFXMaster.instance.PlayOneShot(gatherSound);
         potionSprite.transform.DOScale(Vector3.one * 1.5f, 0.5f).SetEase(Ease.OutBack).OnComplete(() =>
         {
             potionSprite.transform.DOScale(Vector3.zero, 1f).SetEase(Ease.InBack).OnComplete(() =>
@@ -360,7 +383,6 @@ public class Cauldron : MonoBehaviour
         gatherButton.interactable = cauldronSave.isDone;
         removeIngredientsButton.interactable = cauldronSave.ingredients.Count > 0 && !cauldronSave.isOn;
         addIngredientButton.interactable = !cauldronSave.isOn && !cauldronSave.isDone && int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
-
     }
 
     public void NextIngredient()
@@ -370,7 +392,7 @@ public class Cauldron : MonoBehaviour
         {
             currentIngredient = 0;
         }
-
+        SFXMaster.instance.PlayMenuClick();
         UpdateIngredient();
         ValidateValue();
     }
@@ -382,7 +404,7 @@ public class Cauldron : MonoBehaviour
         {
             currentIngredient = MushroomBlock.MushroomType.Blue;
         }
-
+        SFXMaster.instance.PlayMenuClick();
         UpdateIngredient();
         ValidateValue();
     }
@@ -428,6 +450,8 @@ public class Cauldron : MonoBehaviour
         ingredientAmountText.text = Mathf.RoundToInt(
             (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
         ValidateValue();
+        SFXMaster.instance.PlayMenuClick();
+
     }
 
     public void IncreasePotionAmount()
@@ -435,6 +459,7 @@ public class Cauldron : MonoBehaviour
         desiredPotions++;
         ProcessDesiredPotions();
         ValidateValue();
+        SFXMaster.instance.PlayMenuClick();
     }
     
     public void DecreasePotionAmount()
@@ -442,6 +467,7 @@ public class Cauldron : MonoBehaviour
         desiredPotions--;
         ProcessDesiredPotions();
         ValidateValue();
+        SFXMaster.instance.PlayMenuClick();
     }
 
     public void ValidateDesiredPotionAmount()

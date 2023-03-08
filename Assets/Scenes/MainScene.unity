@@ -7772,6 +7772,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 646568110}
+        m_TargetAssemblyTypeName: SFXMaster, Assembly-CSharp
+        m_MethodName: PlayMenuClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &440786645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10003,6 +10015,18 @@ MonoBehaviour:
       - m_Target: {fileID: 127682600}
         m_TargetAssemblyTypeName: Merchant, Assembly-CSharp
         m_MethodName: RandomThankYou
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 646568110}
+        m_TargetAssemblyTypeName: SFXMaster, Assembly-CSharp
+        m_MethodName: PlayMenuClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19470,6 +19494,11 @@ MonoBehaviour:
   - {fileID: 1034454693}
   ingredientBar: {fileID: 845638738}
   timeLeftText: {fileID: 1622917280}
+  addIngredientSound: {fileID: 8300000, guid: 6e19d21fb3e21954b9c4c0357a225fdb, type: 3}
+  removeIngredientSound: {fileID: 8300000, guid: 82b6f51743ab8444e823406207ad5e7c, type: 3}
+  brewSound: {fileID: 8300000, guid: 8fbc6f018e566fb4fb5e1740fee9a823, type: 3}
+  gatherSound: {fileID: 8300000, guid: 44b8e1d1d0c390240a3c597c3c86f98b, type: 3}
+  finishSound: {fileID: 8300000, guid: 77ecd15b1358e3846bae4832afe4be6f, type: 3}
 --- !u!1 &1260912050
 GameObject:
   m_ObjectHideFlags: 0

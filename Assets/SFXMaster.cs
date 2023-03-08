@@ -38,7 +38,16 @@ public class SFXMaster : MonoBehaviour
     {
         audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.volume = 0.5f;
-
+    }
+    
+    public void PlayOneShot(AudioClip clip)
+    {
+        if (!muteToggle.isOn)
+        {
+            return;
+        }
+        Randomize();
+        audioSource.PlayOneShot(clip);
     }
     
     public void PlayMushPop()
