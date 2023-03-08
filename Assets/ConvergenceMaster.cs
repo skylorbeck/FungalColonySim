@@ -286,7 +286,7 @@ public class ConvergenceMaster : MonoBehaviour
     private void CalculateHivemindPointsReward()
     {
         double pointCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().hivemindPointsTotal);
-        float pointMultiplier = 1 + (SaveSystem.instance.GetSaveFile().hivemindPointValue * 0.1f);//TODO make this a meta meta upgrade
+        float pointMultiplier = SaveSystem.instance.GetSaveFile().sporeMultiplier;
         uint pointValue = (uint)Mathf.Pow(reward*pointMultiplier, 1.5f);
         convergenceSkillPointCostText.text = pointValue.ToString("0.00")+"\n"+pointCost.ToString("0.00");
         // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(pointValue/sporeCost)));

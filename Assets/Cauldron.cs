@@ -106,6 +106,10 @@ public class Cauldron : MonoBehaviour
         UpdateIngredient();
         UpdateNeededIngredients();
         UpdateButtons();
+        fuelButton.gameObject.SetActive(!SaveSystem.instance.GetSaveFile().autoWood);
+        cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.instance.GetSaveFile().autoWood;
+        percentButtons.SetActive(SaveSystem.instance.GetSaveFile().percentButtons);
+        evenPotionButtons.SetActive(SaveSystem.instance.GetSaveFile().evenAmount);
     }
 
     void Update()
@@ -176,6 +180,7 @@ public class Cauldron : MonoBehaviour
 
     public void RemoveFuel()
     {
+        if (SaveSystem.instance.GetSaveFile().autoWood) return;
         cauldronSave.hasFuel = false;
         foreach (var renderer in wood)
         {
@@ -308,7 +313,9 @@ public class Cauldron : MonoBehaviour
     {
         if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
-            cauldronSave.progress += Time.fixedDeltaTime * progressSpeed;//TODO good place for upgrades
+            float progress = Time.fixedDeltaTime * progressSpeed;
+            progress += SaveSystem.instance.GetSaveFile().betterCauldron?Time.fixedDeltaTime * progressSpeed*.25f:0;//TODO good place for upgrades
+            cauldronSave.progress += progress;
             //convert to hours, minutes and seconds left
             int hours = (int) (cauldronSave.progressMax - cauldronSave.progress) / 3600;
             int minutes = (int) ((cauldronSave.progressMax - cauldronSave.progress) % 3600) / 60;

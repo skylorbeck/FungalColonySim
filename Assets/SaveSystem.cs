@@ -103,6 +103,11 @@ public class SaveSystem : MonoBehaviour
             }
             saveFile.spoonEnchanted = false;
             saveFile.potentShrooms = false;
+            saveFile.sporeMultiplier = 1;
+            saveFile.betterCauldron = false;
+            saveFile.autoWood = false;
+            saveFile.percentButtons = false;
+            saveFile.evenAmount = false;
         }
         
         loaded = true;
@@ -191,6 +196,11 @@ public class SaveSystem : MonoBehaviour
             shopTicks = 2;
             spoonEnchanted = false;
             potentShrooms = false;
+            sporeMultiplier = 1;
+            betterCauldron = false;
+            autoWood = false;
+            percentButtons = false;
+            evenAmount = false;
         }
 
         public uint saveVersion = 0;
@@ -227,5 +237,10 @@ public class SaveSystem : MonoBehaviour
         public uint shopTicks = 2;
         public bool spoonEnchanted = false;
         public bool potentShrooms = false;
+        public uint sporeMultiplier = 1;
+        public bool betterCauldron= false;
+        public bool autoWood= false;
+        public bool percentButtons= false;
+        public bool evenAmount= false;
     }
 }

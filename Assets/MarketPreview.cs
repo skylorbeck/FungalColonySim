@@ -286,6 +286,8 @@ public class MarketPreview : MonoBehaviour
     
     public void ValidateAmount()
     {
+        if (mode == Mode.Buy)return;//TODO remove this when you can buy more than 1 item
+
         int amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? a : 0;
         if (amount < 0)
         {
