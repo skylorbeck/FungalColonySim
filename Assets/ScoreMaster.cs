@@ -59,12 +59,13 @@ public class ScoreMaster : MonoBehaviour
 
     }
 
-    public void AddMushroom(MushroomBlock.MushroomType mushroomType, uint amt = 1)
+    public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool golden = false)
     {
-        SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] +=
-            amt + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
-        SaveSystem.instance.GetSaveFile().mushroomCount[(int)mushroomType] +=
-            amt + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
+        uint amount = 1 + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
+        amount *= (golden ? SaveSystem.instance.GetSaveFile().goldenMultiplier : 1);
+        // Debug.Log("Adding " + amount + " " + mushroomType + " mushrooms");
+        SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] +=amount;
+        SaveSystem.instance.GetSaveFile().mushroomCount[(int)mushroomType] += amount;
 
         switch (mushroomType)
         {
@@ -118,7 +119,6 @@ public class ScoreMaster : MonoBehaviour
 
     public void Reset()
     {
-        
         SaveSystem.instance.GetSaveFile().mushrooms = new uint[3];
         UpdateMushroomText();
     }

@@ -149,20 +149,14 @@ public class MushroomBlock : Block
                 .onComplete += () =>
                 mushroomPop.transform.DOScale(Vector3.zero, 0.25f);
             mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f).onComplete +=
-                () => ScoreMaster.instance.AddMushroom(mushroomType);
+                () => ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
             SFXMaster.instance.PlayMushPop();
         }
         else
         {
-            ScoreMaster.instance.AddMushroom(mushroomType);
+            ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
         }
-
-        if (isGolden)
-        {
-            ScoreMaster.instance.AddMushroom(mushroomType ,SaveSystem.instance.GetSaveFile().goldenMultiplier);
-        }
-
-        isGolden = SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().goldenChanceMultiplier;//TODO make this an upgrade
+        isGolden = SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().goldenChanceMultiplier;
         if (isGolden)
         {
             goldenParticles.Play();

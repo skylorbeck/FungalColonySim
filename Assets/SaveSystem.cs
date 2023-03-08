@@ -90,6 +90,10 @@ public class SaveSystem : MonoBehaviour
             saveFile.sellPrice = 0;
             saveFile.buyPrice = 99999;
             saveFile.shopTicks = 2;
+            if (saveFile.goldenMultiplier <= 1)
+            {
+                saveFile.goldenMultiplier = 2;
+            }
         }
         
         loaded = true;
@@ -166,7 +170,7 @@ public class SaveSystem : MonoBehaviour
             blueMultiplier = 0;
             hivemindPointValue = 0;
             goldenSporeUnlocked = false;
-            goldenMultiplier = 1;
+            goldenMultiplier = 2;
             goldenChanceMultiplier = 1;
             cauldronSave = new CauldronSave();
             potionsCount = new uint[3];
@@ -200,7 +204,7 @@ public class SaveSystem : MonoBehaviour
         public uint blueMultiplier;
         public float hivemindPointValue;
         public bool goldenSporeUnlocked;
-        public uint goldenMultiplier;
+        public uint goldenMultiplier = 2;
         public uint goldenChanceMultiplier;
         public CauldronSave cauldronSave = new CauldronSave();
         public uint[] potionsCount = new uint[3];
