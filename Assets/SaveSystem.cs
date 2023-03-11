@@ -108,6 +108,7 @@ public class SaveSystem : MonoBehaviour
             saveFile.autoWood = false;
             saveFile.percentButtons = false;
             saveFile.evenAmount = false;
+            saveFile.collectionItems =  Array.Empty<CollectionItemSaveData>();
         }
         
         loaded = true;
@@ -201,6 +202,7 @@ public class SaveSystem : MonoBehaviour
             autoWood = false;
             percentButtons = false;
             evenAmount = false;
+            collectionItems = Array.Empty<CollectionItemSaveData>();
         }
 
         public uint saveVersion = 0;
@@ -242,5 +244,6 @@ public class SaveSystem : MonoBehaviour
         public bool autoWood= false;
         public bool percentButtons= false;
         public bool evenAmount= false;
+        public CollectionItemSaveData[] collectionItems = Array.Empty<CollectionItemSaveData>();
     }
 }

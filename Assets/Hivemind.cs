@@ -6,9 +6,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Hivemind : MonoBehaviour, IPointerClickHandler
+public class Hivemind : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
+    public PlinkoMachine plinkoMachine;
+    public CollectionShelf collectionShelf;
+    public HiveMindMode mode = HiveMindMode.Plinko;
     
     public RectTransform hivemindPanel;
     public Toggle upgradeToggle;
@@ -61,6 +63,8 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         enchantSpoonButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         UpdateGoldenChanceText();
         UpdateGoldenMultiText();
+        plinkoMachine.transform.position = new Vector3(0, 0, 0);
+        collectionShelf.transform.position = new Vector3(collectionShelf.transform.position.x, collectionShelf.GetY(), 0);
     }
 
     void Update()
@@ -168,9 +172,6 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
     {
         if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind)return;
         
-        float size = 0.1f+ Mathf.Clamp01(SaveSystem.instance.GetSaveFile().hivemindPointsTotal / 1000f) * 5;
-        spriteRenderer.transform.localScale = new Vector3(size, size,size);
-        
         TickUpgradeButtons();
     }
 
@@ -247,19 +248,33 @@ public class Hivemind : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void ShakeStuff()
-    {
-        transform.DOComplete();
-        transform.DOShakeScale(0.5f, 0.5f, 15, 50);
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        ShakeStuff();
-    }
-    
     public void ToggleShowUpgrades()
     {
         hivemindPanel.DOLocalMoveX(upgradeToggle.isOn ? 0 : 900, 0.5f).SetEase(Ease.OutBounce);
+    }
+    
+    public enum HiveMindMode
+    {
+        Plinko,
+        Collection,
+    }
+    public void ToggleHiveMindMode()
+    {
+        if (mode == HiveMindMode.Plinko)
+        {
+            mode = HiveMindMode.Collection;
+            plinkoMachine.transform.DOMoveY(-200, 0.5f).SetEase(Ease.InOutCubic);
+            collectionShelf.transform.DOMoveY(0, 0.5f).SetEase(Ease.InOutCubic);
+            // plinkoButton.ToggleButton(false); //TODO replace this with plinko UI toggle
+            // collectionButton.ToggleButton(true); //TODO replace this with collection UI toggle
+        }
+        else
+        {
+            mode = HiveMindMode.Plinko;
+            plinkoMachine.transform.DOMoveY(0, 0.5f).SetEase(Ease.InOutCubic);
+            collectionShelf.transform.DOMoveY(collectionShelf.GetY(), 0.5f).SetEase(Ease.InOutCubic);
+            // plinkoButton.ToggleButton(true);
+            // collectionButton.ToggleButton(false);
+        }
     }
 }
