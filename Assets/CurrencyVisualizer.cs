@@ -119,6 +119,7 @@ public class CurrencyVisualizer : MonoBehaviour
         RedPotion,
         BluePotion,
         Coin,
-        PlinkoBall
+        PlinkoBall,
+        Collectible,
     }
 }

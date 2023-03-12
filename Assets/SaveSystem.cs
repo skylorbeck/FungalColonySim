@@ -111,6 +111,9 @@ public class SaveSystem : MonoBehaviour
             saveFile.collectionItems = new List<CollectionItemSaveData>();
             saveFile.plinkoBalls = 0;
             saveFile.plinkoBallSoftCap = 10;
+            saveFile.sellItemData = new CollectionItemSaveData();
+            saveFile.sellSoldOut = false;
+            saveFile.buySoldOut = false;
         }
         
         loaded = true;
@@ -196,6 +199,8 @@ public class SaveSystem : MonoBehaviour
             buyItem = CurrencyVisualizer.Currency.Spore;
             sellPrice = 0;
             buyPrice = 99999;
+            sellSoldOut = false;
+            buySoldOut = false;
             shopTicks = 2;
             spoonEnchanted = false;
             potentShrooms = false;
@@ -207,6 +212,7 @@ public class SaveSystem : MonoBehaviour
             collectionItems =  new List<CollectionItemSaveData>();
             plinkoBalls = 0;
             plinkoBallSoftCap = 10;
+            sellItemData = new CollectionItemSaveData();
         }
 
         public uint saveVersion = 0;
@@ -238,8 +244,10 @@ public class SaveSystem : MonoBehaviour
         public uint coins = 0;
         public CurrencyVisualizer.Currency sellItem = CurrencyVisualizer.Currency.BrownMushroom;
         public uint sellPrice = 0;
+        public bool sellSoldOut = false;
         public CurrencyVisualizer.Currency buyItem = CurrencyVisualizer.Currency.Spore;
         public uint buyPrice = 99999;
+        public bool buySoldOut = false;
         public uint shopTicks = 2;
         public bool spoonEnchanted = false;
         public bool potentShrooms = false;
@@ -251,5 +259,6 @@ public class SaveSystem : MonoBehaviour
         public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
         public uint plinkoBalls = 0;
         public uint plinkoBallSoftCap = 10;
+        public CollectionItemSaveData sellItemData = new CollectionItemSaveData();
     }
 }

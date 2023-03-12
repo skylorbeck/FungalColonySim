@@ -17,12 +17,16 @@ public class MarketPreview : MonoBehaviour
     public TextMeshProUGUI itemPrice;
     public Button buySellButton;
     public CurrencyVisualizer.Currency currency => mode == Mode.Sell ? SaveSystem.instance.GetSaveFile().sellItem : SaveSystem.instance.GetSaveFile().buyItem;
+    public CollectionItemSaveData item
+    {
+        get => SaveSystem.instance.GetSaveFile().sellItemData;
+        set => SaveSystem.instance.GetSaveFile().sellItemData = value;
+    }
+
     public Mode mode = Mode.Sell;
     public TMP_InputField inputField;
     public TextMeshProUGUI goldChangedText;
 
-    public bool soldOut = false;
-    
     public float speed = 1f;
     public float timeOffset = 0f;
     public float maxAngle = 15f;
@@ -77,6 +81,10 @@ public class MarketPreview : MonoBehaviour
             case CurrencyVisualizer.Currency.BluePotion:
                 itemSprite.sprite = Cauldron.GetPotionSprite(MushroomBlock.MushroomType.Blue);
                 break;
+            case CurrencyVisualizer.Currency.Collectible:
+                item = SaveSystem.instance.GetSaveFile().collectionItems[Random.Range(0, SaveSystem.instance.GetSaveFile().collectionItems.Count)];
+                itemSprite.sprite = Resources.Load<Sprite>("Sprites/Collection/" + item.spriteName);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newCurrency), newCurrency, null);
         }
@@ -124,6 +132,9 @@ public class MarketPreview : MonoBehaviour
             case CurrencyVisualizer.Currency.BluePotion:
                 price = (uint)Random.Range(300, 1500);
                 break;
+            case CurrencyVisualizer.Currency.Collectible:
+                price = (uint)Random.Range(100, 5000);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -152,6 +163,9 @@ public class MarketPreview : MonoBehaviour
 
     public void CheckButton()
     {
+        bool soldOut = mode == Mode.Sell
+            ? SaveSystem.instance.GetSaveFile().sellSoldOut
+            : SaveSystem.instance.GetSaveFile().buySoldOut;
         if (mode == Mode.Buy)
             buySellButton.interactable = SaveSystem.instance.GetSaveFile().coins >= price && !soldOut;
         else
@@ -165,13 +179,14 @@ public class MarketPreview : MonoBehaviour
                 CurrencyVisualizer.Currency.BrownPotion => SaveSystem.instance.GetSaveFile().potionsCount[0] > 0,
                 CurrencyVisualizer.Currency.RedPotion => SaveSystem.instance.GetSaveFile().potionsCount[1] > 0,
                 CurrencyVisualizer.Currency.BluePotion => SaveSystem.instance.GetSaveFile().potionsCount[2] > 0,
+                CurrencyVisualizer.Currency.Collectible => SaveSystem.instance.GetSaveFile().collectionItems.Count > 0,
                 _ => throw new ArgumentOutOfRangeException()
             };
     }
 
     public void Sell()
     {
-        if (soldOut) return;
+        if (SaveSystem.instance.GetSaveFile().sellSoldOut) return;
         uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 0;
         if (amount == 0) return;
         switch (currency)
@@ -200,6 +215,10 @@ public class MarketPreview : MonoBehaviour
             case CurrencyVisualizer.Currency.BluePotion:
                 SaveSystem.instance.GetSaveFile().potionsCount[2]-=amount;
                 break;
+            case CurrencyVisualizer.Currency.Collectible:
+                SaveSystem.instance.GetSaveFile().sellSoldOut = true;
+                SaveSystem.instance.GetSaveFile().collectionItems.Remove(item);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -213,7 +232,7 @@ public class MarketPreview : MonoBehaviour
 
     public void Buy()
     {
-        if (soldOut) return;
+        if (SaveSystem.instance.GetSaveFile().buySoldOut) return;
         if (SaveSystem.instance.GetSaveFile().coins < price) return;
         switch (currency)
         {
@@ -248,31 +267,50 @@ public class MarketPreview : MonoBehaviour
         goldChangedText.text = "-" + (price).ToString("N0");
         goldChangedText.DOKill();
         goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
-        soldOut = true;
+        SaveSystem.instance.GetSaveFile().buySoldOut = true;
         itemSprite.color = Color.gray;
         CheckButton();
     }
 
     public void Refresh()
     {
-        CurrencyVisualizer.Currency[] currencies = mode switch
+        if (mode==Mode.Sell)
         {
-            Mode.Buy => new[]
+            SaveSystem.instance.GetSaveFile().sellSoldOut = false;
+        } else if (mode==Mode.Buy)
+        {
+            SaveSystem.instance.GetSaveFile().buySoldOut = false;
+        }
+        itemSprite.color = Color.white;
+        List<CurrencyVisualizer.Currency> currencies = mode switch
+        {
+            Mode.Buy => new List<CurrencyVisualizer.Currency>()
             {
-                CurrencyVisualizer.Currency.Spore, CurrencyVisualizer.Currency.SkillPoint,
-                CurrencyVisualizer.Currency.BrownPotion, CurrencyVisualizer.Currency.RedPotion,
+                CurrencyVisualizer.Currency.Spore,
+                CurrencyVisualizer.Currency.SkillPoint,
+                CurrencyVisualizer.Currency.BrownPotion, 
+                CurrencyVisualizer.Currency.RedPotion,
                 CurrencyVisualizer.Currency.BluePotion
             },
-            Mode.Sell => new[]
+            Mode.Sell => new List<CurrencyVisualizer.Currency>()
             {
-                CurrencyVisualizer.Currency.BrownMushroom, CurrencyVisualizer.Currency.RedMushroom,
-                CurrencyVisualizer.Currency.BlueMushroom, CurrencyVisualizer.Currency.BrownPotion,
-                CurrencyVisualizer.Currency.RedPotion, CurrencyVisualizer.Currency.BluePotion
+                CurrencyVisualizer.Currency.BrownMushroom,
+                CurrencyVisualizer.Currency.RedMushroom,
+                CurrencyVisualizer.Currency.BlueMushroom, 
+                CurrencyVisualizer.Currency.BrownPotion,
+                CurrencyVisualizer.Currency.RedPotion,
+                CurrencyVisualizer.Currency.BluePotion,
+                CurrencyVisualizer.Currency.Collectible
             },
             _ => throw new ArgumentOutOfRangeException()
         };
+
+        if (SaveSystem.instance.GetSaveFile().collectionItems.Count == 0)
+        {
+            currencies.Remove(CurrencyVisualizer.Currency.Collectible);
+        }
         
-        SetCurrency(currencies[Random.Range(0, currencies.Length)]);
+        SetCurrency(currencies[Random.Range(0, currencies.Count)]);
 
         UpdatePrice();
         CheckButton();
@@ -370,8 +408,10 @@ public class MarketPreview : MonoBehaviour
                 {
                     inputField.text = SaveSystem.instance.GetSaveFile().potionsCount[2].ToString("N0");
                 }
-
                 break;
+                case CurrencyVisualizer.Currency.Collectible:
+                    inputField.text = "1";
+                    break;
             default:
                 throw new ArgumentOutOfRangeException();
         }

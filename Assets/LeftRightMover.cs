@@ -23,16 +23,16 @@ public class LeftRightMover : MonoBehaviour
     {
         if (isMovingLeft)
         {
-            transform.position += Vector3.left * (speed * Time.fixedDeltaTime);
-            if (transform.position.x < leftBound)
+            transform.localPosition += Vector3.left * (speed * Time.fixedDeltaTime);
+            if (transform.localPosition.x < leftBound)
             {
                 isMovingLeft = false;
             }
         }
         else
         {
-            transform.position += Vector3.right * (speed * Time.fixedDeltaTime);
-            if (transform.position.x > rightBound)
+            transform.localPosition += Vector3.right * (speed * Time.fixedDeltaTime);
+            if (transform.localPosition.x > rightBound)
             {
                 isMovingLeft = true;
             }
