@@ -110,6 +110,7 @@ public class SaveSystem : MonoBehaviour
             saveFile.evenAmount = false;
             saveFile.collectionItems = new List<CollectionItemSaveData>();
             saveFile.plinkoBalls = 0;
+            saveFile.plinkoBallSoftCap = 10;
         }
         
         loaded = true;
@@ -205,6 +206,7 @@ public class SaveSystem : MonoBehaviour
             evenAmount = false;
             collectionItems =  new List<CollectionItemSaveData>();
             plinkoBalls = 0;
+            plinkoBallSoftCap = 10;
         }
 
         public uint saveVersion = 0;
@@ -248,5 +250,6 @@ public class SaveSystem : MonoBehaviour
         public bool evenAmount= false;
         public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
         public uint plinkoBalls = 0;
+        public uint plinkoBallSoftCap = 10;
     }
 }

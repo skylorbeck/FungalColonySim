@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class PlinkoMachine : MonoBehaviour
@@ -23,16 +24,18 @@ public class PlinkoMachine : MonoBehaviour
     public TextMeshProUGUI prizeText;
     public CollectionItem prizePreview;
 
-    public float spawnForce = 500;
-    public float spawnRate = 1;
+    public float spawnForce = 50;
+    public float spawnRate = 60f;//TODO good place for upgrades. Faster ball generation.
     public float spawnTimer = 0;
+    public Image spawnTimerBar;
 
-    public int pegRows = 4;
-    public int pegsPerRow = 5;
+    public int pegRows = 6;
+    public int pegsPerRow = 10;
     public float pegDistance = 1.5f;
     public float rowDistance = 2f;
     
     public float[] prizeWeights = new float[3];
+
 
     public void AwardCollectible()
     {
@@ -125,16 +128,32 @@ public class PlinkoMachine : MonoBehaviour
         ClearPegs();
         GeneratePegs();
     }
-    
+
+    public void Update()
+    {
+        if (!(GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind &&
+             GameMaster.instance.Hivemind.mode == Hivemind.HiveMindMode.Plinko)) return;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SpawnBall();
+        }
+    }
+
     public void FixedUpdate()
     {
-        /*if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
+        if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
+        
+        if (SaveSystem.instance.GetSaveFile().plinkoBalls >=
+            SaveSystem.instance.GetSaveFile().plinkoBallSoftCap) return;
+        
         spawnTimer += Time.fixedDeltaTime;
         if (spawnTimer > spawnRate)
         {
             spawnTimer = 0;
-            SpawnBall();
-        }*/
+            SaveSystem.instance.GetSaveFile().plinkoBalls +=
+                1; //TODO good place for upgrades. More balls per spawn.
+        }
+        spawnTimerBar.fillAmount = spawnTimer / spawnRate;
     }
 
     public void SpawnBall()
