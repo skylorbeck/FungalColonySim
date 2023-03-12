@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlinkoBall : PlinkoPiece
 {
-    public float score = 0;
+    [SerializeField]private int score = 0;
 
     private void OnCollisionEnter2D(Collision2D col)
     {
@@ -15,13 +15,18 @@ public class PlinkoBall : PlinkoPiece
         }
     }
 
-    public object GetScore()
+    public int GetScore()
     {
-        float score = this.score;
-        if (isGolden)
-        {
-            score *= 2;//TODO good place for upgrades
-        }
         return score;
+    }
+
+    public void SetScore(int i)
+    {
+        score = i;
+    }
+
+    public void AddScore(int i)
+    {
+        score += i * (isGolden ? 2 : 1);
     }
 }

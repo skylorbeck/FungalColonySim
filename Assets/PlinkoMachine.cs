@@ -23,6 +23,9 @@ public class PlinkoMachine : MonoBehaviour
     public PlinkoPrizeAwarder prizeAwarder;
     public TextMeshProUGUI prizeText;
     public CollectionItem prizePreview;
+    
+    public int score = 0;//TODO move to save file
+    public TextMeshProUGUI scoreText;
 
     public float spawnForce = 50;
     public float spawnRate = 60f;//TODO good place for upgrades. Faster ball generation.
@@ -71,7 +74,9 @@ public class PlinkoMachine : MonoBehaviour
             },
             ball =>
             {
-                ball.score = 0;
+                score += ball.GetScore();
+                scoreText.text = "Score: " + score.ToString("F0");
+                ball.SetScore(0);
                 plinkoBalls.Remove(ball);
                 ball.gameObject.SetActive(false);
             },
@@ -167,7 +172,7 @@ public class PlinkoMachine : MonoBehaviour
             return;
         }
         var ball = ballPool.Get();
-        ball.SetGolden(Random.Range(0, 100) < 5);
+        ball.SetGolden(Random.Range(0, 100) < ball.goldChance);
         ball.rb.AddForce(Vector2.up*spawnForce);
         plinkoBalls.Add(ball);
     }

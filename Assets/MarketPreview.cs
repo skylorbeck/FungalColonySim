@@ -17,7 +17,7 @@ public class MarketPreview : MonoBehaviour
     public TextMeshProUGUI itemPrice;
     public Button buySellButton;
     public CurrencyVisualizer.Currency currency => mode == Mode.Sell ? SaveSystem.instance.GetSaveFile().sellItem : SaveSystem.instance.GetSaveFile().buyItem;
-    public CollectionItemSaveData item
+    public static CollectionItemSaveData item
     {
         get => SaveSystem.instance.GetSaveFile().sellItemData;
         set => SaveSystem.instance.GetSaveFile().sellItemData = value;
