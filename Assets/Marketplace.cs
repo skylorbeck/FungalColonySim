@@ -208,7 +208,7 @@ public class Marketplace : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().brownMultiplier++;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             UpdateBrownValueText();
         }
     }
@@ -225,7 +225,7 @@ public class Marketplace : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().redMultiplier++;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             UpdateRedValueText();
         }
     }
@@ -242,7 +242,7 @@ public class Marketplace : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().blueMultiplier++;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             UpdateBlueValueText();
         }
     }
@@ -258,7 +258,7 @@ public class Marketplace : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().sporeMultiplier++;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             UpdateSporeValueText();
         }
     }
@@ -275,7 +275,7 @@ public class Marketplace : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().betterCauldron = true;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             betterCauldronButton.gameObject.SetActive(false);
         }
     }
@@ -288,7 +288,7 @@ public class Marketplace : MonoBehaviour
             SaveSystem.instance.GetSaveFile().autoWood = true;
             GameMaster.instance.Cauldron.fuelButton.gameObject.SetActive(false);
             GameMaster.instance.Cauldron.AddFuel();
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             autoWoodButton.gameObject.SetActive(false);
         }
     }
@@ -300,7 +300,7 @@ public class Marketplace : MonoBehaviour
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().percentButtons = true;
             GameMaster.instance.Cauldron.percentButtons.gameObject.SetActive(true);
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             percentButtonsUpgradeContainer.gameObject.SetActive(false);
         }
     }
@@ -312,7 +312,7 @@ public class Marketplace : MonoBehaviour
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().evenAmount = true;
             GameMaster.instance.Cauldron.evenPotionButtons.gameObject.SetActive(true);
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             evenAmountButton.gameObject.SetActive(false);
         }
     }

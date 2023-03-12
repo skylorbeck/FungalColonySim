@@ -78,7 +78,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().redUnlocked = true;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockRedButton.ToggleButton(false);
             unlockRedButton.gameObject.SetActive(false);
@@ -91,7 +91,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().blueUnlocked = true;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockBlueButton.ToggleButton(false);
             unlockBlueButton.gameObject.SetActive(false);
@@ -104,7 +104,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().goldenSporeUnlocked = true;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             goldenSporeButton.ToggleButton(false);
             goldenSporeButton.gameObject.SetActive(false);
         }
@@ -122,7 +122,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().goldenMultiplier++;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             UpdateGoldenMultiText();
         }
     }
@@ -139,7 +139,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().goldenChanceMultiplier++;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             UpdateGoldenChanceText();
         }
     }
@@ -150,7 +150,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().spoonEnchanted = true;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             enchantSpoonButton.ToggleButton(false);
             enchantSpoonButton.gameObject.SetActive(false);
         }
@@ -162,7 +162,7 @@ public class Hivemind : MonoBehaviour
         {
             SFXMaster.instance.PlayMenuClick();
             SaveSystem.instance.GetSaveFile().potentShrooms = true;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             potentShroomsButton.ToggleButton(false);
             potentShroomsButton.gameObject.SetActive(false);
         }

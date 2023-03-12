@@ -27,8 +27,11 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public Color lockedColor = Color.gray;
     
+    public bool preview = false;
+    
     public void SetUnlocked(bool isUnlocked)
     {
+        if (preview) isUnlocked = true;
         this.isUnlocked = isUnlocked;
         sr.color = isUnlocked ? Color.white :lockedColor;
         frameSr.sprite = isUnlocked ? unlockedSprite : lockedSprite;
@@ -45,13 +48,16 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     void FixedUpdate()
     {
-        // if (!saveData.isUnlocked)return;
-        Transform thisTransform = sr.transform;
-        var position = thisTransform.localPosition;
+        if (preview)return;
+        Transform srTransform = sr.transform;
+        var position = srTransform.localPosition;
         position = new Vector3(position.x, Mathf.Sin(Time.time * bobSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * bobRange, position.z);
-        thisTransform.localPosition = position;
-        thisTransform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time*rotationSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * roationRange);
-        thisTransform.localScale = new Vector3(1 + Mathf.Sin(Time.time * zoomSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * zoomRange, 1 + Mathf.Sin(Time.time * zoomSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * zoomRange, 1);
+        srTransform.localPosition = position;
+        srTransform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time*rotationSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * roationRange);
+        srTransform.localScale = new Vector3(1 + Mathf.Sin(Time.time * zoomSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * zoomRange, 1 + Mathf.Sin(Time.time * zoomSpeed * (mouseOver?mouseOverMultiplier:1) + timeOffset) * zoomRange, 1);
+        transform.localScale = Vector3.Lerp(mouseOver
+            ? new Vector3(mouseOverMultiplier, mouseOverMultiplier, mouseOverMultiplier)
+            : Vector3.one, transform.localScale, Time.fixedDeltaTime * 10);
     }
 
 
@@ -76,6 +82,7 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (preview)return;
         mouseOver = true;
         descriptionText.gameObject.SetActive(true);
         SetUnlocked(true);
@@ -83,10 +90,12 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (preview)return;
         mouseOver = false;
         descriptionText.gameObject.SetActive(false);
         SetUnlocked(false);
     }
+    
 }
 [Serializable]
 public class CollectionItemSaveData

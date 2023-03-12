@@ -57,7 +57,7 @@ public class SaveSystem : MonoBehaviour
         return true;
     }
 
-    public void Save()
+    private void Save()
     {
         Save("savefile", saveFile);
         saveIcon.DOKill();
@@ -108,7 +108,8 @@ public class SaveSystem : MonoBehaviour
             saveFile.autoWood = false;
             saveFile.percentButtons = false;
             saveFile.evenAmount = false;
-            saveFile.collectionItems =  Array.Empty<CollectionItemSaveData>();
+            saveFile.collectionItems = new List<CollectionItemSaveData>();
+            saveFile.plinkoBalls = 0;
         }
         
         loaded = true;
@@ -202,7 +203,8 @@ public class SaveSystem : MonoBehaviour
             autoWood = false;
             percentButtons = false;
             evenAmount = false;
-            collectionItems = Array.Empty<CollectionItemSaveData>();
+            collectionItems =  new List<CollectionItemSaveData>();
+            plinkoBalls = 0;
         }
 
         public uint saveVersion = 0;
@@ -244,6 +246,7 @@ public class SaveSystem : MonoBehaviour
         public bool autoWood= false;
         public bool percentButtons= false;
         public bool evenAmount= false;
-        public CollectionItemSaveData[] collectionItems = Array.Empty<CollectionItemSaveData>();
+        public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
+        public uint plinkoBalls = 0;
     }
 }

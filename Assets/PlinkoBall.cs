@@ -14,4 +14,14 @@ public class PlinkoBall : PlinkoPiece
             GameMaster.instance.Hivemind.plinkoMachine.RemoveBall(this);
         }
     }
+
+    public object GetScore()
+    {
+        float score = this.score;
+        if (isGolden)
+        {
+            score *= 2;//TODO good place for upgrades
+        }
+        return score;
+    }
 }

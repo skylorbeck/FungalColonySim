@@ -61,6 +61,9 @@ public class CurrencyVisualizer : MonoBehaviour
             case Currency.Coin:
                 text.text = SaveSystem.instance.GetSaveFile().coins.ToString("N0");
                 break;
+            case Currency.PlinkoBall:
+                text.text = SaveSystem.instance.GetSaveFile().plinkoBalls.ToString("N0");
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
         }
@@ -97,6 +100,9 @@ public class CurrencyVisualizer : MonoBehaviour
             case Currency.Coin:
                 image.sprite = Resources.Load<Sprite>("Sprites/Coin");
                 break;
+            case Currency.PlinkoBall:
+                image.sprite = Resources.Load<Sprite>("Sprites/PlinkoBall");
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
         }
@@ -112,6 +118,7 @@ public class CurrencyVisualizer : MonoBehaviour
         BrownPotion,
         RedPotion,
         BluePotion,
-        Coin
+        Coin,
+        PlinkoBall
     }
 }

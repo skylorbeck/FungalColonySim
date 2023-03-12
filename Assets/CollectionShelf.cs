@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CollectionShelf : MonoBehaviour
 {
@@ -13,38 +15,46 @@ public class CollectionShelf : MonoBehaviour
     
     public float curScroll = 0;
     
-    public string[] itemNames;
-    public string[] itemDescriptions;
-    public Sprite[] itemSprites;
+    public ItemVariableCluster[] itemVariableCluster;
     
     
     void Start()
     {
         var datas = SaveSystem.instance.GetSaveFile().collectionItems;
-        for (var i = 0; i < datas.Length; i++)
+        for (var i = 0; i < datas.Count; i++)
         {
             var itemSaveData = datas[i];
             CollectionItem item = Instantiate(itemPrefab, transform);
             item.InsertSaveData(itemSaveData);
-            item.timeOffset = i * 3;
+            item.timeOffset = i * itemsPerRow;
             items.Add(item);
         }
 
-        for (int i = 0; i < items.Count; i++)
-        {
-            int row = i / itemsPerRow;
-            int column = i % itemsPerRow;
-            items[i].transform.localPosition = new Vector3(column * itemDistance, -row * rowDistance, 0);
-        }
-        
         this.transform.localPosition = new Vector3(-Mathf.FloorToInt(itemsPerRow * 0.5f) * itemDistance, 0, 0);
+    }
+    public void AddItem(CollectionItemSaveData saveData)
+    {
+        CollectionItem item = Instantiate(itemPrefab, transform);
+        item.InsertSaveData(saveData);
+        item.timeOffset = items.Count * itemsPerRow;
+        items.Add(item);
+        item.transform.localPosition = new Vector3(items.Count * itemDistance, 0, 0);
     }
 
     public float GetY()
     {
         return Mathf.FloorToInt(items.Count / (float)itemsPerRow) * rowDistance+50f;
     }
-
+    
+    public CollectionItemSaveData GenerateSaveData()
+    {
+        ItemVariableCluster cluster = itemVariableCluster[Random.Range(0, itemVariableCluster.Length)];
+        CollectionItemSaveData saveData = new CollectionItemSaveData();
+        saveData.name = cluster.itemNames[Random.Range(0, cluster.itemNames.Length)];
+        saveData.description = cluster.itemDescriptions[Random.Range(0, cluster.itemDescriptions.Length)];
+        saveData.spriteName = cluster.itemSprites[Random.Range(0, cluster.itemSprites.Length)].name;
+        return saveData;
+    }
  
     void Update()
     {
@@ -57,7 +67,8 @@ public class CollectionShelf : MonoBehaviour
         {
             curScroll += 1;
         }
-        curScroll = Mathf.Clamp(curScroll, 0, Mathf.Max(0, Mathf.CeilToInt(items.Count / (float)itemsPerRow) - 1));
+        
+        curScroll = Mathf.Clamp(curScroll, 0, Mathf.Max(0, Mathf.CeilToInt((items.Count - (itemsPerRow-1)*3) / (float)itemsPerRow) - 1));
 
     }
 
@@ -67,8 +78,15 @@ public class CollectionShelf : MonoBehaviour
         {
             int row = i / itemsPerRow;
             int column = i % itemsPerRow;
-            Vector3 targetPos = new Vector3(column * itemDistance, -row * rowDistance + curScroll * rowDistance, 0);
+            Vector3 targetPos = new Vector3(column * itemDistance, -row * rowDistance + curScroll * rowDistance, items[i].mouseOver? -5f : 0);
             items[i].transform.localPosition = Vector3.Lerp(items[i].transform.localPosition, targetPos, Time.fixedDeltaTime * 10);
         }
     }
+}
+[Serializable]
+public class ItemVariableCluster
+{
+    public string[] itemNames;
+    public string[] itemDescriptions;
+    public Sprite[] itemSprites;
 }

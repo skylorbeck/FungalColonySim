@@ -144,9 +144,9 @@ MonoBehaviour:
   bobRange: 0
   bobSpeed: 1
   zoomRange: 0.1
-  zoomSpeed: 1
+  zoomSpeed: 1.5
   mouseOver: 0
-  mouseOverMultiplier: 3
+  mouseOverMultiplier: 2
   saveData:
     name: Item
     description: This is an item
@@ -155,7 +155,7 @@ MonoBehaviour:
     isEquipped: 0
     isEquippable: 0
   isUnlocked: 0
-  lockedColor: {r: 0.45400003, g: 0.45400003, b: 0.45400003, a: 1}
+  lockedColor: {r: 0.65, g: 0.65, b: 0.65, a: 1}
 --- !u!1 &4825242995674387624
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +182,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4825242995674387624}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -354,7 +354,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5088935858166679133}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

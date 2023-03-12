@@ -106,7 +106,7 @@ public class GameMaster : MonoBehaviour
         yield return blue2;
         
         SaveSystem.instance.GetSaveFile().totalConverges++;
-        SaveSystem.instance.Save();
+        SaveSystem.SaveS();
         ModeMaster.UpdateButton();
         isConverging = false;
     }
@@ -122,13 +122,13 @@ public class GameMaster : MonoBehaviour
         if (saveTimer > 500 && !convergenceMaster.inStore && !isConverging && (brownBlockMaster.isWorldCreated && redBlockMaster.isWorldCreated && blueBlockMaster.isWorldCreated))
         {
             saveTimer = 0;
-            SaveSystem.instance.Save();
+            SaveSystem.SaveS();
             
         }
     }
 
     public void OnDestroy()
     {
-        SaveSystem.instance.Save();
+        SaveSystem.SaveS();
     }
 }
