@@ -40,6 +40,19 @@ public class CollectionShelf : MonoBehaviour
         items.Add(item);
         item.transform.localPosition = new Vector3(items.Count * itemDistance, 0, 0);
     }
+    
+    public void RemoveItem(CollectionItemSaveData saveData)
+    {
+        for (var i = 0; i < items.Count; i++)
+        {
+            if (items[i].saveData.name == saveData.name)
+            {
+                Destroy(items[i].gameObject);
+                items.RemoveAt(i);
+                break;
+            }
+        }
+    }
 
     public float GetY()
     {
@@ -51,7 +64,6 @@ public class CollectionShelf : MonoBehaviour
         ItemVariableCluster cluster = itemVariableCluster[Random.Range(0, itemVariableCluster.Length)];
         CollectionItemSaveData saveData = new CollectionItemSaveData();
         saveData.name = cluster.itemNames[Random.Range(0, cluster.itemNames.Length)];
-        saveData.description = cluster.itemDescriptions[Random.Range(0, cluster.itemDescriptions.Length)];
         saveData.spriteName = cluster.itemSprites[Random.Range(0, cluster.itemSprites.Length)].name;
         return saveData;
     }
@@ -87,6 +99,5 @@ public class CollectionShelf : MonoBehaviour
 public class ItemVariableCluster
 {
     public string[] itemNames;
-    public string[] itemDescriptions;
     public Sprite[] itemSprites;
 }

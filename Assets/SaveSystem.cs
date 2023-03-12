@@ -114,6 +114,7 @@ public class SaveSystem : MonoBehaviour
             saveFile.sellItemData = new CollectionItemSaveData();
             saveFile.sellSoldOut = false;
             saveFile.buySoldOut = false;
+            saveFile.plinkoScore = 0;
         }
         
         loaded = true;
@@ -213,6 +214,7 @@ public class SaveSystem : MonoBehaviour
             plinkoBalls = 0;
             plinkoBallSoftCap = 10;
             sellItemData = new CollectionItemSaveData();
+            plinkoScore = 0;
         }
 
         public uint saveVersion = 0;
@@ -260,5 +262,6 @@ public class SaveSystem : MonoBehaviour
         public uint plinkoBalls = 0;
         public uint plinkoBallSoftCap = 10;
         public CollectionItemSaveData sellItemData = new CollectionItemSaveData();
+        public uint plinkoScore;
     }
 }

@@ -217,7 +217,9 @@ public class MarketPreview : MonoBehaviour
                 break;
             case CurrencyVisualizer.Currency.Collectible:
                 SaveSystem.instance.GetSaveFile().sellSoldOut = true;
+                itemSprite.color = Color.gray;
                 SaveSystem.instance.GetSaveFile().collectionItems.Remove(item);
+                GameMaster.instance.Hivemind.collectionShelf.RemoveItem(item);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

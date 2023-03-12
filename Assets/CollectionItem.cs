@@ -12,7 +12,6 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public Sprite unlockedSprite;
     public Sprite lockedSprite;
     public TextMeshPro nameText;
-    public TextMeshPro descriptionText;
     public float timeOffset = 0;//TODO create patterns by offsetting time
     public float roationRange = 5;
     public float rotationSpeed = 1;
@@ -66,7 +65,7 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         this.saveData = itemSaveData;
         SetUnlocked(isUnlocked);
         SetSprite(itemSaveData.spriteName);
-        SetText(itemSaveData.name, itemSaveData.description);
+        SetText(itemSaveData.name);
     }
 
     private void SetSprite(string spriteName)
@@ -74,17 +73,15 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         sr.sprite = Resources.Load<Sprite>("Sprites/Collection/" + spriteName);
     }
 
-    private void SetText(string name, string description)
+    private void SetText(string name)
     {
         nameText.text = name;
-        descriptionText.text = description;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (preview)return;
         mouseOver = true;
-        descriptionText.gameObject.SetActive(true);
         SetUnlocked(true);
     }
 
@@ -92,7 +89,6 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if (preview)return;
         mouseOver = false;
-        descriptionText.gameObject.SetActive(false);
         SetUnlocked(false);
     }
     
@@ -100,9 +96,8 @@ public class CollectionItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 [Serializable]
 public class CollectionItemSaveData
 {
-    public string name = "Item";//TODO make this a dictionary SO of names
-    public string description = "This is an item";//TODO make this a dictionary SO of descriptions
-    public string spriteName = "Item";//TODO make this a dictionary SO of sprites
+    public string name = "Item";
+    public string spriteName = "Item";
     //below are Copilot generated, not implemented yet
     public bool isGolden = false;
     public bool isEquipped = false;

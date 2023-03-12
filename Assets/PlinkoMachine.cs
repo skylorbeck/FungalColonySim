@@ -24,8 +24,14 @@ public class PlinkoMachine : MonoBehaviour
     public TextMeshProUGUI prizeText;
     public CollectionItem prizePreview;
     
-    public int score = 0;//TODO move to save file
+    public uint score
+    {
+        get => SaveSystem.instance.GetSaveFile().plinkoScore;
+        set => SaveSystem.instance.GetSaveFile().plinkoScore = value;
+    }
+
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI softCapText;
 
     public float spawnForce = 50;
     public float spawnRate = 60f;//TODO good place for upgrades. Faster ball generation.
@@ -75,7 +81,7 @@ public class PlinkoMachine : MonoBehaviour
             ball =>
             {
                 score += ball.GetScore();
-                scoreText.text = "Score: " + score.ToString("F0");
+                UpdateScoreText();
                 ball.SetScore(0);
                 plinkoBalls.Remove(ball);
                 ball.gameObject.SetActive(false);
@@ -102,8 +108,14 @@ public class PlinkoMachine : MonoBehaviour
             },
             peg => { Destroy(peg); }
         );
-        
+        UpdateScoreText();
         // GeneratePegs();//use this to generate pegs, then copy them into the editor
+    }
+
+    private void UpdateScoreText()
+    {
+        scoreText.text = "Score: " + score.ToString("N0");
+        softCapText.text = "Soft Cap: " + SaveSystem.instance.GetSaveFile().plinkoBallSoftCap.ToString("N0");
     }
 
     public void GeneratePegs()
