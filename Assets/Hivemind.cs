@@ -63,8 +63,8 @@ public class Hivemind : MonoBehaviour
         enchantSpoonButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
         UpdateGoldenChanceText();
         UpdateGoldenMultiText();
-        plinkoMachine.transform.position = new Vector3(0, 0, 0);
-        collectionShelf.transform.position = new Vector3(collectionShelf.transform.position.x, collectionShelf.GetY(), 0);
+        plinkoMachine.transform.localPosition = new Vector3(0, 0, 0);
+        collectionShelf.transform.localPosition = new Vector3(0, collectionShelf.GetY(), 0);
     }
 
     void Update()

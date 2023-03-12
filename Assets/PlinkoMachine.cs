@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DamageNumbersPro;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -45,6 +46,8 @@ public class PlinkoMachine : MonoBehaviour
     
     public float[] prizeWeights = new float[3];
 
+    public DamageNumber numberPrefab;
+    public RectTransform rectParent;
 
     public void AwardCollectible()
     {
@@ -81,6 +84,8 @@ public class PlinkoMachine : MonoBehaviour
             ball =>
             {
                 score += ball.GetScore();
+                DamageNumber damageNumber = numberPrefab.Spawn(Vector3.zero, ball.GetScore());
+                damageNumber.SetAnchoredPosition(rectParent, new Vector2(0,-100));
                 UpdateScoreText();
                 ball.SetScore(0);
                 plinkoBalls.Remove(ball);
