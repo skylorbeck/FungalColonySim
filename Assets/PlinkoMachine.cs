@@ -270,27 +270,27 @@ public class PlinkoMachine : MonoBehaviour
                 {
                     case 1:
                         uint spores = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().sporeCount +=spores;
+                        SaveSystem.instance.GetSaveFile().stats.spores +=spores;
                         prizeText.text = "Spores +" + spores;
                         break;
                     case 2:
                         uint hivemindPoints = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().hivemindPoints +=hivemindPoints;
+                        SaveSystem.instance.GetSaveFile().stats.skillPoints +=hivemindPoints;
                         prizeText.text = "Skill Points +" + hivemindPoints;
                         break;
                     case 3:
                         uint bpotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().potionsCount[0] +=bpotions;
+                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] +=bpotions;
                         prizeText.text = "Brown Potions +" + bpotions;
                         break;
                     case 4:
                         uint rpotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().potionsCount[0] +=rpotions;
+                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] +=rpotions;
                         prizeText.text = "Red Potions +" + rpotions;
                         break;
                     case 5:
                         uint bupotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().potionsCount[0] +=bupotions;
+                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] +=bupotions;
                         prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:

@@ -53,7 +53,7 @@ public class ModeMaster : MonoBehaviour
 
     public void UpdateButton()
     {
-        bool unlocked = (SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
+        bool unlocked = (SaveSystem.instance.GetSaveFile().statsTotal.spores > 0);
         modeText.gameObject.SetActive(unlocked);
         nextButton.gameObject.SetActive(unlocked);
         previousButton.gameObject.SetActive(unlocked);
@@ -65,17 +65,17 @@ public class ModeMaster : MonoBehaviour
         Gamemode mode = currentMode;
         mode++;
 
-        if (!SaveSystem.instance.GetSaveFile().redUnlocked && mode == Gamemode.RedFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked && mode == Gamemode.RedFarm)
         {
             mode++;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().blueUnlocked && mode == Gamemode.BlueFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked&& mode == Gamemode.BlueFarm)
         {
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0) && mode == Gamemode.Hivemind)
         {
             mode++;
         }
@@ -119,17 +119,17 @@ public class ModeMaster : MonoBehaviour
             mode--;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0) && mode == Gamemode.Hivemind)
         {
             mode--;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().blueUnlocked && mode == Gamemode.BlueFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked&& mode == Gamemode.BlueFarm)
         {
             mode--;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().redUnlocked && mode == Gamemode.RedFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked&& mode == Gamemode.RedFarm)
         {
             mode--;
         }
@@ -291,10 +291,10 @@ public class ModeMaster : MonoBehaviour
 
     public void UpdateDots()
     {
-        dots[1].gameObject.SetActive(SaveSystem.instance.GetSaveFile().redUnlocked);
-        dots[2].gameObject.SetActive(SaveSystem.instance.GetSaveFile().blueUnlocked);
-        dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
-        dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
+        dots[1].gameObject.SetActive(SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked);
+        dots[2].gameObject.SetActive(SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked);
+        dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0);
+        dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0);
         dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked);
         dots[5].gameObject.SetActive(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked);
 

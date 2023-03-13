@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour
             return;
         }
         
-        int larger = Mathf.Max(SaveSystem.instance.GetSaveFile().farmSize.x, SaveSystem.instance.GetSaveFile().farmSize.y);
+        int larger = Mathf.Max(SaveSystem.instance.GetSaveFile().farmSave.farmSize.x, SaveSystem.instance.GetSaveFile().farmSave.farmSize.y);
         bounds = new Vector3(larger, larger, 0);
         if (Input.mouseScrollDelta.y > 0)
         {

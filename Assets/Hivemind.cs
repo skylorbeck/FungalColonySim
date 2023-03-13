@@ -86,7 +86,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(unlockRedCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().redUnlocked = true;
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked = true;
             SaveSystem.SaveS();
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockRedButton.ToggleButton(false);
@@ -100,7 +100,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(unlockBlueCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().blueUnlocked = true;
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked = true;
             SaveSystem.SaveS();
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockBlueButton.ToggleButton(false);
@@ -113,7 +113,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(goldenSporeCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().goldenSporeUnlocked = true;
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked = true;
             SaveSystem.SaveS();
             goldenSporeButton.ToggleButton(false);
             goldenSporeButton.gameObject.SetActive(false);
@@ -122,7 +122,7 @@ public class Hivemind : MonoBehaviour
     
     public void UpdateGoldenMultiText()
     {
-        goldenMultiCost = (uint)(Mathf.Pow(goldenMultiRatio, SaveSystem.instance.GetSaveFile().goldenMultiplier));
+        goldenMultiCost = (uint)(Mathf.Pow(goldenMultiRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier));
         goldenMultiButton.SetCostText(goldenMultiCost.ToString("N0"));
     }
     
@@ -131,7 +131,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(goldenMultiCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().goldenMultiplier++;
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier++;
             SaveSystem.SaveS();
             UpdateGoldenMultiText();
         }
@@ -139,7 +139,7 @@ public class Hivemind : MonoBehaviour
     
     public void UpdateGoldenChanceText()
     {
-        goldenChanceCost = (uint)(Mathf.Pow(goldenChanceRatio, SaveSystem.instance.GetSaveFile().goldenChanceMultiplier));
+        goldenChanceCost = (uint)(Mathf.Pow(goldenChanceRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier));
         goldenChanceButton.SetCostText(goldenChanceCost.ToString("N0"));
     }
     
@@ -148,7 +148,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(goldenChanceCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().goldenChanceMultiplier++;
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier++;
             SaveSystem.SaveS();
             UpdateGoldenChanceText();
         }
@@ -200,65 +200,65 @@ public class Hivemind : MonoBehaviour
 
     private void TickUpgradeButtons()
     {
-        if (unlockRedButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().redUnlocked)
+        if (unlockRedButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked)
         {
             unlockRedButton.gameObject.SetActive(false);
         }
         else
         {
-            unlockRedButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockRedCost);
+            unlockRedButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= unlockRedCost);
         }
 
-        if (unlockBlueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().blueUnlocked)
+        if (unlockBlueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked)
         {
             unlockBlueButton.gameObject.SetActive(false);
         }
-        else if (!SaveSystem.instance.GetSaveFile().redUnlocked)
+        else if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked)
         {
             unlockBlueButton.gameObject.SetActive(false);
         }
         else
         {
-            unlockBlueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockBlueCost);
+            unlockBlueButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= unlockBlueCost);
         }
 
 
-        if (goldenSporeButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        if (goldenSporeButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked)
         {
             goldenSporeButton.gameObject.SetActive(false);
         }
         else
         {
-            goldenSporeButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost);
+            goldenSporeButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= goldenSporeCost);
         }
 
-        if (goldenChanceButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax)
+        if (goldenChanceButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier >= goldenChanceMax)
         {
             goldenChanceButton.gameObject.SetActive(false);
         } 
-        else if (!SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        else if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked)
         {
             goldenChanceButton.gameObject.SetActive(false);
         }
-        else if (SaveSystem.instance.GetSaveFile().goldenSporeUnlocked &&
-                 SaveSystem.instance.GetSaveFile().goldenChanceMultiplier < goldenChanceMax)
+        else if (SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked &&
+                 SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier < goldenChanceMax)
         {
             goldenChanceButton.gameObject.SetActive(true);
-            goldenChanceButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost);
+            goldenChanceButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= goldenChanceCost);
         }
 
-        if (goldenMultiButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax)
+        if (goldenMultiButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier >= goldenMultiMax)
         {
             goldenMultiButton.gameObject.SetActive(false);
         }
-        else if (!SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        else if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked)
         {
             goldenMultiButton.gameObject.SetActive(false);
         }
-        else if (SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && SaveSystem.instance.GetSaveFile().goldenMultiplier < goldenMultiMax)
+        else if (SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier < goldenMultiMax)
         {
             goldenMultiButton.gameObject.SetActive(true);
-            goldenMultiButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenMultiCost);
+            goldenMultiButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= goldenMultiCost);
         }
 
         if (potentShroomsButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms))
@@ -271,7 +271,7 @@ public class Hivemind : MonoBehaviour
         }
         else
         {
-            potentShroomsButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= potentShroomsCost);
+            potentShroomsButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= potentShroomsCost);
         }
 
         if (enchantSpoonButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.spoonEnchanted))
@@ -284,7 +284,7 @@ public class Hivemind : MonoBehaviour
         }
         else
         {
-            enchantSpoonButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= enchantSpoonCost);
+            enchantSpoonButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= enchantSpoonCost);
         }
 
         if (unlockCauldronButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked))
@@ -293,7 +293,7 @@ public class Hivemind : MonoBehaviour
         }
         else
         {
-            unlockCauldronButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockCauldronCost);
+            unlockCauldronButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= unlockCauldronCost);
         }
     }
 

@@ -127,10 +127,10 @@ public class MarketPreview : MonoBehaviour
                 price = (uint)Random.Range(3, 10);
                 break;
             case CurrencyVisualizer.Currency.Spore:
-                price = (uint)Random.Range(SaveSystem.instance.GetSaveFile().sporeCountTotal*50,SaveSystem.instance.GetSaveFile().sporeCountTotal*100);
+                price = (uint)Random.Range(SaveSystem.instance.GetSaveFile().statsTotal.skillPoints*50,SaveSystem.instance.GetSaveFile().statsTotal.skillPoints*100);
                 break;
             case CurrencyVisualizer.Currency.SkillPoint:
-                price = (uint)Random.Range(SaveSystem.instance.GetSaveFile().hivemindPointsTotal*500,SaveSystem.instance.GetSaveFile().hivemindPointsTotal* 1000);
+                price = (uint)Random.Range(SaveSystem.instance.GetSaveFile().statsTotal.skillPoints*500,SaveSystem.instance.GetSaveFile().statsTotal.skillPoints* 1000);
                 break;
             case CurrencyVisualizer.Currency.BrownPotion:
                 price = (uint)Random.Range(100, 300);
@@ -177,18 +177,18 @@ public class MarketPreview : MonoBehaviour
             : SaveSystem.instance.GetSaveFile().marketSave.buySoldOut;
         itemSprite.color = soldOut ? new Color(.3f,.3f,.3f,1) : Color.white;
         if (mode == Mode.Buy)
-            buySellButton.interactable = SaveSystem.instance.GetSaveFile().coins >= price && !soldOut;
+            buySellButton.interactable = SaveSystem.instance.GetSaveFile().marketSave.coins >= price && !soldOut;
         else
             buySellButton.interactable = !soldOut && currency switch
             {
-                CurrencyVisualizer.Currency.BrownMushroom => SaveSystem.instance.GetSaveFile().mushrooms[0] > 0,
-                CurrencyVisualizer.Currency.RedMushroom => SaveSystem.instance.GetSaveFile().mushrooms[1] > 0,
-                CurrencyVisualizer.Currency.BlueMushroom => SaveSystem.instance.GetSaveFile().mushrooms[2] > 0,
-                CurrencyVisualizer.Currency.Spore => SaveSystem.instance.GetSaveFile().sporeCount > 0,
-                CurrencyVisualizer.Currency.SkillPoint => SaveSystem.instance.GetSaveFile().hivemindPoints > 0,
-                CurrencyVisualizer.Currency.BrownPotion => SaveSystem.instance.GetSaveFile().potionsCount[0] > 0,
-                CurrencyVisualizer.Currency.RedPotion => SaveSystem.instance.GetSaveFile().potionsCount[1] > 0,
-                CurrencyVisualizer.Currency.BluePotion => SaveSystem.instance.GetSaveFile().potionsCount[2] > 0,
+                CurrencyVisualizer.Currency.BrownMushroom => SaveSystem.instance.GetSaveFile().stats.mushrooms[0] > 0,
+                CurrencyVisualizer.Currency.RedMushroom => SaveSystem.instance.GetSaveFile().stats.mushrooms[1] > 0,
+                CurrencyVisualizer.Currency.BlueMushroom => SaveSystem.instance.GetSaveFile().stats.mushrooms[2] > 0,
+                CurrencyVisualizer.Currency.Spore => SaveSystem.instance.GetSaveFile().stats.spores > 0,
+                CurrencyVisualizer.Currency.SkillPoint => SaveSystem.instance.GetSaveFile().stats.skillPoints > 0,
+                CurrencyVisualizer.Currency.BrownPotion => SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] > 0,
+                CurrencyVisualizer.Currency.RedPotion => SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1] > 0,
+                CurrencyVisualizer.Currency.BluePotion => SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2] > 0,
                 CurrencyVisualizer.Currency.Collectible => SaveSystem.instance.GetSaveFile().collectionItems.Count > 0,
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -202,28 +202,28 @@ public class MarketPreview : MonoBehaviour
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
-                SaveSystem.instance.GetSaveFile().mushrooms[0]-=amount;
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[0]-=amount;
                 break;
             case CurrencyVisualizer.Currency.RedMushroom:
-                SaveSystem.instance.GetSaveFile().mushrooms[1]-=amount;
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[1]-=amount;
                 break;
             case CurrencyVisualizer.Currency.BlueMushroom:
-                SaveSystem.instance.GetSaveFile().mushrooms[2]-=amount;
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[2]-=amount;
                 break;
             case CurrencyVisualizer.Currency.Spore:
-                SaveSystem.instance.GetSaveFile().sporeCount-=amount;
+                SaveSystem.instance.GetSaveFile().stats.spores-=amount;
                 break;
             case CurrencyVisualizer.Currency.SkillPoint:
-                SaveSystem.instance.GetSaveFile().hivemindPoints-=amount;
+                SaveSystem.instance.GetSaveFile().stats.skillPoints-=amount;
                 break;
             case CurrencyVisualizer.Currency.BrownPotion:
-                SaveSystem.instance.GetSaveFile().potionsCount[0]-=amount;
+                SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0]-=amount;
                 break;
             case CurrencyVisualizer.Currency.RedPotion:
-                SaveSystem.instance.GetSaveFile().potionsCount[1]-=amount;
+                SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1]-=amount;
                 break;
             case CurrencyVisualizer.Currency.BluePotion:
-                SaveSystem.instance.GetSaveFile().potionsCount[2]-=amount;
+                SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2]-=amount;
                 break;
             case CurrencyVisualizer.Currency.Collectible:
                 SaveSystem.instance.GetSaveFile().marketSave.sellSoldOut = true;
@@ -236,7 +236,7 @@ public class MarketPreview : MonoBehaviour
 
         uint total = price * amount;
         total += (uint)Mathf.FloorToInt(total * SaveSystem.instance.GetSaveFile().collectionItems.Count * 0.01f);
-        SaveSystem.instance.GetSaveFile().coins += total;
+        SaveSystem.instance.GetSaveFile().marketSave.coins += total;
         goldChangedText.text = "+" + total.ToString("N0");
         goldChangedText.DOKill();
         goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
@@ -247,37 +247,37 @@ public class MarketPreview : MonoBehaviour
     public void Buy()
     {
         if (SaveSystem.instance.GetSaveFile().marketSave.buySoldOut) return;
-        if (SaveSystem.instance.GetSaveFile().coins < price) return;
+        if (SaveSystem.instance.GetSaveFile().marketSave.coins < price) return;
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
-                SaveSystem.instance.GetSaveFile().mushrooms[0]++;
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[0]++;
                 break;
             case CurrencyVisualizer.Currency.RedMushroom:
-                SaveSystem.instance.GetSaveFile().mushrooms[1]++;
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[1]++;
                 break;
             case CurrencyVisualizer.Currency.BlueMushroom:
-                SaveSystem.instance.GetSaveFile().mushrooms[2]++;
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[2]++;
                 break;
             case CurrencyVisualizer.Currency.Spore:
-                SaveSystem.instance.GetSaveFile().sporeCount++;
+                SaveSystem.instance.GetSaveFile().stats.spores++;
                 break;
             case CurrencyVisualizer.Currency.SkillPoint:
-                SaveSystem.instance.GetSaveFile().hivemindPoints++;
+                SaveSystem.instance.GetSaveFile().stats.skillPoints++;
                 break;
             case CurrencyVisualizer.Currency.BrownPotion:
-                SaveSystem.instance.GetSaveFile().potionsCount[0]++;
+                SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0]++;
                 break;
             case CurrencyVisualizer.Currency.RedPotion:
-                SaveSystem.instance.GetSaveFile().potionsCount[1]++;
+                SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1]++;
                 break;
             case CurrencyVisualizer.Currency.BluePotion:
-                SaveSystem.instance.GetSaveFile().potionsCount[2]++;
+                SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2]++;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        SaveSystem.instance.GetSaveFile().coins -= price;
+        SaveSystem.instance.GetSaveFile().marketSave.coins -= price;
         goldChangedText.text = "-" + (price).ToString("N0");
         goldChangedText.DOKill();
         goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
@@ -355,9 +355,9 @@ public class MarketPreview : MonoBehaviour
 
     private void ValidateBuy(int amount)
     {
-        if (amount * price > SaveSystem.instance.GetSaveFile().coins)
+        if (amount * price > SaveSystem.instance.GetSaveFile().marketSave.coins)
         {
-            inputField.text = (SaveSystem.instance.GetSaveFile().coins / price).ToString("N0");
+            inputField.text = (SaveSystem.instance.GetSaveFile().marketSave.coins / price).ToString("N0");
         }
     }
 
@@ -366,58 +366,58 @@ public class MarketPreview : MonoBehaviour
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
-                if (amount > SaveSystem.instance.GetSaveFile().mushrooms[0])
+                if (amount > SaveSystem.instance.GetSaveFile().stats.mushrooms[0])
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().mushrooms[0].ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[0].ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.RedMushroom:
-                if (amount > SaveSystem.instance.GetSaveFile().mushrooms[1])
+                if (amount > SaveSystem.instance.GetSaveFile().stats.mushrooms[1])
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().mushrooms[1].ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[1].ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.BlueMushroom:
-                if (amount > SaveSystem.instance.GetSaveFile().mushrooms[2])
+                if (amount > SaveSystem.instance.GetSaveFile().stats.mushrooms[2])
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().mushrooms[2].ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[2].ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.Spore:
-                if (amount > SaveSystem.instance.GetSaveFile().sporeCount)
+                if (amount > SaveSystem.instance.GetSaveFile().stats.spores)
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().sporeCount.ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().stats.spores.ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.SkillPoint:
-                if (amount > SaveSystem.instance.GetSaveFile().hivemindPoints)
+                if (amount > SaveSystem.instance.GetSaveFile().stats.skillPoints)
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().hivemindPoints.ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().stats.skillPoints.ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.BrownPotion:
-                if (amount > SaveSystem.instance.GetSaveFile().potionsCount[0])
+                if (amount > SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0])
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().potionsCount[0].ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0].ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.RedPotion:
-                if (amount > SaveSystem.instance.GetSaveFile().potionsCount[1])
+                if (amount > SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1])
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().potionsCount[1].ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1].ToString("N0");
                 }
 
                 break;
             case CurrencyVisualizer.Currency.BluePotion:
-                if (amount > SaveSystem.instance.GetSaveFile().potionsCount[2])
+                if (amount > SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2])
                 {
-                    inputField.text = SaveSystem.instance.GetSaveFile().potionsCount[2].ToString("N0");
+                    inputField.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2].ToString("N0");
                 }
                 break;
                 case CurrencyVisualizer.Currency.Collectible:

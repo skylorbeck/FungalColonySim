@@ -52,8 +52,8 @@ public class MushroomBlock : Block
         if (isGrowing)
         {
             growthTimer += Time.deltaTime +
-                           (SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)mushroomType] * Time.deltaTime * 0.1f) +
-                           (SaveSystem.instance.GetSaveFile().mushroomSpeed * Time.deltaTime * 0.05f) +
+                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[(int)mushroomType] * Time.deltaTime * 0.1f) +
+                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * Time.deltaTime * 0.05f) +
                            (SaveSystem.instance.GetSaveFile().collectionItems.Count * Time.deltaTime * 0.01f);
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
@@ -67,10 +67,10 @@ public class MushroomBlock : Block
                 UpdateSprite();
             }
         }
-        else if (isGrown && SaveSystem.instance.GetSaveFile().autoHarvest[(int)mushroomType])
+        else if (isGrown && SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvest[(int)mushroomType])
         {
             harvestTimer += Time.deltaTime +
-                            (SaveSystem.instance.GetSaveFile().autoHarvestSpeed[(int)mushroomType] * Time.deltaTime *
+                            (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[(int)mushroomType] * Time.deltaTime *
                              0.1f);
             if (harvestTimer >= harvestTime)
             {
@@ -157,7 +157,7 @@ public class MushroomBlock : Block
         {
             ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
         }
-        isGolden = SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().goldenChanceMultiplier;
+        isGolden = SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier;
         if (isGolden)
         {
             goldenParticles.Play();

@@ -35,31 +35,31 @@ public class CurrencyVisualizer : MonoBehaviour
         switch (currency)
         {
             case Currency.BrownMushroom:
-                text.text = SaveSystem.instance.GetSaveFile().mushrooms[0].ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[0].ToString("N0");
                 break;
             case Currency.RedMushroom:
-                text.text = SaveSystem.instance.GetSaveFile().mushrooms[1].ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[1].ToString("N0");
                 break;
             case Currency.BlueMushroom:
-                text.text = SaveSystem.instance.GetSaveFile().mushrooms[2].ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[2].ToString("N0");
                 break;
             case Currency.Spore:
-                text.text = SaveSystem.instance.GetSaveFile().sporeCount.ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().stats.spores.ToString("N0");
                 break;
             case Currency.SkillPoint:
-                text.text = SaveSystem.instance.GetSaveFile().hivemindPoints.ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().stats.skillPoints.ToString("N0");
                 break;
             case Currency.BrownPotion:
-                text.text = SaveSystem.instance.GetSaveFile().potionsCount[0].ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0].ToString("N0");
                 break;
             case Currency.RedPotion:
-                text.text = SaveSystem.instance.GetSaveFile().potionsCount[1].ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1].ToString("N0");
                 break;
             case Currency.BluePotion:
-                text.text = SaveSystem.instance.GetSaveFile().potionsCount[2].ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2].ToString("N0");
                 break;
             case Currency.Coin:
-                text.text = SaveSystem.instance.GetSaveFile().coins.ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().marketSave.coins.ToString("N0");
                 break;
             case Currency.PlinkoBall:
                 text.text = SaveSystem.instance.GetSaveFile().plinkoSave.balls.ToString("N0");

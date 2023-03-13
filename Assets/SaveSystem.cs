@@ -39,22 +39,22 @@ public class SaveSystem : MonoBehaviour
 
     public bool SpendSpores(uint amount)
     {
-        if (instance.saveFile.sporeCount < amount) return false;
-        instance.saveFile.sporeCount -= amount;
+        if (instance.saveFile.stats.spores < amount) return false;
+        instance.saveFile.stats.spores -= amount;
         return true;
     }
 
     public bool SpendHivemindPoints(uint amount)
     {
-        if (instance.saveFile.hivemindPoints < amount) return false;
-        instance.saveFile.hivemindPoints -= amount;
+        if (instance.saveFile.stats.skillPoints < amount) return false;
+        instance.saveFile.stats.skillPoints -= amount;
         return true;
     }
     
     public bool SpendCoins(uint amount)
     {
-        if (instance.saveFile.coins < amount) return false;
-        instance.saveFile.coins -= amount;
+        if (instance.saveFile.marketSave.coins < amount) return false;
+        instance.saveFile.marketSave.coins -= amount;
         return true;
     }
 
@@ -75,34 +75,11 @@ public class SaveSystem : MonoBehaviour
     public void Load()
     {
         Load("savefile", out saveFile);
-        if (saveFile.saveVersion<2)
+        if (saveFile.saveVersion<4)
         {
             Reset();
         }
 
-        if (saveFile.saveVersion < 3)
-        {
-            saveFile.saveVersion = 3;
-            saveFile.goldenMultiplier = 1;
-            saveFile.goldenChanceMultiplier = 1;
-        }
-
-        if (saveFile.saveVersion < 4)
-        {
-            saveFile.saveVersion = 4;
-            saveFile.cauldronSave = new CauldronSave();
-            saveFile.potionsCount = new uint[3];
-            saveFile.coins = 0;
-            saveFile.marketSave = new MarketSave();
-            if (saveFile.goldenMultiplier <= 1)
-            {
-                saveFile.goldenMultiplier = 2;
-            }
-            saveFile.sporeMultiplier = 1;
-            saveFile.plinkoSave = new PlinkoSave();
-            saveFile.collectionItems = new List<CollectionItemSaveData>();
-        }
-        
         loaded = true;
     }
 
@@ -156,44 +133,57 @@ public class SaveSystem : MonoBehaviour
 [Serializable]
 public class SaveFile
 {
-//TODO it would probably be smart to cluster some of these things together into their own sub-classes but that would destroy old saves
     public uint saveVersion = 0;
-    public uint[] mushrooms = new uint[3];
-    public uint[] mushroomBlockCount = new uint[3];
-    public uint[] mushroomCount = new uint[3];
-    public uint sporeCountTotal = 0;
-    public uint sporeCount = 0;
-    public int2 farmSize = new int2(0, 0);
-    public uint mushroomMultiplier = 0;
-    public uint mushroomSpeed = 0;
-    public bool[] autoHarvest = new bool[3];
-    public uint[] growthSpeedBonus = new uint[3];
-    public uint[] autoHarvestSpeed = new uint[3];
-    public uint totalConverges = 0;
-    public uint hivemindPointsTotal = 0;
-    public uint hivemindPoints = 0;
-    public bool redUnlocked = false;
-    public bool blueUnlocked = false;
-    public uint brownMultiplier;
-    public uint redMultiplier;
-    public uint blueMultiplier;
-    public float hivemindPointValue;
-    public bool goldenSporeUnlocked;
-    public uint goldenMultiplier = 2;
-    public uint goldenChanceMultiplier;
-    public uint sporeMultiplier = 1;
+    public FarmSave farmSave = new FarmSave();
+    public StatTracking stats = new StatTracking();
+    public StatTracking statsTotal = new StatTracking();
     public CauldronSave cauldronSave = new CauldronSave();
-    public uint[] potionsCount = new uint[3];
-    public uint coins = 0;
     public MarketSave marketSave = new MarketSave();
     public PlinkoSave plinkoSave = new PlinkoSave();
     public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
 }
 
 [Serializable]
+public class FarmSave
+{
+    public int2 farmSize = new int2(0, 0);
+    public uint[] mushroomBlockCount = new uint[3];
+    public FarmUpgrades upgrades = new FarmUpgrades();
+}
+
+[Serializable]
+public class FarmUpgrades
+{
+    public uint mushroomMultiplier = 0;
+    public uint mushroomSpeed = 0;
+    public bool[] autoHarvest = new bool[3];
+    public uint[] growthSpeedBonus = new uint[3];
+    public uint[] autoHarvestSpeed = new uint[3];
+    public bool redUnlocked = false;
+    public bool blueUnlocked = false;
+    public uint brownMultiplier;
+    public uint redMultiplier;
+    public uint blueMultiplier;
+    public bool goldenSporeUnlocked;
+    public uint goldenMultiplier = 2;
+    public uint goldenChanceMultiplier;
+    public uint sporeMultiplier = 1;
+}
+[Serializable]
+public class StatTracking
+{
+    public uint[] mushrooms = new uint[3];
+    public uint spores = 0;
+    public uint converges = 0;
+    public uint skillPoints = 0;
+}
+
+[Serializable]
 public class MarketSave
 {
     public bool isUnlocked = false;
+    public uint coins = 0;
+    public uint[] potionsCount = new uint[3];
     public CurrencyVisualizer.Currency sellItem = CurrencyVisualizer.Currency.BrownMushroom;
     public uint sellPrice = 0;
     public bool sellSoldOut = false;

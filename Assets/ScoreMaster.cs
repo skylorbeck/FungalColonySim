@@ -29,11 +29,11 @@ public class ScoreMaster : MonoBehaviour
 
     public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool golden = false)
     {
-        uint amount = 1 + SaveSystem.instance.GetSaveFile().mushroomMultiplier;
-        amount *= (golden ? SaveSystem.instance.GetSaveFile().goldenMultiplier : 1);
+        uint amount = 1 + SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier;
+        amount *= (golden ? SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier : 1);
         // Debug.Log("Adding " + amount + " " + mushroomType + " mushrooms");
-        SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] +=amount;
-        SaveSystem.instance.GetSaveFile().mushroomCount[(int)mushroomType] += amount;
+        SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] +=amount;
+        SaveSystem.instance.GetSaveFile().statsTotal.mushrooms[(int)mushroomType] += amount;
 
         switch (mushroomType)
         {
@@ -61,33 +61,33 @@ public class ScoreMaster : MonoBehaviour
 
     public void UpdateBlueText()
     {
-        blueMushroomText.text = SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue].ToString("N0");
+        blueMushroomText.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Blue].ToString("N0");
         GameMaster.instance.blueUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateRedText()
     {
-        redMushroomText.text = SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red].ToString("N0");
+        redMushroomText.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Red].ToString("N0");
         GameMaster.instance.redUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateBrownText()
     {
-        brownMushroomText.text = SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown].ToString("N0");
+        brownMushroomText.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Brown].ToString("N0");
         GameMaster.instance.brownUpgradeMaster.UpdateButtons();
     }
 
     public bool SpendMushrooms(MushroomBlock.MushroomType type, uint amount)
     {
-        if (SaveSystem.instance.GetSaveFile().mushrooms[(int)type] < amount) return false;
-        SaveSystem.instance.GetSaveFile().mushrooms[(int)type] -= amount;
+        if (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)type] < amount) return false;
+        SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)type] -= amount;
         UpdateMushroomText();
         return true;
     }
 
     public void Reset()
     {
-        SaveSystem.instance.GetSaveFile().mushrooms = new uint[3];
+        SaveSystem.instance.GetSaveFile().stats.mushrooms = new uint[3];
         UpdateMushroomText();
     }
 }

@@ -101,7 +101,7 @@ public class GameMaster : MonoBehaviour
         yield return red2;
         yield return blue2;
         
-        SaveSystem.instance.GetSaveFile().totalConverges++;
+        SaveSystem.instance.GetSaveFile().statsTotal.converges++;
         SaveSystem.SaveS();
         ModeMaster.UpdateButton();
         isConverging = false;

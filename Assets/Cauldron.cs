@@ -59,7 +59,7 @@ public class Cauldron : MonoBehaviour
     public AudioClip finishSound;
 
     private CauldronSave cauldronSave => SaveSystem.instance.GetSaveFile().cauldronSave;
-    private uint[] potions => SaveSystem.instance.GetSaveFile().potionsCount;
+    private uint[] potions => SaveSystem.instance.GetSaveFile().marketSave.potionsCount;
 
     IEnumerator Start()
     {
@@ -156,7 +156,7 @@ public class Cauldron : MonoBehaviour
         
         foreach (MushroomBlock.MushroomType mushroomType in cauldronSave.ingredients)
         {
-            SaveSystem.instance.GetSaveFile().mushrooms[(int)mushroomType] -= (uint)cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(mushroomType)];
+            SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] -= (uint)cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(mushroomType)];
             ScoreMaster.instance.UpdateMushroomText();
         }
         UpdateButtons();
@@ -449,9 +449,9 @@ public class Cauldron : MonoBehaviour
                 {
                     alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
                 }
-                if (value > SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave)
+                if (value > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave)
                 {
-                    ingredientAmountText.text = (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave).ToString();
+                    ingredientAmountText.text = (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave).ToString();
                 }
                 
                 UpdateButtons();
@@ -471,7 +471,7 @@ public class Cauldron : MonoBehaviour
             alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
         }
         ingredientAmountText.text = Mathf.RoundToInt(
-            (SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
+            (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
 
@@ -511,16 +511,16 @@ public class Cauldron : MonoBehaviour
 
     public void ProcessDesiredPotions()
     {
-        if (desiredPotions > SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] / neededIngredients)
+        if (desiredPotions > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients)
         {
-            desiredPotions = Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] / (float)neededIngredients);
+            desiredPotions = Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / (float)neededIngredients);
         }
         if (desiredPotions < 1)
         {
             desiredPotions = 1;
         }
         ingredientAmountText.text = neededIngredients * desiredPotions + "";
-        increaseDesiredPotionsButton.interactable = desiredPotions < SaveSystem.instance.GetSaveFile().mushrooms[(int)currentIngredient] / neededIngredients;
+        increaseDesiredPotionsButton.interactable = desiredPotions < SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients;
         decreaseDesiredPotionsButton.interactable = desiredPotions > 1;
         desiredPotionsText.text = desiredPotions + "";
     }
