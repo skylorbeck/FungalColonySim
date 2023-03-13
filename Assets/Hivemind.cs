@@ -64,7 +64,7 @@ public class Hivemind : MonoBehaviour
         UpdateGoldenChanceText();
         UpdateGoldenMultiText();
         plinkoMachine.transform.localPosition = new Vector3(0, 0, 0);
-        collectionShelf.transform.localPosition = new Vector3(0, collectionShelf.GetY(), 0);
+        collectionShelf.transform.localPosition = new Vector3(-5, collectionShelf.GetY(), 0);
     }
 
     void Update()
@@ -149,7 +149,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(enchantSpoonCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().spoonEnchanted = true;
+            SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.spoonEnchanted = true;
             SaveSystem.SaveS();
             enchantSpoonButton.ToggleButton(false);
             enchantSpoonButton.gameObject.SetActive(false);
@@ -161,7 +161,7 @@ public class Hivemind : MonoBehaviour
         if (SaveSystem.instance.SpendHivemindPoints(potentShroomsCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().potentShrooms = true;
+            SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms = true;
             SaveSystem.SaveS();
             potentShroomsButton.ToggleButton(false);
             potentShroomsButton.gameObject.SetActive(false);
@@ -205,31 +205,27 @@ public class Hivemind : MonoBehaviour
             goldenSporeButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenSporeCost);
         }
 
-        if (goldenChanceButton.isActiveAndEnabled &&
-            (SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax) ||
-            !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        if (goldenChanceButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax)
         {
             goldenChanceButton.gameObject.SetActive(false);
         }
-        else
+        else if (SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && SaveSystem.instance.GetSaveFile().goldenChanceMultiplier < goldenChanceMax)
         {
             goldenChanceButton.gameObject.SetActive(true);
             goldenChanceButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost);
         }
 
-        if (goldenMultiButton.isActiveAndEnabled &&
-            (SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax) ||
-            !SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        if (goldenMultiButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax)
         {
             goldenMultiButton.gameObject.SetActive(false);
         }
-        else
+        else if (SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && SaveSystem.instance.GetSaveFile().goldenMultiplier < goldenMultiMax)
         {
             goldenMultiButton.gameObject.SetActive(true);
             goldenMultiButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenMultiCost);
         }
 
-        if (potentShroomsButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().potentShrooms))
+        if (potentShroomsButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms))
         {
             potentShroomsButton.gameObject.SetActive(false);
         }
@@ -238,7 +234,7 @@ public class Hivemind : MonoBehaviour
             potentShroomsButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= potentShroomsCost);
         }
 
-        if (enchantSpoonButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().spoonEnchanted))
+        if (enchantSpoonButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.spoonEnchanted))
         {
             enchantSpoonButton.gameObject.SetActive(false);
         }
@@ -260,6 +256,7 @@ public class Hivemind : MonoBehaviour
     }
     public void ToggleHiveMindMode()
     {
+        SFXMaster.instance.PlayMenuClick();
         if (mode == HiveMindMode.Plinko)
         {
             mode = HiveMindMode.Collection;

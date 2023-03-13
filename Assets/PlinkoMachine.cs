@@ -27,8 +27,8 @@ public class PlinkoMachine : MonoBehaviour
     
     public uint score
     {
-        get => SaveSystem.instance.GetSaveFile().plinkoScore;
-        set => SaveSystem.instance.GetSaveFile().plinkoScore = value;
+        get => SaveSystem.instance.GetSaveFile().plinkoSave.score;
+        set => SaveSystem.instance.GetSaveFile().plinkoSave.score = value;
     }
 
     public TextMeshProUGUI scoreText;
@@ -36,7 +36,12 @@ public class PlinkoMachine : MonoBehaviour
 
     public float spawnForce = 50;
     public float spawnRate = 60f;//TODO good place for upgrades. Faster ball generation.
-    public float spawnTimer = 0;
+    public float spawnTimer
+    {
+        get => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress;
+        set => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress = value;
+    }
+
     public Image spawnTimerBar;
 
     public int pegRows = 6;
@@ -48,9 +53,12 @@ public class PlinkoMachine : MonoBehaviour
 
     public DamageNumber numberPrefab;
     public RectTransform rectParent;
+    public AudioClip jackpotSound;
+    public AudioClip winSound;
 
     public void AwardCollectible()
     {
+        SFXMaster.instance.PlayOneShot(jackpotSound);
         CollectionItemSaveData saveData = prizeAwarder.currentPrize;
         prizePreview.InsertSaveData(saveData);
         prizePreview.gameObject.transform.DOKill();
@@ -114,13 +122,18 @@ public class PlinkoMachine : MonoBehaviour
             peg => { Destroy(peg); }
         );
         UpdateScoreText();
+        UpdateSoftCap();
         // GeneratePegs();//use this to generate pegs, then copy them into the editor
     }
 
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString("N0");
-        softCapText.text = "Soft Cap: " + SaveSystem.instance.GetSaveFile().plinkoBallSoftCap.ToString("N0");
+    }
+
+    public void UpdateSoftCap()
+    {
+        softCapText.text = "Soft Cap: " + SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap.ToString("N0");
     }
 
     public void GeneratePegs()
@@ -163,33 +176,37 @@ public class PlinkoMachine : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
+        // if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
         
-        if (SaveSystem.instance.GetSaveFile().plinkoBalls >=
-            SaveSystem.instance.GetSaveFile().plinkoBallSoftCap) return;
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls >=
+            SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap) return;
         
-        spawnTimer += Time.fixedDeltaTime;
+        spawnTimer += Time.fixedDeltaTime * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed;
         if (spawnTimer > spawnRate)
         {
             spawnTimer = 0;
-            SaveSystem.instance.GetSaveFile().plinkoBalls +=
-                1; //TODO good place for upgrades. More balls per spawn.
+            SaveSystem.instance.GetSaveFile().plinkoSave.balls +=
+                SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenAmount;
         }
         spawnTimerBar.fillAmount = spawnTimer / spawnRate;
     }
 
     public void SpawnBall()
     {
-        if (SaveSystem.instance.GetSaveFile().plinkoBalls>0)
+        SFXMaster.instance.PlayMenuClick();
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls>0)
         {
-            SaveSystem.instance.GetSaveFile().plinkoBalls--;
+            SaveSystem.instance.GetSaveFile().plinkoSave.balls--;
         }
         else
         {
             return;
         }
         var ball = ballPool.Get();
-        ball.SetGolden(Random.Range(0, 100) < ball.goldChance);
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.goldenBallsUnlocked)
+        {
+            ball.SetGolden(Random.Range(0, 100) < ball.goldChance);
+        }
         ball.rb.AddForce(Vector2.up*spawnForce);
         plinkoBalls.Add(ball);
     }
@@ -212,6 +229,7 @@ public class PlinkoMachine : MonoBehaviour
 
     public void AwardNonCollectible()
     {
+        SFXMaster.instance.PlayOneShot(winSound);
         float totalWeight = 0;
         foreach (var weight in prizeWeights)
         {
@@ -240,7 +258,7 @@ public class PlinkoMachine : MonoBehaviour
                         break;
                     default:
                         uint balls = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().plinkoBalls += balls;
+                        SaveSystem.instance.GetSaveFile().plinkoSave.balls += balls;
                         prizeText.text = "Balls +" + balls;
                         break;
                 }

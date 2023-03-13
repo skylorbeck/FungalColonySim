@@ -133,17 +133,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387edfe7e8880cd41883b3bc76b26213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 205
   itemSprite: {fileID: 7386873298616482995}
   shadowSprite: {fileID: 7386873299188212042}
   rockSprite: {fileID: 2472127503555520573}
   itemName: {fileID: 7386873299375053256}
   itemPrice: {fileID: 0}
   buySellButton: {fileID: 0}
-  currency: 6
   mode: 1
   inputField: {fileID: 0}
-  soldOut: 0
+  goldChangedText: {fileID: 0}
   speed: 1
   timeOffset: 0
   maxAngle: 5
@@ -532,8 +530,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.75
-  m_fontSizeBase: 0.75
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0

@@ -5,6 +5,7 @@ using System.IO;
 using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -92,29 +93,14 @@ public class SaveSystem : MonoBehaviour
             saveFile.cauldronSave = new CauldronSave();
             saveFile.potionsCount = new uint[3];
             saveFile.coins = 0;
-            saveFile.sellItem = CurrencyVisualizer.Currency.BrownMushroom;
-            saveFile.buyItem = CurrencyVisualizer.Currency.Spore;
-            saveFile.sellPrice = 0;
-            saveFile.buyPrice = 99999;
-            saveFile.shopTicks = 2;
+            saveFile.marketSave = new MarketSave();
             if (saveFile.goldenMultiplier <= 1)
             {
                 saveFile.goldenMultiplier = 2;
             }
-            saveFile.spoonEnchanted = false;
-            saveFile.potentShrooms = false;
             saveFile.sporeMultiplier = 1;
-            saveFile.betterCauldron = false;
-            saveFile.autoWood = false;
-            saveFile.percentButtons = false;
-            saveFile.evenAmount = false;
+            saveFile.plinkoSave = new PlinkoSave();
             saveFile.collectionItems = new List<CollectionItemSaveData>();
-            saveFile.plinkoBalls = 0;
-            saveFile.plinkoBallSoftCap = 10;
-            saveFile.sellItemData = new CollectionItemSaveData();
-            saveFile.sellSoldOut = false;
-            saveFile.buySoldOut = false;
-            saveFile.plinkoScore = 0;
         }
         
         loaded = true;
@@ -155,7 +141,7 @@ public class SaveSystem : MonoBehaviour
             File.Create(path).Dispose();
         }
 
-        string json = JsonUtility.ToJson(data);
+        string json = JsonUtility.ToJson(data,true);
         File.WriteAllText(path, json);
     }
 
@@ -164,104 +150,68 @@ public class SaveSystem : MonoBehaviour
         saveFile = new SaveFile();
     }
 
-    [Serializable]
-    public class SaveFile
-    {
-        public SaveFile()
-        {
-            saveVersion = 3;
-            mushrooms = new uint[3];
-            mushroomBlockCount = new uint[3];
-            mushroomCount = new uint[3];
-            sporeCountTotal = 0;
-            sporeCount = 0;
-            farmSize = new int2(0, 0);
-            mushroomMultiplier = 0;
-            mushroomSpeed = 0;
-            autoHarvest = new bool[3];
-            growthSpeedBonus = new uint[3];
-            autoHarvestSpeed = new uint[3];
-            totalConverges = 0;
-            hivemindPointsTotal = 0;
-            hivemindPoints = 0;
-            redUnlocked = false;
-            blueUnlocked = false;
-            brownMultiplier = 0;
-            redMultiplier = 0;
-            blueMultiplier = 0;
-            hivemindPointValue = 0;
-            goldenSporeUnlocked = false;
-            goldenMultiplier = 2;
-            goldenChanceMultiplier = 1;
-            cauldronSave = new CauldronSave();
-            potionsCount = new uint[3];
-            coins = 0;
-            sellItem = CurrencyVisualizer.Currency.BrownMushroom;
-            buyItem = CurrencyVisualizer.Currency.Spore;
-            sellPrice = 0;
-            buyPrice = 99999;
-            sellSoldOut = false;
-            buySoldOut = false;
-            shopTicks = 2;
-            spoonEnchanted = false;
-            potentShrooms = false;
-            sporeMultiplier = 1;
-            betterCauldron = false;
-            autoWood = false;
-            percentButtons = false;
-            evenAmount = false;
-            collectionItems =  new List<CollectionItemSaveData>();
-            plinkoBalls = 0;
-            plinkoBallSoftCap = 10;
-            sellItemData = new CollectionItemSaveData();
-            plinkoScore = 0;
-        }
+   
+}
 
-        public uint saveVersion = 0;
-        public uint[] mushrooms = new uint[3];
-        public uint[] mushroomBlockCount = new uint[3];
-        public uint[] mushroomCount = new uint[3];
-        public uint sporeCountTotal = 0;
-        public uint sporeCount = 0;
-        public int2 farmSize = new int2(0, 0);
-        public uint mushroomMultiplier = 0;
-        public uint mushroomSpeed = 0;
-        public bool[] autoHarvest = new bool[3];
-        public uint[] growthSpeedBonus = new uint[3];
-        public uint[] autoHarvestSpeed = new uint[3];
-        public uint totalConverges = 0;
-        public uint hivemindPointsTotal = 0;
-        public uint hivemindPoints = 0;
-        public bool redUnlocked = false;
-        public bool blueUnlocked = false;
-        public uint brownMultiplier;
-        public uint redMultiplier;
-        public uint blueMultiplier;
-        public float hivemindPointValue;
-        public bool goldenSporeUnlocked;
-        public uint goldenMultiplier = 2;
-        public uint goldenChanceMultiplier;
-        public CauldronSave cauldronSave = new CauldronSave();
-        public uint[] potionsCount = new uint[3];
-        public uint coins = 0;
-        public CurrencyVisualizer.Currency sellItem = CurrencyVisualizer.Currency.BrownMushroom;
-        public uint sellPrice = 0;
-        public bool sellSoldOut = false;
-        public CurrencyVisualizer.Currency buyItem = CurrencyVisualizer.Currency.Spore;
-        public uint buyPrice = 99999;
-        public bool buySoldOut = false;
-        public uint shopTicks = 2;
-        public bool spoonEnchanted = false;
-        public bool potentShrooms = false;
-        public uint sporeMultiplier = 1;
-        public bool betterCauldron= false;
-        public bool autoWood= false;
-        public bool percentButtons= false;
-        public bool evenAmount= false;
-        public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
-        public uint plinkoBalls = 0;
-        public uint plinkoBallSoftCap = 10;
-        public CollectionItemSaveData sellItemData = new CollectionItemSaveData();
-        public uint plinkoScore;
-    }
+[Serializable]
+public class SaveFile
+{
+//TODO it would probably be smart to cluster some of these things together into their own sub-classes but that would destroy old saves
+    public uint saveVersion = 0;
+    public uint[] mushrooms = new uint[3];
+    public uint[] mushroomBlockCount = new uint[3];
+    public uint[] mushroomCount = new uint[3];
+    public uint sporeCountTotal = 0;
+    public uint sporeCount = 0;
+    public int2 farmSize = new int2(0, 0);
+    public uint mushroomMultiplier = 0;
+    public uint mushroomSpeed = 0;
+    public bool[] autoHarvest = new bool[3];
+    public uint[] growthSpeedBonus = new uint[3];
+    public uint[] autoHarvestSpeed = new uint[3];
+    public uint totalConverges = 0;
+    public uint hivemindPointsTotal = 0;
+    public uint hivemindPoints = 0;
+    public bool redUnlocked = false;
+    public bool blueUnlocked = false;
+    public uint brownMultiplier;
+    public uint redMultiplier;
+    public uint blueMultiplier;
+    public float hivemindPointValue;
+    public bool goldenSporeUnlocked;
+    public uint goldenMultiplier = 2;
+    public uint goldenChanceMultiplier;
+    public uint sporeMultiplier = 1;
+    public CauldronSave cauldronSave = new CauldronSave();
+    public uint[] potionsCount = new uint[3];
+    public uint coins = 0;
+    public MarketSave marketSave = new MarketSave();
+    public PlinkoSave plinkoSave = new PlinkoSave();
+    public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
+}
+
+[Serializable]
+public class MarketSave
+{
+    public CurrencyVisualizer.Currency sellItem = CurrencyVisualizer.Currency.BrownMushroom;
+    public uint sellPrice = 0;
+    public bool sellSoldOut = false;
+    public CurrencyVisualizer.Currency buyItem = CurrencyVisualizer.Currency.Spore;
+    public uint buyPrice = 99999;
+    public bool buySoldOut = false;
+    public uint shopTicks = 2;
+    public CollectionItemSaveData sellItemData = new CollectionItemSaveData();
+}
+
+[Serializable]
+public class PlinkoSave
+{
+    public uint balls = 5;
+    public uint ballSoftCap = 10;
+    public uint score = 0;
+    public float ballProgress = 0;
+    public float ballRegenSpeed = 1;
+    public uint ballRegenAmount = 1;
+    public bool goldenBallsUnlocked = false;
+    public bool goldenPegsUnlocked = false;
 }

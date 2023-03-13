@@ -62,7 +62,7 @@ public class CurrencyVisualizer : MonoBehaviour
                 text.text = SaveSystem.instance.GetSaveFile().coins.ToString("N0");
                 break;
             case Currency.PlinkoBall:
-                text.text = SaveSystem.instance.GetSaveFile().plinkoBalls.ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().plinkoSave.balls.ToString("N0");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);

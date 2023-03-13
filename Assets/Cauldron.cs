@@ -106,10 +106,10 @@ public class Cauldron : MonoBehaviour
         UpdateIngredient();
         UpdateNeededIngredients();
         UpdateButtons();
-        fuelButton.gameObject.SetActive(!SaveSystem.instance.GetSaveFile().autoWood);
-        cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.instance.GetSaveFile().autoWood;
-        percentButtons.SetActive(SaveSystem.instance.GetSaveFile().percentButtons);
-        evenPotionButtons.SetActive(SaveSystem.instance.GetSaveFile().evenAmount);
+        fuelButton.gameObject.SetActive(!SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood);
+        cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood;
+        percentButtons.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.percentButtons);
+        evenPotionButtons.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.evenAmount);
     }
 
     void Update()
@@ -180,7 +180,7 @@ public class Cauldron : MonoBehaviour
 
     public void RemoveFuel()
     {
-        if (SaveSystem.instance.GetSaveFile().autoWood) return;
+        if (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood) return;
         cauldronSave.hasFuel = false;
         foreach (var renderer in wood)
         {
@@ -237,7 +237,7 @@ public class Cauldron : MonoBehaviour
         CheckFueledAndReady();
         UpdateNeededIngredients();
         cauldronSave.progressMax = baseBrewTime + (baseBrewTime * ((cauldronSave.ingredientTotal-neededIngredients) /neededIngredients) *additionalBrewRatio);//TODO good place for upgrades
-        if (SaveSystem.instance.GetSaveFile().spoonEnchanted)
+        if (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.spoonEnchanted)
         {
             int total = 0;
             float percent = 0;
@@ -264,7 +264,7 @@ public class Cauldron : MonoBehaviour
 
     public void UpdateNeededIngredients()
     {
-        neededIngredients = neededIngredientsBase -(SaveSystem.instance.GetSaveFile().potentShrooms?Mathf.FloorToInt(neededIngredientsBase*.25f):0); //TODO good place for upgrades //TODO finish this
+        neededIngredients = neededIngredientsBase -(SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms?Mathf.FloorToInt(neededIngredientsBase*.25f):0); //TODO good place for upgrades //TODO finish this
         ingredientBar.ratio = neededIngredients;
     }
 
@@ -314,7 +314,7 @@ public class Cauldron : MonoBehaviour
         if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
             float progress = Time.fixedDeltaTime * progressSpeed;
-            progress += SaveSystem.instance.GetSaveFile().betterCauldron?Time.fixedDeltaTime * progressSpeed*.25f:0;//TODO good place for upgrades
+            progress += SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.betterCauldron?Time.fixedDeltaTime * progressSpeed*.25f:0;//TODO good place for upgrades
             cauldronSave.progress += progress;
             //convert to hours, minutes and seconds left
             int hours = (int) (cauldronSave.progressMax - cauldronSave.progress) / 3600;
@@ -533,6 +533,7 @@ public class Cauldron : MonoBehaviour
 [Serializable]
 public class CauldronSave
 {
+    public CauldronUpgrades upgrades = new CauldronUpgrades();
     public float progressMax = 30f;
     public float progress = 0f;
     public bool hasFuel = false;
@@ -541,4 +542,15 @@ public class CauldronSave
     public List<MushroomBlock.MushroomType> ingredients = new List<MushroomBlock.MushroomType>();
     public List<int> ingredientAmounts = new List<int>();
     public int ingredientTotal = 0;
+    
+}
+[Serializable]
+public class CauldronUpgrades
+{
+    public bool spoonEnchanted = false;
+    public bool potentShrooms = false;
+    public bool betterCauldron = false;
+    public bool autoWood = false;
+    public bool percentButtons = false;
+    public bool evenAmount = false;
 }

@@ -52,8 +52,9 @@ public class MushroomBlock : Block
         if (isGrowing)
         {
             growthTimer += Time.deltaTime +
-                           (SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)mushroomType] * Time.deltaTime *
-                            0.1f) + (SaveSystem.instance.GetSaveFile().mushroomSpeed * Time.deltaTime * 0.05f);
+                           (SaveSystem.instance.GetSaveFile().growthSpeedBonus[(int)mushroomType] * Time.deltaTime * 0.1f) +
+                           (SaveSystem.instance.GetSaveFile().mushroomSpeed * Time.deltaTime * 0.05f) +
+                           (SaveSystem.instance.GetSaveFile().collectionItems.Count * Time.deltaTime * 0.01f);
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
             spriteRenderer.transform.localPosition =
