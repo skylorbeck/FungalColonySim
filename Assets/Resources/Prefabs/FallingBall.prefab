@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 139906052769437702}
   - component: {fileID: 139906052769437703}
   - component: {fileID: 139906052769437700}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FallingBall
   m_TagString: PlinkoBall
   m_Icon: {fileID: 0}

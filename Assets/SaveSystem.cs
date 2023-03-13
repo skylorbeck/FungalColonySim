@@ -193,6 +193,7 @@ public class SaveFile
 [Serializable]
 public class MarketSave
 {
+    public bool isUnlocked = false;
     public CurrencyVisualizer.Currency sellItem = CurrencyVisualizer.Currency.BrownMushroom;
     public uint sellPrice = 0;
     public bool sellSoldOut = false;
@@ -214,4 +215,5 @@ public class PlinkoSave
     public uint ballRegenAmount = 1;
     public bool goldenBallsUnlocked = false;
     public bool goldenPegsUnlocked = false;
+    public bool autofireUnlocked = false;
 }

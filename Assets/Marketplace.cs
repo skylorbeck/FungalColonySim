@@ -88,6 +88,10 @@ public class Marketplace : MonoBehaviour
     [Header("GoldenPeg")]
     public UpgradeContainer goldenPegButton;
     public uint goldenPegCost = 25000;
+    
+    [Header("AutoFire")]
+    public UpgradeContainer autoFireButton;
+    public uint autoFireCost = 100000;
     void Start()
     {
         Refresh();
@@ -105,6 +109,7 @@ public class Marketplace : MonoBehaviour
         ballSoftCapButton.SetIcon(coinSprite);
         goldenBallButton.SetIcon(coinSprite);
         goldenPegButton.SetIcon(coinSprite);
+        autoFireButton.SetIcon(coinSprite);
 
         UpdateBrownValueText();
         UpdateRedValueText();
@@ -119,6 +124,7 @@ public class Marketplace : MonoBehaviour
         ballSoftCapButton.SetCostText(ballSoftCapCost.ToString("N0"));
         goldenBallButton.SetCostText(goldenBallCost.ToString("N0"));
         goldenPegButton.SetCostText(goldenPegCost.ToString("N0"));
+        autoFireButton.SetCostText(autoFireCost.ToString("N0"));
     }
 
     
@@ -249,6 +255,15 @@ public class Marketplace : MonoBehaviour
         else
         {
             goldenPegButton.ToggleButton(SaveSystem.instance.GetSaveFile().coins >= goldenPegCost);
+        }
+
+        if (autoFireButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked)
+        {
+            autoFireButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            autoFireButton.ToggleButton(SaveSystem.instance.GetSaveFile().coins >= autoFireCost);
         }
     }
 
@@ -463,6 +478,17 @@ public class Marketplace : MonoBehaviour
             SaveSystem.instance.GetSaveFile().plinkoSave.goldenPegsUnlocked = true;
             SaveSystem.SaveS();
             goldenPegButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void AutoFire()
+    {
+        if (SaveSystem.instance.SpendCoins(autoFireCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked = true;
+            SaveSystem.SaveS();
+            autoFireButton.gameObject.SetActive(false);
         }
     }
 }

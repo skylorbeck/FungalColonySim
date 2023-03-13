@@ -94,10 +94,6 @@ public class GameMaster : MonoBehaviour
         yield return red;
         yield return blue;
         
-        ScoreMaster.instance.Reset();
-        brownUpgradeMaster.Reset();
-        redUpgradeMaster.Reset();
-        blueUpgradeMaster.Reset();
         Coroutine brown2 = StartCoroutine(brownBlockMaster.CreateWorld());
         Coroutine red2 = StartCoroutine(redBlockMaster.CreateWorld());
         Coroutine blue2 = StartCoroutine(blueBlockMaster.CreateWorld());

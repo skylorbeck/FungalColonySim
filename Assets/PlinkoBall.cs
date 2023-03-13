@@ -9,7 +9,7 @@ public class PlinkoBall : PlinkoPiece
     public AudioClip popSound;
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Peg")) 
+        if (col.gameObject.CompareTag("Peg") && GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
         { 
             SFXMaster.instance.PlayOneShot(popSound);
         }

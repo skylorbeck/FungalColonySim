@@ -123,8 +123,8 @@ public class ConvergenceMaster : MonoBehaviour
     
     public void UpdateUpgradeText()
     {
-        farmXCost = (uint)Mathf.RoundToInt(10 * Mathf.Pow(1.1f, SaveSystem.instance.GetSaveFile().farmSize.x));
-        farmYCost = (uint)Mathf.RoundToInt(10 * Mathf.Pow(1.1f, SaveSystem.instance.GetSaveFile().farmSize.y));
+        farmXCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.1f, SaveSystem.instance.GetSaveFile().farmSize.x));
+        farmYCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.1f, SaveSystem.instance.GetSaveFile().farmSize.y));
         farmXCostText.text = farmXCost.ToString();
         farmYCostText.text = farmYCost.ToString();
         
@@ -133,7 +133,7 @@ public class ConvergenceMaster : MonoBehaviour
         farmXButton.interactable = SaveSystem.instance.GetSaveFile().sporeCount >= farmXCost;
         farmYButton.interactable = SaveSystem.instance.GetSaveFile().sporeCount >= farmYCost;
         
-        mushroomMultiCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.2f, SaveSystem.instance.GetSaveFile().mushroomMultiplier));
+        mushroomMultiCost = (uint)Mathf.RoundToInt(10 * Mathf.Pow(1.2f, SaveSystem.instance.GetSaveFile().mushroomMultiplier));
         mushroomMultiCostText.text = mushroomMultiCost.ToString();
         mushroomMultiText.text = (SaveSystem.instance.GetSaveFile().mushroomMultiplier + 1).ToString();
         mushroomMultiButton.interactable = SaveSystem.instance.GetSaveFile().sporeCount >= mushroomMultiCost;
@@ -193,11 +193,19 @@ public class ConvergenceMaster : MonoBehaviour
         confirmConvergeButton.interactable = false;
         yield return StartCoroutine(HideMenu());
         ShowStoreMenu();
+        if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.BrownFarm)
+        {
+            GameMaster.instance.ModeMaster.SetMode(ModeMaster.Gamemode.BrownFarm);
+        }
 
     }
 
     public void ShowStoreMenu()
     {
+        ScoreMaster.instance.Reset();
+        GameMaster.instance.brownUpgradeMaster.Reset();
+        GameMaster.instance.redUpgradeMaster.Reset();
+        GameMaster.instance.blueUpgradeMaster.Reset();
         convergeButton.interactable = false;
         convergenceStoreMenu.SetActive(true);
         inStore = true;
@@ -244,8 +252,8 @@ public class ConvergenceMaster : MonoBehaviour
         }
 
         spendableSporeText.text = SaveSystem.instance.GetSaveFile().sporeCount + " Spores";
-        rewardText.text = "+"+reward + " spores";
-        skillRewardText.text = "+"+skillReward + " skill points";
+        rewardText.text = "+" + reward;
+        skillRewardText.text = "+" + skillReward;
         if (!unlocked)
         {
             unlocked = (SaveSystem.instance.GetSaveFile().mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().totalConverges >= 1) && GameMaster.instance.brownBlockMaster.isWorldCreated && GameMaster.instance.redBlockMaster.isWorldCreated && GameMaster.instance.blueBlockMaster.isWorldCreated;

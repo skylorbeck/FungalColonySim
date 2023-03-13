@@ -43,6 +43,12 @@ public class Hivemind : MonoBehaviour
     [Header("Enchant Spoon")]
     public UpgradeContainer enchantSpoonButton;
     public uint enchantSpoonCost = 15;
+    
+    [Header("Cauldron Unlock")]
+    public UpgradeContainer unlockCauldronButton;
+    public uint unlockCauldronCost = 10;
+    
+    
 
     void Start()
     {
@@ -51,15 +57,21 @@ public class Hivemind : MonoBehaviour
         goldenSporeButton.SetCostText(goldenSporeCost.ToString("N0"));
         potentShroomsButton.SetCostText(potentShroomsCost.ToString("N0"));
         enchantSpoonButton.SetCostText(enchantSpoonCost.ToString("N0"));
-        unlockRedButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
-        unlockBlueButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
-        goldenSporeButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
-        goldenMultiButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
-        goldenChanceButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
-        potentShroomsButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
-        enchantSpoonButton.SetIcon(Resources.Load<Sprite>("Sprites/SkillPoint"));
+        unlockCauldronButton.SetCostText(unlockCauldronCost.ToString("N0"));
         UpdateGoldenChanceText();
         UpdateGoldenMultiText();
+        
+        Sprite skillpoint = Resources.Load<Sprite>("Sprites/SkillPoint");
+        
+        unlockRedButton.SetIcon(skillpoint);
+        unlockBlueButton.SetIcon(skillpoint);
+        goldenSporeButton.SetIcon(skillpoint);
+        goldenMultiButton.SetIcon(skillpoint);
+        goldenChanceButton.SetIcon(skillpoint);
+        potentShroomsButton.SetIcon(skillpoint);
+        enchantSpoonButton.SetIcon(skillpoint);
+        unlockCauldronButton.SetIcon(skillpoint);
+        
         plinkoMachine.transform.localPosition = new Vector3(0, 0, 0);
         collectionShelf.transform.localPosition = new Vector3(-5, collectionShelf.GetY(), 0);
     }
@@ -79,6 +91,7 @@ public class Hivemind : MonoBehaviour
             GameMaster.instance.ModeMaster.UpdateDots();
             unlockRedButton.ToggleButton(false);
             unlockRedButton.gameObject.SetActive(false);
+            unlockBlueButton.ToggleButton(true);
         }
     }
     
@@ -164,6 +177,19 @@ public class Hivemind : MonoBehaviour
             potentShroomsButton.gameObject.SetActive(false);
         }
     }
+    
+    public void UnlockCauldron()
+    {
+        if (SaveSystem.instance.SpendHivemindPoints(unlockCauldronCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked = true;
+            SaveSystem.instance.GetSaveFile().marketSave.isUnlocked = true;
+            SaveSystem.SaveS();
+            unlockCauldronButton.gameObject.SetActive(false);
+            GameMaster.instance.ModeMaster.UpdateDots();
+        }
+    }
 
     void FixedUpdate()
     {
@@ -187,6 +213,10 @@ public class Hivemind : MonoBehaviour
         {
             unlockBlueButton.gameObject.SetActive(false);
         }
+        else if (!SaveSystem.instance.GetSaveFile().redUnlocked)
+        {
+            unlockBlueButton.gameObject.SetActive(false);
+        }
         else
         {
             unlockBlueButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockBlueCost);
@@ -205,14 +235,23 @@ public class Hivemind : MonoBehaviour
         if (goldenChanceButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenChanceMultiplier >= goldenChanceMax)
         {
             goldenChanceButton.gameObject.SetActive(false);
+        } 
+        else if (!SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
+        {
+            goldenChanceButton.gameObject.SetActive(false);
         }
-        else if (SaveSystem.instance.GetSaveFile().goldenSporeUnlocked && SaveSystem.instance.GetSaveFile().goldenChanceMultiplier < goldenChanceMax)
+        else if (SaveSystem.instance.GetSaveFile().goldenSporeUnlocked &&
+                 SaveSystem.instance.GetSaveFile().goldenChanceMultiplier < goldenChanceMax)
         {
             goldenChanceButton.gameObject.SetActive(true);
             goldenChanceButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= goldenChanceCost);
         }
 
         if (goldenMultiButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().goldenMultiplier >= goldenMultiMax)
+        {
+            goldenMultiButton.gameObject.SetActive(false);
+        }
+        else if (!SaveSystem.instance.GetSaveFile().goldenSporeUnlocked)
         {
             goldenMultiButton.gameObject.SetActive(false);
         }
@@ -226,6 +265,10 @@ public class Hivemind : MonoBehaviour
         {
             potentShroomsButton.gameObject.SetActive(false);
         }
+        else if (!SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked)
+        {
+            potentShroomsButton.gameObject.SetActive(false);
+        }
         else
         {
             potentShroomsButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= potentShroomsCost);
@@ -235,9 +278,22 @@ public class Hivemind : MonoBehaviour
         {
             enchantSpoonButton.gameObject.SetActive(false);
         }
+        else if (!SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked)
+        {
+            enchantSpoonButton.gameObject.SetActive(false);
+        }
         else
         {
             enchantSpoonButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= enchantSpoonCost);
+        }
+
+        if (unlockCauldronButton.isActiveAndEnabled && (SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked))
+        {
+            unlockCauldronButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            unlockCauldronButton.ToggleButton(SaveSystem.instance.GetSaveFile().hivemindPoints >= unlockCauldronCost);
         }
     }
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2649831466005733906}
   - component: {fileID: 2649831466005733905}
   - component: {fileID: 4527644419961232922}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Peg
   m_TagString: Peg
   m_Icon: {fileID: 0}
@@ -146,3 +146,5 @@ MonoBehaviour:
   defaultColor: {r: 0, g: 1, b: 0.67, a: 1}
   scoreMultiplier: 1
   scoreAddition: 1
+  punchScale: 0.25
+  doPunch: 1

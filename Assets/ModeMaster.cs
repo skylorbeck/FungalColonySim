@@ -80,12 +80,12 @@ public class ModeMaster : MonoBehaviour
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Potions)
+        if (!(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked) && mode == Gamemode.Potions)
         {
             mode++;
         }
         
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Marketplace)
+        if (!(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked) && mode == Gamemode.Marketplace)
         {
             mode++;
         }
@@ -104,12 +104,17 @@ public class ModeMaster : MonoBehaviour
         Gamemode mode = currentMode;
         mode--;
 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Marketplace)
+        if (mode < Gamemode.BrownFarm)
+        {
+            mode = Gamemode.Marketplace;
+        }
+        
+        if (!(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked) && mode == Gamemode.Marketplace)
         {
             mode--;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0) && mode == Gamemode.Potions)
+        if (!(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked) && mode == Gamemode.Potions)
         {
             mode--;
         }
@@ -130,15 +135,12 @@ public class ModeMaster : MonoBehaviour
         }
 
 
-        if (mode < Gamemode.BrownFarm)
-        {
-            mode = Gamemode.Marketplace;
-        }
+      
 
         SetMode(mode, true);
     }
 
-    private void SetMode(Gamemode gamemode, bool left = false)
+    public void SetMode(Gamemode gamemode, bool left = false)
     {
         lastMode = currentMode;
         currentMode = gamemode;
@@ -245,7 +247,7 @@ public class ModeMaster : MonoBehaviour
                 BlueFarmUpgrades.transform.DOScale(1, duration).onComplete = () => BlueFarmUpgrades.transform.localScale = Vector3.one;
                 break;
             case Gamemode.Hivemind:
-                modeText.text = "Hivemind Core";
+                modeText.text = "Plinko Board";
                 Hivemind.transform.position = new Vector3(-dist, 0, 0);
                 Hivemind.transform.DOMoveX(0, duration).onComplete = () => HivemindUpgrades.SetActive(true);
                 HivemindUpgrades.transform.localScale = Vector3.one * 5;
@@ -293,8 +295,8 @@ public class ModeMaster : MonoBehaviour
         dots[2].gameObject.SetActive(SaveSystem.instance.GetSaveFile().blueUnlocked);
         dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
         dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
-        dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
-        dots[5].gameObject.SetActive(SaveSystem.instance.GetSaveFile().sporeCountTotal > 0);
+        dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked);
+        dots[5].gameObject.SetActive(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked);
 
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);

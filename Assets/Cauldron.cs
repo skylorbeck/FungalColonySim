@@ -533,6 +533,7 @@ public class Cauldron : MonoBehaviour
 [Serializable]
 public class CauldronSave
 {
+    public bool isUnlocked = false;
     public CauldronUpgrades upgrades = new CauldronUpgrades();
     public float progressMax = 30f;
     public float progress = 0f;

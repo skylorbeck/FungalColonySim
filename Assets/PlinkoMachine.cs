@@ -35,13 +35,16 @@ public class PlinkoMachine : MonoBehaviour
     public TextMeshProUGUI softCapText;
 
     public float spawnForce = 50;
-    public float spawnRate = 60f;//TODO good place for upgrades. Faster ball generation.
+    public float spawnRate = 60f;
     public float spawnTimer
     {
         get => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress;
         set => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress = value;
     }
 
+    public float autoFireTimer = 0;
+    public float autoFireRate = 1f;
+    
     public Image spawnTimerBar;
 
     public int pegRows = 6;
@@ -58,7 +61,10 @@ public class PlinkoMachine : MonoBehaviour
 
     public void AwardCollectible()
     {
-        SFXMaster.instance.PlayOneShot(jackpotSound);
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        {
+            SFXMaster.instance.PlayOneShot(jackpotSound);
+        }
         CollectionItemSaveData saveData = prizeAwarder.currentPrize;
         prizePreview.InsertSaveData(saveData);
         prizePreview.gameObject.transform.DOKill();
@@ -177,6 +183,16 @@ public class PlinkoMachine : MonoBehaviour
     public void FixedUpdate()
     {
         // if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
+
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked)
+        {
+            autoFireTimer += Time.fixedDeltaTime;//TODO place for upgrades
+            if (autoFireTimer > autoFireRate)
+            {
+                autoFireTimer = 0;
+                SpawnBall();
+            }
+        }
         
         if (SaveSystem.instance.GetSaveFile().plinkoSave.balls >=
             SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap) return;
@@ -193,7 +209,10 @@ public class PlinkoMachine : MonoBehaviour
 
     public void SpawnBall()
     {
-        SFXMaster.instance.PlayMenuClick();
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        {
+            SFXMaster.instance.PlayMenuClick();
+        }
         if (SaveSystem.instance.GetSaveFile().plinkoSave.balls>0)
         {
             SaveSystem.instance.GetSaveFile().plinkoSave.balls--;
@@ -229,7 +248,10 @@ public class PlinkoMachine : MonoBehaviour
 
     public void AwardNonCollectible()
     {
-        SFXMaster.instance.PlayOneShot(winSound);
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        {
+            SFXMaster.instance.PlayOneShot(winSound);
+        }
         float totalWeight = 0;
         foreach (var weight in prizeWeights)
         {
@@ -255,6 +277,21 @@ public class PlinkoMachine : MonoBehaviour
                         uint hivemindPoints = (uint)Random.Range(1, 5);//TODO good place for upgrades
                         SaveSystem.instance.GetSaveFile().hivemindPoints +=hivemindPoints;
                         prizeText.text = "Skill Points +" + hivemindPoints;
+                        break;
+                    case 3:
+                        uint bpotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().potionsCount[0] +=bpotions;
+                        prizeText.text = "Brown Potions +" + bpotions;
+                        break;
+                    case 4:
+                        uint rpotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().potionsCount[0] +=rpotions;
+                        prizeText.text = "Red Potions +" + rpotions;
+                        break;
+                    case 5:
+                        uint bupotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().potionsCount[0] +=bupotions;
+                        prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:
                         uint balls = (uint)Random.Range(1, 5);//TODO good place for upgrades
