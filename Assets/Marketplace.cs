@@ -67,8 +67,8 @@ public class Marketplace : MonoBehaviour
     [Header("BallGenerationSpeed")]
     public UpgradeContainer ballGenerationSpeedButton;
     public uint ballGenerationSpeedCost = 5000;
-    public float ballGenerationSpeedMultiplier = 0.25f;
-    public float ballGenerationSpeedMax = 1.5f;
+    public uint ballGenerationSpeedBaseCost = 5000;
+    public uint ballGenerationSpeedMax = 10;
     
     [Header("BallGenerationAmount")]
     public UpgradeContainer ballGenerationAmountButton;
@@ -402,7 +402,7 @@ public class Marketplace : MonoBehaviour
         if (SaveSystem.instance.SpendCoins(ballGenerationSpeedCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed += ballGenerationSpeedMultiplier;
+            SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed *= 2;
             SaveSystem.SaveS();
             UpdateBallGenerationSpeedText();
         }
@@ -410,7 +410,7 @@ public class Marketplace : MonoBehaviour
 
     private void UpdateBallGenerationSpeedText()
     {
-        ballGenerationSpeedCost = (uint)(Mathf.Pow(ballGenerationSpeedCost, SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed));
+        ballGenerationSpeedCost = (uint)(ballGenerationSpeedBaseCost * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed);
         ballGenerationSpeedButton.SetCostText(ballGenerationSpeedCost.ToString("N0"));
     }
     

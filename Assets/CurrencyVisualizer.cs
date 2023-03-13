@@ -64,6 +64,9 @@ public class CurrencyVisualizer : MonoBehaviour
             case Currency.PlinkoBall:
                 text.text = SaveSystem.instance.GetSaveFile().plinkoSave.balls.ToString("N0");
                 break;
+            case Currency.Collectible:
+                text.text = SaveSystem.instance.GetSaveFile().collectionItems.Count.ToString("N0");
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
         }
@@ -102,6 +105,9 @@ public class CurrencyVisualizer : MonoBehaviour
                 break;
             case Currency.PlinkoBall:
                 image.sprite = Resources.Load<Sprite>("Sprites/PlinkoBall");
+                break;
+            case Currency.Collectible:
+                image.sprite = Resources.Load<Sprite>("Sprites/Collectible");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);

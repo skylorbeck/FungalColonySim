@@ -27,10 +27,6 @@ public class UpgradeMaster : MonoBehaviour
     
     [Header("Enrich")]
     [SerializeField] private UpgradeContainer enrichButton;
-    
-    [Header("Meta")]
-    [SerializeField] private Toggle showUpgrades;
-    [SerializeField] private RectTransform upgradePanel;
 
     public MushroomBlock.MushroomType mushroomType;
     void Start()
@@ -46,12 +42,7 @@ public class UpgradeMaster : MonoBehaviour
     {
     }
 
-    public void ToggleShowUpgrades()
-    {
-        // SFXMaster.instance.PlayMenuClick();
-        upgradePanel.DOLocalMoveX(showUpgrades.isOn ? 0 : 900, 0.5f).SetEase(Ease.OutBounce);
-    }
-    
+ 
     public void PurchaseAutoHarvest()
     {
         if (ScoreMaster.instance.SpendMushrooms(mushroomType,autoHarvestCost))

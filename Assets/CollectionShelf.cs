@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,6 +17,8 @@ public class CollectionShelf : MonoBehaviour
     public float curScroll = 0;
     
     public ItemVariableCluster[] itemVariableCluster;
+    public TextMeshProUGUI collectiblePercentText;
+
     
     
     void Start()
@@ -29,7 +32,7 @@ public class CollectionShelf : MonoBehaviour
             item.timeOffset = i * itemsPerRow;
             items.Add(item);
         }
-
+        UpdatePercentText();
         this.transform.localPosition = new Vector3(-Mathf.FloorToInt(itemsPerRow * 0.5f) * itemDistance, 0, 0);
     }
     public void AddItem(CollectionItemSaveData saveData)
@@ -39,6 +42,7 @@ public class CollectionShelf : MonoBehaviour
         item.timeOffset = items.Count * itemsPerRow;
         items.Add(item);
         item.transform.localPosition = new Vector3(items.Count * itemDistance, 0, 0);
+        UpdatePercentText();
     }
     
     public void RemoveItem(CollectionItemSaveData saveData)
@@ -52,6 +56,7 @@ public class CollectionShelf : MonoBehaviour
                 break;
             }
         }
+        UpdatePercentText();
     }
 
     public float GetY()
@@ -93,6 +98,11 @@ public class CollectionShelf : MonoBehaviour
             Vector3 targetPos = new Vector3(column * itemDistance, -row * rowDistance + curScroll * rowDistance, items[i].mouseOver? -5f : 0);
             items[i].transform.localPosition = Vector3.Lerp(items[i].transform.localPosition, targetPos, Time.fixedDeltaTime * 10);
         }
+    }
+
+    public void UpdatePercentText()
+    {
+        collectiblePercentText.text ="+"+ SaveSystem.instance.GetSaveFile().collectionItems.Count +"%";
     }
 }
 [Serializable]

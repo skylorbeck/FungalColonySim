@@ -12,9 +12,6 @@ public class Hivemind : MonoBehaviour
     public CollectionShelf collectionShelf;
     public HiveMindMode mode = HiveMindMode.Plinko;
     
-    public RectTransform hivemindPanel;
-    public Toggle upgradeToggle;
-    
     [Header("UnlockRed")]
     public UpgradeContainer unlockRedButton;
     public uint unlockRedCost = 3;
@@ -244,10 +241,7 @@ public class Hivemind : MonoBehaviour
         }
     }
 
-    public void ToggleShowUpgrades()
-    {
-        hivemindPanel.DOLocalMoveX(upgradeToggle.isOn ? 0 : 900, 0.5f).SetEase(Ease.OutBounce);
-    }
+   
     
     public enum HiveMindMode
     {

@@ -1,17 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-using Task = System.Threading.Tasks.Task;
 
 public class BlockMaster : MonoBehaviour
 {
@@ -59,6 +54,7 @@ public class BlockMaster : MonoBehaviour
         enrichButton.SetActive(false);
         yield return StartCoroutine(CreateWorld());
         UpdateMushPerSec();
+        UpdateMushPerTenSec();
         UpdateMushPerTenSec();
         
     }

@@ -197,8 +197,8 @@ public class MarketPreview : MonoBehaviour
     public void Sell()
     {
         if (SaveSystem.instance.GetSaveFile().marketSave.sellSoldOut) return;
-        uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 0;
-        if (amount == 0) return;
+        uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 1;
+        ValidateAmount();
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:

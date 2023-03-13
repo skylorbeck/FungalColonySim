@@ -12,14 +12,8 @@ public class ScoreMaster : MonoBehaviour
     public static ScoreMaster instance;
 
     [SerializeField] private TextMeshProUGUI brownMushroomText;
-    [SerializeField] private Transform brownMushroomBanner;
-    [SerializeField] private bool brownShowing = false;
     [SerializeField] private TextMeshProUGUI redMushroomText;
-    [SerializeField] private Transform redMushroomBanner;
-    [SerializeField] private bool redShowing = false;
     [SerializeField] private TextMeshProUGUI blueMushroomText;
-    [SerializeField] private Transform blueMushroomBanner;
-    [SerializeField] private bool blueShowing = false;
 
     void Start()
     {
@@ -31,32 +25,6 @@ public class ScoreMaster : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    void Update()
-    {
-        if (!brownShowing && SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown] > 0)
-        {
-            brownShowing = true;
-            brownMushroomBanner.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBounce);
-        }
-
-        if (!redShowing && SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red] > 0)
-        {
-            redShowing = true;
-            redMushroomBanner.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBounce);
-        }
-
-        if (!blueShowing && SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue] > 0)
-        {
-            blueShowing = true;
-            blueMushroomBanner.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBounce);
-        }
-    }
-
-    void FixedUpdate()
-    {
-
     }
 
     public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool golden = false)
@@ -93,19 +61,19 @@ public class ScoreMaster : MonoBehaviour
 
     public void UpdateBlueText()
     {
-        blueMushroomText.text = "x" + SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue];
+        blueMushroomText.text = SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Blue].ToString("N0");
         GameMaster.instance.blueUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateRedText()
     {
-        redMushroomText.text = "x" + SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red];
+        redMushroomText.text = SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Red].ToString("N0");
         GameMaster.instance.redUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateBrownText()
     {
-        brownMushroomText.text = "x" + SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown];
+        brownMushroomText.text = SaveSystem.instance.GetSaveFile().mushrooms[(int)MushroomBlock.MushroomType.Brown].ToString("N0");
         GameMaster.instance.brownUpgradeMaster.UpdateButtons();
     }
 

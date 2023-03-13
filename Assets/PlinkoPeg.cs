@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlinkoPeg : PlinkoPiece
 {
-    
+    public float punchScale = 0.25f;
+    public bool doPunch = true;
     void Start()
     {
 
@@ -26,6 +28,10 @@ public class PlinkoPeg : PlinkoPiece
             {
                 this.SetGolden(Random.Range(0, 100) < this.goldChance);
             }
+
+            if (!doPunch) return;
+            sr.transform.DOComplete();
+            sr.transform.DOPunchScale(Vector3.one * punchScale, 0.1f);
         }
     }
     
