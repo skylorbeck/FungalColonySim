@@ -53,7 +53,7 @@ public class ModeMaster : MonoBehaviour
 
     public void UpdateButton()
     {
-        bool unlocked = (SaveSystem.instance.GetSaveFile().statsTotal.spores > 0);
+        bool unlocked = (SaveSystem.instance.GetSaveFile().statsTotal.converges > 0);
         modeText.gameObject.SetActive(unlocked);
         nextButton.gameObject.SetActive(unlocked);
         previousButton.gameObject.SetActive(unlocked);
@@ -75,7 +75,7 @@ public class ModeMaster : MonoBehaviour
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0) && mode == Gamemode.Hivemind)
         {
             mode++;
         }
@@ -119,7 +119,7 @@ public class ModeMaster : MonoBehaviour
             mode--;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0) && mode == Gamemode.Hivemind)
         {
             mode--;
         }
@@ -293,8 +293,8 @@ public class ModeMaster : MonoBehaviour
     {
         dots[1].gameObject.SetActive(SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked);
         dots[2].gameObject.SetActive(SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked);
-        dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0);
-        dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.spores > 0);
+        dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0);
+        dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0);
         dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked);
         dots[5].gameObject.SetActive(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked);
 

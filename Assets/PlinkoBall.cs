@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlinkoBall : PlinkoPiece
 {
     [SerializeField]private uint score = 0;
+    public bool hasWon = false;
     public AudioClip popSound;
     private void OnCollisionEnter2D(Collision2D col)
     {
@@ -15,6 +16,7 @@ public class PlinkoBall : PlinkoPiece
         }
         if (col.gameObject.CompareTag("PlinkoRemove"))
         {
+            hasWon = false;
             GameMaster.instance.Hivemind.plinkoMachine.RemoveBall(this);
         }
     }

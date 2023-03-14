@@ -78,6 +78,7 @@ public class SaveSystem : MonoBehaviour
         if (saveFile.saveVersion<4)
         {
             Reset();
+            saveFile.saveVersion = 4;
         }
 
         loaded = true;

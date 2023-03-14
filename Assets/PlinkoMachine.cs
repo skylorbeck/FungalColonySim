@@ -209,10 +209,7 @@ public class PlinkoMachine : MonoBehaviour
 
     public void SpawnBall()
     {
-        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
-        {
-            SFXMaster.instance.PlayMenuClick();
-        }
+        
         if (SaveSystem.instance.GetSaveFile().plinkoSave.balls>0)
         {
             SaveSystem.instance.GetSaveFile().plinkoSave.balls--;
@@ -220,6 +217,10 @@ public class PlinkoMachine : MonoBehaviour
         else
         {
             return;
+        }
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        {
+            SFXMaster.instance.PlayMenuClick();
         }
         var ball = ballPool.Get();
         if (SaveSystem.instance.GetSaveFile().plinkoSave.goldenBallsUnlocked)

@@ -23,6 +23,8 @@ public class PlinkoPrizeAwarder : MonoBehaviour
         {
                 if (col.gameObject.CompareTag("PlinkoBall"))
                 {
+                        PlinkoBall ball = col.gameObject.GetComponent<PlinkoBall>();
+                        if (ball.hasWon) return;
                         switch (prizeType)
                         {
                                 case PrizeType.Collectible:
@@ -34,6 +36,7 @@ public class PlinkoPrizeAwarder : MonoBehaviour
                                 default:
                                         throw new ArgumentOutOfRangeException();
                         }
+                        ball.hasWon = true;
                 }
         }
         
