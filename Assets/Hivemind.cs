@@ -219,6 +219,7 @@ public class Hivemind : MonoBehaviour
         }
         else
         {
+            unlockBlueButton.gameObject.SetActive(true);
             unlockBlueButton.ToggleButton(SaveSystem.instance.GetSaveFile().stats.skillPoints >= unlockBlueCost);
         }
 
