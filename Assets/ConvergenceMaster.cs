@@ -273,7 +273,7 @@ public class ConvergenceMaster : MonoBehaviour
 
     private void CalculateSporeReward()
     {
-        double sporeCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().stats.spores );
+        double sporeCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().statsTotal.spores );
         float brownMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier * GameMaster.instance.Marketplace.brownValueMultiplierGain);
         uint brownValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Brown]*brownMultiplier, 1.1f);
 
