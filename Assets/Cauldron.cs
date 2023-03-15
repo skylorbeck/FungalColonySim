@@ -401,6 +401,7 @@ public class Cauldron : MonoBehaviour
     public void UpdateButtons()
     {
         CheckFueledAndReady();
+        ProcessDesiredPotions();
         fuelButton.interactable = !cauldronSave.hasFuel && !cauldronSave.isOn;
         onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel && cauldronSave.ingredientTotal >= neededIngredients && !cauldronSave.isOn;
         gatherButton.interactable = cauldronSave.isDone;
@@ -474,7 +475,6 @@ public class Cauldron : MonoBehaviour
             (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
-
     }
 
     public void IncreasePotionAmount()
