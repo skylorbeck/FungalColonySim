@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
-public class MushroomBlock : Block
+public class MushroomBlock : Block, IPointerEnterHandler
 {
     [SerializeField] private MushroomType mushroomType;
     private MushroomType plantTypePrevious;
@@ -157,6 +157,7 @@ public class MushroomBlock : Block
         {
             ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
         }
+        
         isGolden = SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier;
         if (isGolden)
         {
@@ -190,5 +191,13 @@ public class MushroomBlock : Block
     public static Sprite GetMushroomSprite(MushroomType mushroomType)
     {
         return Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
+    }
+    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (isGrown && Input.GetMouseButton(0))
+        {
+            Harvest();
+        }
     }
 }

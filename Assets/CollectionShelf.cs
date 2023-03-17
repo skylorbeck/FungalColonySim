@@ -42,6 +42,9 @@ public class CollectionShelf : MonoBehaviour
         item.timeOffset = items.Count * itemsPerRow;
         items.Add(item);
         item.transform.localPosition = new Vector3(items.Count * itemDistance, 0, 0);
+        Vector3 thisPos = transform.position;
+        thisPos.y = GetY();
+        transform.position = thisPos;
         UpdatePercentText();
     }
     
@@ -83,6 +86,11 @@ public class CollectionShelf : MonoBehaviour
         else if (Input.mouseScrollDelta.y < 0)
         {
             curScroll += 1;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            curScroll += Input.GetAxis("Mouse Y") * 0.5f;
         }
         
         curScroll = Mathf.Clamp(curScroll, 0, Mathf.Max(0, Mathf.CeilToInt((items.Count - (itemsPerRow-1)*3) / (float)itemsPerRow) - 1));

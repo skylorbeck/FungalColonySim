@@ -18,7 +18,8 @@ public class GameMaster : MonoBehaviour
     public BlockMaster blueBlockMaster;
     public Camera camera;
     public Tooltip tooltip;
-
+    public Toggle fpsToggle;
+    
     public ModeMaster ModeMaster;
     public UpgradeMaster brownUpgradeMaster;
     public UpgradeMaster redUpgradeMaster;
@@ -54,9 +55,27 @@ public class GameMaster : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Application.targetFrameRate = PlayerPrefs.GetInt("targetFPS", Screen.currentResolution.refreshRate);
+        fpsToggle.isOn = Application.targetFrameRate == Screen.currentResolution.refreshRate;
         camera = Camera.main;
         yield return new WaitUntil(() => SaveSystem.instance != null);
         SaveSystem.instance.Load();
+    }
+
+    public void ToggleFPS()
+    {
+        if (Application.targetFrameRate == Screen.currentResolution.refreshRate)
+        {
+            Application.targetFrameRate = 30;
+            PlayerPrefs.SetInt("targetFPS", 30);
+            fpsToggle.isOn = false;
+        }
+        else
+        {
+            Application.targetFrameRate = Screen.currentResolution.refreshRate;
+            PlayerPrefs.SetInt("targetFPS", Screen.currentResolution.refreshRate);
+            fpsToggle.isOn = true;
+        }
     }
 
     void Update()

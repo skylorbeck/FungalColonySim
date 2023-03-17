@@ -480,7 +480,7 @@ public class Cauldron : MonoBehaviour
     public void IncreasePotionAmount()
     {
         desiredPotions++;
-        ProcessDesiredPotions();
+        // ProcessDesiredPotions();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
     }
@@ -488,7 +488,7 @@ public class Cauldron : MonoBehaviour
     public void DecreasePotionAmount()
     {
         desiredPotions--;
-        ProcessDesiredPotions();
+        // ProcessDesiredPotions();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
     }
@@ -500,26 +500,30 @@ public class Cauldron : MonoBehaviour
             if (value > 0)
             {
                 desiredPotions = value;
-                ProcessDesiredPotions();
-                return;
             }
         }
+        else
+        {
+            desiredPotions = 1;
+        }
+        
+        if (desiredPotions > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients)
+        {
+            desiredPotions = Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / (float)neededIngredients);
+        }
 
-        desiredPotions = 1;
+        if (desiredPotions < 0)
+        {
+            desiredPotions = 0;
+        }
+
+        ingredientAmountText.text = neededIngredients * desiredPotions + "";
+
         ProcessDesiredPotions();
     }
 
     public void ProcessDesiredPotions()
     {
-        if (desiredPotions > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients)
-        {
-            desiredPotions = Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / (float)neededIngredients);
-        }
-        if (desiredPotions < 1)
-        {
-            desiredPotions = 1;
-        }
-        ingredientAmountText.text = neededIngredients * desiredPotions + "";
         increaseDesiredPotionsButton.interactable = desiredPotions < SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients;
         decreaseDesiredPotionsButton.interactable = desiredPotions > 1;
         desiredPotionsText.text = desiredPotions + "";

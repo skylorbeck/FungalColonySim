@@ -80,6 +80,10 @@ public class SaveSystem : MonoBehaviour
             Reset();
             saveFile.saveVersion = 4;
         }
+        if (saveFile.farmSave.upgrades.goldenMultiplier < 2)
+        {
+            saveFile.farmSave.upgrades.goldenMultiplier = 2;
+        }
 
         loaded = true;
     }
