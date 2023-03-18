@@ -197,8 +197,13 @@ public class MarketPreview : MonoBehaviour
     public void Sell()
     {
         if (SaveSystem.instance.GetSaveFile().marketSave.sellSoldOut) return;
-        uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 1;
         ValidateAmount();
+        uint amount = int.TryParse(inputField.text.Replace(",", ""), out var a) ? (uint)a : 1;
+        if (amount == 0)
+        {
+            GameMaster.instance.Marketplace.merchant.RandomNoItem();
+            return;
+        }
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
@@ -241,13 +246,19 @@ public class MarketPreview : MonoBehaviour
         goldChangedText.DOKill();
         goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
         CheckButton();
-        ValidateAmount();
+        GameMaster.instance.Marketplace.merchant.RandomThankYou();
     }
 
     public void Buy()
     {
         if (SaveSystem.instance.GetSaveFile().marketSave.buySoldOut) return;
-        if (SaveSystem.instance.GetSaveFile().marketSave.coins < price) return;
+        if (SaveSystem.instance.GetSaveFile().marketSave.coins < price)
+        {
+            GameMaster.instance.Marketplace.merchant.RandomNoMoney();
+            return;
+        }
+
+
         switch (currency)
         {
             case CurrencyVisualizer.Currency.BrownMushroom:
@@ -283,6 +294,7 @@ public class MarketPreview : MonoBehaviour
         goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
         SaveSystem.instance.GetSaveFile().marketSave.buySoldOut = true;
         CheckButton();
+        GameMaster.instance.Marketplace.merchant.RandomThankYou();
     }
 
     public void Refresh()
@@ -325,6 +337,12 @@ public class MarketPreview : MonoBehaviour
         SetCurrency(currencies[Random.Range(0, currencies.Count)]);
 
         UpdatePrice();
+    }
+    
+    public void Clear()
+    {
+        inputField.text = "0";
+        ValidateAmount();
     }
 
     public enum Mode

@@ -94,6 +94,7 @@ public class Marketplace : MonoBehaviour
     public uint autoFireCost = 100000;
     void Start()
     {
+        GameMaster.instance.ModeMaster.OnModeChange += sellPreview.Clear;
         Refresh();
         Sprite coinSprite = Resources.Load<Sprite>("Sprites/Coin");
         brownValueButton.SetIcon(coinSprite);
@@ -275,7 +276,11 @@ public class Marketplace : MonoBehaviour
             Refresh();
         }
 
-        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Marketplace) return;
+        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Marketplace)
+        {
+            
+            return;
+        }
         buyPreview.CheckButton();
         sellPreview.CheckButton();
         //format tickstoRefresh to minutes and seconds. 50 ticks = 1 second

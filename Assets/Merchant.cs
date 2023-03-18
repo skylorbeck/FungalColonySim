@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Merchant : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class Merchant : MonoBehaviour
         "What're ya sellin'?",
         "What do you have?",
     };
+
     public string[] thankYou = new[]
     {
         "Hehe, thanks.",
@@ -27,11 +29,30 @@ public class Merchant : MonoBehaviour
         "Thanks!",
         "I'll use it to buy more stuff!",
     };
+
+    public string[] noItem = new[]
+    {
+        "...",
+        "...You didn't give me anything...",
+        "...I'm not a charity.",
+        "...Nothing...?",
+        "*grumble*",
+    };
+
+    public string[] noMoney = new[]
+    {
+        "...",
+        "...You don't have enough money...",
+        "...I'm not a charity.",
+        "...No money...?",
+        "*grumble*",
+    };
+
     public int currentSaying = 0;
-    
+
     void Start()
     {
-        RandomSaying();
+        GameMaster.instance.ModeMaster.OnModeChange += RandomSaying;
     }
 
     public void NextSaying()
@@ -41,27 +62,33 @@ public class Merchant : MonoBehaviour
         {
             currentSaying = 0;
         }
+
         speech.text = sayings[currentSaying];
     }
-    
+
     public void RandomSaying()
     {
         currentSaying = Random.Range(0, sayings.Length);
         speech.text = sayings[currentSaying];
     }
-    
+
     public void RandomThankYou()
     {
         speech.text = thankYou[Random.Range(0, thankYou.Length)];
     }
     
-    void Update()
+    public void RandomNoItem()
     {
-        
+        speech.text = noItem[Random.Range(0, noItem.Length)];
     }
 
     void FixedUpdate()
     {
-        speech.transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time*2) * 5);
+        speech.transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * 2) * 5);
+    }
+
+    public void RandomNoMoney()
+    {
+        throw new System.NotImplementedException();
     }
 }
