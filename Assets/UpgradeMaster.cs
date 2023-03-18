@@ -12,16 +12,19 @@ public class UpgradeMaster : MonoBehaviour
     [Header("Auto Harvest")]
     [SerializeField] private UpgradeContainer autoHarvestButton;
     [SerializeField] private uint autoHarvestCost = 5;
+    [SerializeField] private uint autoHarvestCostDefault = 50;
     [SerializeField] private bool autoHarvestVisible = false;
     [Header("Auto Harvest Speed")]
     [SerializeField] private UpgradeContainer autoHarvestSpeedButton;
     [SerializeField] private uint autoHarvestSpeedCost = 50;
+    [SerializeField] private uint autoHarvestSpeedCostDefault = 50;
     [SerializeField] private uint autoHarvestSpeedRatio = 2;
     [SerializeField] private bool autoHarvestSpeedVisible = false;
 
     [Header("Growth Speed")]
     [SerializeField] private UpgradeContainer growthSpeedButton;
     [SerializeField] private uint growthSpeedCost = 5;
+    [SerializeField] private uint growthSpeedCostDefault = 5;
     [SerializeField] private uint growthSpeedRatio= 3;
     [SerializeField] private bool growthSpeedVisible = false;
     
@@ -158,9 +161,9 @@ public class UpgradeMaster : MonoBehaviour
         autoHarvestVisible = false;
         growthSpeedVisible = false;
         autoHarvestSpeedVisible = false;
-        autoHarvestCost = 5;
-        growthSpeedCost = 5;
-        autoHarvestSpeedCost = 50;
+        autoHarvestCost = autoHarvestCostDefault;
+        growthSpeedCost = growthSpeedCostDefault;
+        autoHarvestSpeedCost = autoHarvestSpeedCostDefault;
         UpdateButtons();
     }
 }
