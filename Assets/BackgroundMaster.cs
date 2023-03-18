@@ -18,6 +18,8 @@ public class BackgroundMaster : MonoBehaviour
                 piece.transform.localPosition = new Vector3(x * spacing.x, y * spacing.y, 0);
             }
         }
+        
+        this.transform.position = new Vector3(-size.x * spacing.x / 2, -size.y * spacing.y / 2, 0);
     }
 
     void Update()

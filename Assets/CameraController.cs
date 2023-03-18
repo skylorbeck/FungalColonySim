@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
 
     public bool isDragging = false;
     public Vector3 dragOrigin;
-    public Vector3 bounds;
+    public Vector2 bounds;
 
     [SerializeField] private Image grabCursor;
     [SerializeField] private Image grabCursorPointer;
@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
         }
         
         int larger = Mathf.Max(SaveSystem.instance.GetSaveFile().farmSave.farmSize.x, SaveSystem.instance.GetSaveFile().farmSave.farmSize.y);
-        bounds = new Vector3(larger, larger, 0);
+        bounds = new Vector2(larger, larger);
         if (Input.mouseScrollDelta.y > 0)
         {
             camDist -= 1;
@@ -57,13 +57,11 @@ public class CameraController : MonoBehaviour
             grabCursor.enabled = true;
             grabCursor.transform.position = Input.mousePosition;
             grabCursorPointer.enabled = true;
-            // Cursor.visible = false;
         } else if (Input.GetMouseButtonUp(1))
         {
             isDragging = false;
             grabCursor.enabled =false;
             grabCursorPointer.enabled = false;
-            // Cursor.visible = true;
         }
 
         if (isDragging)
@@ -73,7 +71,7 @@ public class CameraController : MonoBehaviour
             Transform transform1;
             (transform1 = transform).Translate(move, Space.World);
             var position = transform1.position;
-            position = new Vector3(Mathf.Clamp(position.x, -bounds.x, bounds.x), Mathf.Clamp(position.y, -bounds.y-5, bounds.y-5), position.z);
+            position = new Vector3(Mathf.Clamp(position.x, -bounds.x*2, bounds.x*2), Mathf.Clamp(position.y, -bounds.y*2-5, bounds.y-5), position.z);
             transform.position = position;
             grabCursorPointer.transform.rotation = Quaternion.Euler(0, 0,Mathf.Atan2(Input.mousePosition.y - dragOrigin.y, Input.mousePosition.x - dragOrigin.x) * Mathf.Rad2Deg );
         }
