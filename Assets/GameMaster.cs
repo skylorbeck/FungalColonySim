@@ -56,7 +56,7 @@ public class GameMaster : MonoBehaviour
             Destroy(gameObject);
         }
         Application.targetFrameRate = PlayerPrefs.GetInt("targetFPS", Screen.currentResolution.refreshRate);
-        fpsToggle.SetIsOnWithoutNotify(Application.targetFrameRate == 30);
+        fpsToggle.SetIsOnWithoutNotify(Application.targetFrameRate != 30);
         camera = Camera.main;
         yield return new WaitUntil(() => SaveSystem.instance != null);
         SaveSystem.instance.Load();
