@@ -24,9 +24,9 @@ public class Cauldron : MonoBehaviour
     public SpriteMask progressMask;
     public float progressSpeed = 1f;
     public float maskOffset = 2.25f;
-    public float rotationSpeed = 5f;
-    public float rotationDegree = 35f;
-    public float punchSize = 1.5f;
+    public float rotationSpeed = 20f;
+    public float rotationDegree = 2f;
+    public float punchSize = 0.5f;
     public float baseBrewTime = 30f;
     public float additionalBrewRatio = 0.25f;
     public int neededIngredients = 100;
@@ -367,7 +367,7 @@ public class Cauldron : MonoBehaviour
             }
         }
 
-        int potionAmount = cauldronSave.ingredientTotal / neededIngredients;//TODO good place for upgrades
+        int potionAmount = Mathf.FloorToInt(cauldronSave.ingredientTotal / (float)neededIngredients);//TODO good place for upgrades
         
         potions[(int)potionType] += (uint)potionAmount;
         
