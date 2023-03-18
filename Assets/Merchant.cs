@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -48,38 +49,26 @@ public class Merchant : MonoBehaviour
         "*grumble*",
     };
 
-    public int currentSaying = 0;
 
     void Start()
     {
         GameMaster.instance.ModeMaster.OnModeChange += RandomSaying;
     }
 
-    public void NextSaying()
-    {
-        currentSaying++;
-        if (currentSaying >= sayings.Length)
-        {
-            currentSaying = 0;
-        }
-
-        speech.text = sayings[currentSaying];
-    }
-
+ 
     public void RandomSaying()
     {
-        currentSaying = Random.Range(0, sayings.Length);
-        speech.text = sayings[currentSaying];
+        UpdateText(sayings[Random.Range(0, sayings.Length)]);
     }
 
     public void RandomThankYou()
     {
-        speech.text = thankYou[Random.Range(0, thankYou.Length)];
+        UpdateText(thankYou[Random.Range(0, thankYou.Length)]);
     }
     
     public void RandomNoItem()
     {
-        speech.text = noItem[Random.Range(0, noItem.Length)];
+        UpdateText(noItem[Random.Range(0, noItem.Length)]);
     }
 
     void FixedUpdate()
@@ -89,6 +78,13 @@ public class Merchant : MonoBehaviour
 
     public void RandomNoMoney()
     {
-        throw new System.NotImplementedException();
+        UpdateText(noMoney[Random.Range(0, noMoney.Length)]);
+    }
+
+    public void UpdateText(string text)
+    {
+        speech.text = text;
+        this.transform.DOComplete();
+        this.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f, 1, 0.5f);
     }
 }

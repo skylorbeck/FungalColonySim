@@ -177,7 +177,7 @@ public class MarketPreview : MonoBehaviour
             : SaveSystem.instance.GetSaveFile().marketSave.buySoldOut;
         itemSprite.color = soldOut ? new Color(.3f,.3f,.3f,1) : Color.white;
         if (mode == Mode.Buy)
-            buySellButton.interactable = SaveSystem.instance.GetSaveFile().marketSave.coins >= price && !soldOut;
+            buySellButton.interactable = /*SaveSystem.instance.GetSaveFile().marketSave.coins >= price &&*/ !soldOut;
         else
             buySellButton.interactable = !soldOut && currency switch
             {
