@@ -30,7 +30,7 @@ public class ScoreMaster : MonoBehaviour
     public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool golden = false)
     {
         uint amount = 1 + SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier;
-        amount *= (golden ? SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier : 1);
+        amount *= golden ? SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier : 1;
         //Debug.Log("Adding " + amount + " " + mushroomType + " mushrooms");
         SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] +=amount;
         SaveSystem.instance.GetSaveFile().statsTotal.mushrooms[(int)mushroomType] += amount;
