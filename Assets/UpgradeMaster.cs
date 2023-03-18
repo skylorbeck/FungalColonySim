@@ -33,9 +33,13 @@ public class UpgradeMaster : MonoBehaviour
     {
         UpdateButtons();
         autoHarvestButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        autoHarvestButton.SetCostText(autoHarvestCost.ToString("N0"));
         autoHarvestSpeedButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        UpdateAutoHarvestButton();
         growthSpeedButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        UpdateGrowthSpeedButton();
         enrichButton.SetIcon(MushroomBlock.GetMushroomSprite(mushroomType));
+        UpdateEnrichButton();
     }
 
     public void Awake()

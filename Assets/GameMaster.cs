@@ -56,25 +56,23 @@ public class GameMaster : MonoBehaviour
             Destroy(gameObject);
         }
         Application.targetFrameRate = PlayerPrefs.GetInt("targetFPS", Screen.currentResolution.refreshRate);
-        fpsToggle.isOn = Application.targetFrameRate == Screen.currentResolution.refreshRate;
+        fpsToggle.SetIsOnWithoutNotify(Application.targetFrameRate == 30);
         camera = Camera.main;
         yield return new WaitUntil(() => SaveSystem.instance != null);
         SaveSystem.instance.Load();
     }
 
-    public void ToggleFPS()
+    public void ToggleFPS(bool value)
     {
-        if (Application.targetFrameRate == Screen.currentResolution.refreshRate)
-        {
-            Application.targetFrameRate = 30;
-            PlayerPrefs.SetInt("targetFPS", 30);
-            fpsToggle.isOn = false;
-        }
-        else
+        if (value)
         {
             Application.targetFrameRate = Screen.currentResolution.refreshRate;
             PlayerPrefs.SetInt("targetFPS", Screen.currentResolution.refreshRate);
-            fpsToggle.isOn = true;
+        }
+        else
+        {
+            Application.targetFrameRate = 30;
+            PlayerPrefs.SetInt("targetFPS", 30);
         }
     }
 

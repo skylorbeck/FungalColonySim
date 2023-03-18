@@ -213,7 +213,7 @@ public class Hivemind : MonoBehaviour
         {
             unlockBlueButton.gameObject.SetActive(false);
         }
-        else if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked)
+        else if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked || SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked)
         {
             unlockBlueButton.gameObject.SetActive(false);
         }

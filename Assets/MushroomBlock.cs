@@ -149,15 +149,12 @@ public class MushroomBlock : Block, IPointerEnterHandler
             mushroomPop.transform.DOLocalJump(mushroomPop.transform.localPosition + Vector3.up * 2, 1, 1, 1)
                 .onComplete += () =>
                 mushroomPop.transform.DOScale(Vector3.zero, 0.25f);
-            mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f).onComplete +=
-                () => ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
+            mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f);
             SFXMaster.instance.PlayMushPop();
         }
-        else
-        {
-            ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
-        }
         
+        ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
+
         isGolden = SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier;
         if (isGolden)
         {
