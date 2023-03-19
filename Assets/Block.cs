@@ -19,7 +19,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
     
     [SerializeField] private int3 lightPos;
     [SerializeField] private int3 lastLightPos;
-    [SerializeField] private bool isPlacing = false;
+    [SerializeField] public bool isPlacing = false;
 
     void Start()
     {
@@ -87,6 +87,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
         this.isPlacing = true;
         this.blockPos = int3;
         this.blockOffset = new Vector3(0, 50, 0);
+        this.transform.localScale = Vector3.one;
         UpdateWorldPos();
         if (Mathf.Abs(transform.position.x) < 100)
         {
@@ -101,16 +102,30 @@ public class Block : MonoBehaviour, IPointerClickHandler
             this.isPlacing = false;
         }
     }
-    public void RemoveBlock()
+    public void RemoveBlock(int mode = 0)
     {
-        isPlacing = true;
         if (Mathf.Abs(transform.position.x) < 100)
         {
-            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 0.5f).onComplete += () => Destroy(gameObject);
+            isPlacing = true;
+            switch (mode)
+            {
+                default:
+                    DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 0.5f).onComplete += () =>
+                    {
+                        isPlacing = false;
+                        gameObject.SetActive(false);
+                    };
+                    break;
+                case 1:
+                    transform.DOScale(new Vector3(0, 0, 0), 0.5f).onComplete += () => isPlacing = false;
+                    break;
+            }
             SFXMaster.instance.PlayBlockDestroy();
-        } else
+        }
+        else
         {
-            Destroy(gameObject);
+            isPlacing = false;
+            gameObject.SetActive(false);
         }
     }
 
