@@ -10329,7 +10329,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  enrichButton: {fileID: 1563601928}
+  enrichButton: {fileID: 1563601930}
   MushPerSecText: {fileID: 1353450335}
   mushPerSecTimerImage: {fileID: 676997290}
   timer: 0
@@ -10722,7 +10722,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  enrichButton: {fileID: 1914094495}
+  enrichButton: {fileID: 1914094497}
   MushPerSecText: {fileID: 1260912052}
   mushPerSecTimerImage: {fileID: 594828566}
   timer: 0
@@ -21702,17 +21702,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914406813}
   m_CullTransparentMesh: 1
---- !u!1 &920333984 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
-  m_PrefabInstance: {fileID: 6982851425932282913}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &920333986 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8135286348101905252, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
   m_PrefabInstance: {fileID: 6982851425932282913}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 920333984}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e061bdc6ec293e42af7cd9e97ffa5c9, type: 3}
@@ -25531,7 +25526,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  enrichButton: {fileID: 920333984}
+  enrichButton: {fileID: 920333986}
   MushPerSecText: {fileID: 32470490}
   mushPerSecTimerImage: {fileID: 349027210}
   timer: 0
@@ -33711,7 +33706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b0aae9634a541f9b8dd816b9c3b4af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 200
+  distance: 100
   duration: 1
   BrownFarm: {fileID: 1112615074}
   BrownFarmUpgrades: {fileID: 2695498247907739668}
@@ -35574,17 +35569,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562823771}
   m_CullTransparentMesh: 1
---- !u!1 &1563601928 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
-  m_PrefabInstance: {fileID: 6982851427503076255}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1563601930 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8135286348101905252, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
   m_PrefabInstance: {fileID: 6982851427503076255}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563601928}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e061bdc6ec293e42af7cd9e97ffa5c9, type: 3}
@@ -41846,17 +41836,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1914094495 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
-  m_PrefabInstance: {fileID: 6982851425798268965}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1914094497 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8135286348101905252, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
   m_PrefabInstance: {fileID: 6982851425798268965}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914094495}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e061bdc6ec293e42af7cd9e97ffa5c9, type: 3}
@@ -50818,7 +50803,7 @@ PrefabInstance:
       objectReference: {fileID: 443011297}
     - target: {fileID: 228526010142832739, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EnrichBlock
+      value: StartEnrichBlock
       objectReference: {fileID: 0}
     - target: {fileID: 228526010142832739, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -50939,7 +50924,7 @@ PrefabInstance:
       objectReference: {fileID: 1112615075}
     - target: {fileID: 228526010142832739, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EnrichBlock
+      value: StartEnrichBlock
       objectReference: {fileID: 0}
     - target: {fileID: 228526010142832739, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -51060,7 +51045,7 @@ PrefabInstance:
       objectReference: {fileID: 440484631}
     - target: {fileID: 228526010142832739, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EnrichBlock
+      value: StartEnrichBlock
       objectReference: {fileID: 0}
     - target: {fileID: 228526010142832739, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
