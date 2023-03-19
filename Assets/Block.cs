@@ -91,7 +91,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
         UpdateWorldPos();
         if (Mathf.Abs(transform.position.x) < 100)
         {
-            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, 0, 0), 0.5f).onComplete += () =>
+            DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, 0, 0), 0.5f).SetEase(Ease.OutBack).onComplete += () =>
             {
                 this.isPlacing = false;
             };
@@ -102,6 +102,12 @@ public class Block : MonoBehaviour, IPointerClickHandler
             this.isPlacing = false;
         }
     }
+    
+    public void RemoveBlockRandom()
+    {
+        RemoveBlock(UnityEngine.Random.Range(0, 2));
+    }
+    
     public void RemoveBlock(int mode = 0)
     {
         if (Mathf.Abs(transform.position.x) < 100)
@@ -110,14 +116,15 @@ public class Block : MonoBehaviour, IPointerClickHandler
             switch (mode)
             {
                 default:
-                    DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -50, 0), 0.5f).onComplete += () =>
+                    transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.InBack).onComplete += () => isPlacing = false;
+
+                    break;
+                case 1:
+                    DOTween.To(() => blockOffset, x => blockOffset = x, new Vector3(0, -25, 0), 0.5f).SetEase(Ease.InBack).onComplete += () =>
                     {
                         isPlacing = false;
                         gameObject.SetActive(false);
-                    };
-                    break;
-                case 1:
-                    transform.DOScale(new Vector3(0, 0, 0), 0.5f).onComplete += () => isPlacing = false;
+                    };               
                     break;
             }
             SFXMaster.instance.PlayBlockDestroy();

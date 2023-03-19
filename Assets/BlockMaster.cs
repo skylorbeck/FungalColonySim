@@ -89,6 +89,7 @@ public class BlockMaster : MonoBehaviour
             foreach (Block block in allBlocks)
             {
                 block.SetLightPos(mousePos);
+                if (block.isPlacing) continue;
                 block.SetBlockOffset(new Vector3(0,
                     Mathf.Sin(((floatFlipped ? 1 : -1) * Time.time) + (floatX ? block.blockPos.x : 0) +
                               (floatY ? block.blockPos.y : 0)) * floatDistance, 0));
@@ -222,7 +223,7 @@ public class BlockMaster : MonoBehaviour
             dirtBlocks.Remove(biomeBlock);
             allBlocks.Remove(biomeBlock);
             allBlocks.Add(newBlock);
-            biomeBlock.RemoveBlock();
+            biomeBlock.RemoveBlockRandom();
 
             MushroomBlock block = mushroomBlockPool.Get();
             Transform transform2;
@@ -371,7 +372,7 @@ public class BlockMaster : MonoBehaviour
                     if (x.blockPos.y != y.blockPos.y) return x.blockPos.y.CompareTo(y.blockPos.y);
                     if (x.blockPos.x == y.blockPos.x)
                     {
-                        return x.blockPos.z.CompareTo(y.blockPos.z);
+                        return x.blockPos.z == y.blockPos.z ? 0 : x.blockPos.z.CompareTo(y.blockPos.z);
                     }
 
                     return Random.value > 0.5f ? 1 : -1;
@@ -384,7 +385,8 @@ public class BlockMaster : MonoBehaviour
                     if (x.blockPos.x != y.blockPos.x) return x.blockPos.x.CompareTo(y.blockPos.x);
                     if (x.blockPos.y == y.blockPos.y)
                     {
-                        return x.blockPos.z.CompareTo(y.blockPos.z);
+                        return x.blockPos.z == y.blockPos.z ? 0 : x.blockPos.z.CompareTo(y.blockPos.z);
+
                     }
 
                     return Random.value > 0.5f ? 1 : -1;
