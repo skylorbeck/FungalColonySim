@@ -11,6 +11,7 @@ public class GameMaster : MonoBehaviour
     public Camera camera;
     public Tooltip tooltip;
     public Toggle fpsToggle;
+    public DayNightSystem dayNightSystem;
     
     public ModeMaster ModeMaster;
     public UpgradeMaster brownUpgradeMaster;

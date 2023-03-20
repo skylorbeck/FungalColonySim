@@ -13201,6 +13201,7 @@ GameObject:
   - component: {fileID: 556978893}
   - component: {fileID: 556978895}
   - component: {fileID: 556978896}
+  - component: {fileID: 556978897}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -13226,6 +13227,7 @@ MonoBehaviour:
   camera: {fileID: 519420031}
   tooltip: {fileID: 1805973537}
   fpsToggle: {fileID: 373558642}
+  dayNightSystem: {fileID: 556978897}
   ModeMaster: {fileID: 1473126409}
   brownUpgradeMaster: {fileID: 20327884}
   redUpgradeMaster: {fileID: 315418730}
@@ -13373,6 +13375,21 @@ MonoBehaviour:
       goldenPegsUnlocked: 0
       autofireUnlocked: 0
     collectionItems: []
+--- !u!114 &556978897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556978892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9707c8776caec214b954bbc677d16ceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayLength: 60
+  nightLength: 60
+  currentTime: 0
 --- !u!1001 &559655107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28079,6 +28096,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1243412738}
     m_Modifications:
+    - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Color.b
+      value: 0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Color.g
+      value: 0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Color.r
+      value: 0.88
+      objectReference: {fileID: 0}
     - target: {fileID: 7386873298780575920, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -51262,6 +51291,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1243412738}
     m_Modifications:
+    - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Color.b
+      value: 0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Color.g
+      value: 0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Color.r
+      value: 0.88
+      objectReference: {fileID: 0}
     - target: {fileID: 7386873298780575920, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
       propertyPath: m_RootOrder
       value: 0

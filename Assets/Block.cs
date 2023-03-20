@@ -62,7 +62,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
         lastLightPos = lightPos;
         //use lightpos to calculate the distance between the light and the block
         float color = 1 - (Vector3.Distance(new Vector3(lightPos.x,lightPos.y,lightPos.z), new Vector3(blockPos.x,blockPos.y,blockPos.z)) / shadowDistance);
-        color = Mathf.Clamp(color, 0.25f, 1);
+        color = Mathf.Clamp(color, 0.20f+(0.30f*GameMaster.instance.dayNightSystem.GetLightProgress()), 1);
         spriteRenderer.color = Color.Lerp(spriteRenderer.color, new Color(color, color, color, 1), 0.1f);
     }
     void FixedUpdate()
