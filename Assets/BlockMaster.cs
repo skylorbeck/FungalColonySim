@@ -260,7 +260,7 @@ public class BlockMaster : MonoBehaviour
             success = true;
         }
 
-        enrichButton.ToggleButton(true);
+        // enrichButton.ToggleButton(true);
     
         if (dirtBlocks.Count == 0 ||!success)
         {

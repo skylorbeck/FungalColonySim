@@ -242,6 +242,7 @@ public class MarketPreview : MonoBehaviour
         uint total = price * amount;
         total += (uint)Mathf.FloorToInt(total * SaveSystem.instance.GetSaveFile().collectionItems.Count * 0.01f);
         SaveSystem.instance.GetSaveFile().marketSave.coins += total;
+        inputField.text = "0";
         goldChangedText.text = "+" + total.ToString("N0");
         goldChangedText.DOKill();
         goldChangedText.DOFade(1, 0.1f).OnComplete(() => goldChangedText.DOFade(0, 0.75f).SetDelay(.5f));
