@@ -45,7 +45,7 @@ public class BlockMaster : MonoBehaviour
     public MushroomBlock.MushroomType currentMushroomType = MushroomBlock.MushroomType.Brown;
     public ObjectPool<BiomeBlock> biomeBlockPool;
     public ObjectPool<MushroomBlock> mushroomBlockPool;
-    bool isInstant => Mathf.Abs(transform.position.x) >= 100;
+    private bool isInstant => Vector3.Distance(transform.position, GameMaster.instance.camera.transform.position) >= 50;
 
     IEnumerator Start()
     {
@@ -422,7 +422,7 @@ public class BlockMaster : MonoBehaviour
 
         foreach (var block in allBlocks)
         {
-            block.RemoveBlock(mode, Mathf.Abs(transform.position.x) > 100);
+            block.RemoveBlock(mode, isInstant);
             yield return new WaitForSeconds(timePerBlock);
         }
 

@@ -154,7 +154,7 @@ public class MushroomBlock : Block, IPointerEnterHandler
 
     private void Harvest()
     {
-        if (Mathf.Abs(transform.position.x) < 100)
+        if (spriteRenderer.isVisible)
         {
             mushroomPop.transform.DOKill();
             mushroomPop.transform.position = transform.position;

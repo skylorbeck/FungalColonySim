@@ -117,7 +117,7 @@ public class Block : MonoBehaviour, IPointerClickHandler
             switch (mode)
             {
                 default:
-                    transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.InBack).onComplete +=
+                    spriteRenderer.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.InBack).onComplete +=
                         () => isPlacing = false;
 
                     break;
