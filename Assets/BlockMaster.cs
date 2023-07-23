@@ -18,8 +18,6 @@ public class BlockMaster : MonoBehaviour
     public List<BiomeBlock> biomeBlocks;
     public List<BiomeBlock> dirtBlocks;
     public List<MushroomBlock> mushroomBlocks;
-    public ObjectPool<BiomeBlock> biomeBlockPool;
-    public ObjectPool<MushroomBlock> mushroomBlockPool;
     public int xMax = 5;
     public int yMax = 5;
     public float maxTime = 3;
@@ -45,6 +43,9 @@ public class BlockMaster : MonoBehaviour
     public uint mushTenSecondAgo = 0;
 
     public MushroomBlock.MushroomType currentMushroomType = MushroomBlock.MushroomType.Brown;
+    public ObjectPool<BiomeBlock> biomeBlockPool;
+    public ObjectPool<MushroomBlock> mushroomBlockPool;
+    bool isInstant => Mathf.Abs(transform.position.x) >= 100;
 
     IEnumerator Start()
     {
@@ -121,6 +122,10 @@ public class BlockMaster : MonoBehaviour
         // MushPerSecText.text = "MPS: " + GetMushPerSec();
     }
 
+    void FixedUpdate()
+    {
+    }
+
     private void UpdateMushPerSec()
     {
         mushPerSec = (SaveSystem.instance.GetSaveFile().statsTotal.mushrooms[(int)currentMushroomType] -
@@ -162,10 +167,8 @@ public class BlockMaster : MonoBehaviour
                           + (SaveSystem.instance.GetSaveFile().farmSave.upgrades
                               .growthSpeedBonus[(int)currentMushroomType] * 5 * 0.1f)
                           + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * 0.05f)
-
                           + (1 + SaveSystem.instance.GetSaveFile().farmSave
                               .mushroomBlockCount[(int)currentMushroomType])
-
                           * SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[(int)currentMushroomType]) /
                          growthTimeWithHarvestTime;
         }
@@ -202,7 +205,7 @@ public class BlockMaster : MonoBehaviour
     {
         StartCoroutine(EnrichBlock());
     }
-    
+
     public IEnumerator EnrichBlock()
     {
         enrichButton.ToggleButton(false);
@@ -229,7 +232,7 @@ public class BlockMaster : MonoBehaviour
             dirtBlocks.Remove(biomeBlock);
             allBlocks.Remove(biomeBlock);
             allBlocks.Add(newBlock);
-            biomeBlock.RemoveBlockRandom();
+            biomeBlock.RemoveBlockRandom(isInstant);
             ScoreMaster.instance.SpendMushrooms(currentMushroomType, cost);
             SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[(int)currentMushroomType]++;
             switch (currentMushroomType)
@@ -246,14 +249,15 @@ public class BlockMaster : MonoBehaviour
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             yield return new WaitUntil(() => !biomeBlock.isPlacing);
             newBlock.gameObject.SetActive(true);
-            newBlock.PlaceBlock(biomeBlock.blockPos, Biome.Grass);
+            newBlock.PlaceBlock(biomeBlock.blockPos, Biome.Grass, isInstant);
             MushroomBlock block = mushroomBlockPool.Get();
             Transform transform2;
             (transform2 = block.transform).SetParent(transform);
             transform2.position = new Vector3(-10000, -10000, 0);
-            block.PlaceBlock(biomeBlock.blockPos + new int3(0, 0, 1), currentMushroomType);
+            block.PlaceBlock(biomeBlock.blockPos + new int3(0, 0, 1), currentMushroomType, isInstant);
             block.isGrowing = true;
             mushroomBlocks.Add(block);
             allBlocks.Add(block);
@@ -261,17 +265,11 @@ public class BlockMaster : MonoBehaviour
         }
 
         // enrichButton.ToggleButton(true);
-    
-        if (dirtBlocks.Count == 0 ||!success)
+
+        if (dirtBlocks.Count == 0 || !success)
         {
             enrichButton.gameObject.SetActive(false);
-            
         }
-    }
-
-    void FixedUpdate()
-    {
-
     }
 
     public IEnumerator CreateWorld()
@@ -327,13 +325,13 @@ public class BlockMaster : MonoBehaviour
                     Transform transform2;
                     (transform2 = mushroomBlock.transform).SetParent(transform);
                     transform2.position = new Vector3(-10000, -10000, 0);
-                    mushroomBlock.PlaceBlock(new int3(x, y, 1), currentMushroomType);
+                    mushroomBlock.PlaceBlock(new int3(x, y, 1), currentMushroomType, isInstant);
                     mushroomBlock.isGrowing = true;
                     mushroomBlocks.Add(mushroomBlock);
                     allBlocks.Add(mushroomBlock);
                 }
 
-                block.PlaceBlock(new int3(x, y, 0), biome);
+                block.PlaceBlock(new int3(x, y, 0), biome, isInstant);
                 if (biome == Biome.Dirt)
                 {
                     dirtBlocks.Add(block);
@@ -387,7 +385,6 @@ public class BlockMaster : MonoBehaviour
                     if (x.blockPos.y == y.blockPos.y)
                     {
                         return x.blockPos.z == y.blockPos.z ? 0 : x.blockPos.z.CompareTo(y.blockPos.z);
-
                     }
 
                     return Random.value > 0.5f ? 1 : -1;
@@ -425,7 +422,7 @@ public class BlockMaster : MonoBehaviour
 
         foreach (var block in allBlocks)
         {
-            block.RemoveBlock(mode);
+            block.RemoveBlock(mode, Mathf.Abs(transform.position.x) > 100);
             yield return new WaitForSeconds(timePerBlock);
         }
 
@@ -446,6 +443,5 @@ public class BlockMaster : MonoBehaviour
         allBlocks.Clear();
         dirtBlocks.Clear();
         SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[(int)currentMushroomType] = 1;
-
     }
 }

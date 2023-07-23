@@ -1,11 +1,6 @@
-using System;using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
-
 
 public class BiomeBlock : Block
 {
@@ -24,20 +19,25 @@ public class BiomeBlock : Block
             biomePrevious = biome;
             UpdateSprite();
         }
+
         base.Update();
+    }
+
+    void FixedUpdate()
+    {
     }
 
     private void UpdateSprite()
     {
         float sum = blockPos.x + blockPos.y + blockPos.z;
         string path = "Sprites/Blocks/" + biome + Mathf.FloorToInt(Mathf.Abs(sum % 3));
-        this.name = "BiomeBlock "+ biome +" "+ blockPos;
+        this.name = "BiomeBlock " + biome + " " + blockPos;
         spriteRenderer.sprite = Resources.Load<Sprite>(path);
     }
-    
-    public void PlaceBlock(int3 blockPos, Biome biome)
+
+    public void PlaceBlock(int3 blockPos, Biome biome, bool isInstant = true)
     {
-        PlaceBlock(blockPos);
+        PlaceBlock(blockPos, isInstant);
         this.biome = biome;
         biomePrevious = biome;
         UpdateSprite();
@@ -47,11 +47,6 @@ public class BiomeBlock : Block
     {
         //TODO harvest the mushroom above
         base.OnPointerClick(eventData);
-    }
-
-    void FixedUpdate()
-    {
-        
     }
 }
 

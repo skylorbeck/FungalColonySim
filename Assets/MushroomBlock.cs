@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,8 +7,14 @@ using Random = UnityEngine.Random;
 
 public class MushroomBlock : Block, IPointerEnterHandler
 {
+    public enum MushroomType
+    {
+        Brown,
+        Red,
+        Blue
+    }
+
     [SerializeField] private MushroomType mushroomType;
-    private MushroomType plantTypePrevious;
     [SerializeField] private bool isDead;
     [SerializeField] public bool isGrowing;
     [SerializeField] public bool isGrown;
@@ -23,6 +27,7 @@ public class MushroomBlock : Block, IPointerEnterHandler
     public bool isGolden;
 
     private GameObject mushroomPop;
+    private MushroomType plantTypePrevious;
 
     void Start()
     {
@@ -34,7 +39,7 @@ public class MushroomBlock : Block, IPointerEnterHandler
             mushroomPop = new GameObject();
             mushroomPop.transform.SetParent(transform);
             SpriteRenderer mushSprite = mushroomPop.AddComponent<SpriteRenderer>();
-            mushSprite.sprite =  GetMushroomSprite(mushroomType);
+            mushSprite.sprite = GetMushroomSprite(mushroomType);
             mushSprite.sortingOrder = 100;
             if (mushroomType is MushroomType.Blue or MushroomType.Red)
             {
@@ -43,7 +48,6 @@ public class MushroomBlock : Block, IPointerEnterHandler
 
             mushroomPop.transform.localScale = Vector3.zero;
             mushroomPop.transform.position = transform.position;
-
         }
     }
 
@@ -52,8 +56,10 @@ public class MushroomBlock : Block, IPointerEnterHandler
         if (isGrowing)
         {
             growthTimer += Time.deltaTime +
-                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[(int)mushroomType] * Time.deltaTime * 0.1f) +
-                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * Time.deltaTime * 0.05f) +
+                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[(int)mushroomType] *
+                            Time.deltaTime * 0.1f) +
+                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * Time.deltaTime *
+                            0.05f) +
                            (SaveSystem.instance.GetSaveFile().collectionItems.Count * Time.deltaTime * 0.01f);
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
@@ -70,7 +76,8 @@ public class MushroomBlock : Block, IPointerEnterHandler
         else if (isGrown && SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvest[(int)mushroomType])
         {
             harvestTimer += Time.deltaTime +
-                            (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[(int)mushroomType] * Time.deltaTime *
+                            (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[(int)mushroomType] *
+                             Time.deltaTime *
                              0.1f);
             if (harvestTimer >= harvestTime)
             {
@@ -87,7 +94,14 @@ public class MushroomBlock : Block, IPointerEnterHandler
         }
 
         base.Update();
+    }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (isGrown && Input.GetMouseButton(0))
+        {
+            Harvest();
+        }
     }
 
     private void UpdateSprite()
@@ -97,8 +111,8 @@ public class MushroomBlock : Block, IPointerEnterHandler
         {
             spriteRenderer.transform.rotation = Quaternion.Euler(0, 0, -20);
         }
-        this.name = "Mushroom " + mushroomType + " " + blockPos;
 
+        this.name = "Mushroom " + mushroomType + " " + blockPos;
     }
 
     private void UpdateGrowthTime()
@@ -152,10 +166,11 @@ public class MushroomBlock : Block, IPointerEnterHandler
             mushroomPop.transform.DOScale(Vector3.one * 0.5f, 0.5f);
             SFXMaster.instance.PlayMushPop();
         }
-        
+
         ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
 
-        isGolden = SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && Random.value < 0.02f * SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier;
+        isGolden = SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && Random.value <
+            0.02f * SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier;
         if (isGolden)
         {
             goldenParticles.Play();
@@ -168,33 +183,17 @@ public class MushroomBlock : Block, IPointerEnterHandler
         isGrowing = true;
         isGrown = false;
     }
-    
 
-    public void PlaceBlock(int3 blockPos, MushroomType mushroomType)
+
+    public void PlaceBlock(int3 blockPos, MushroomType mushroomType, bool isInstant = true)
     {
-        base.PlaceBlock(blockPos);
+        base.PlaceBlock(blockPos, isInstant);
         this.mushroomType = mushroomType;
         UpdateSprite();
-    }
-
-
-    public enum MushroomType
-    {
-        Brown,
-        Red,
-        Blue
     }
 
     public static Sprite GetMushroomSprite(MushroomType mushroomType)
     {
         return Resources.Load<Sprite>("Sprites/Blocks/Mushroom/" + mushroomType);
-    }
-    
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (isGrown && Input.GetMouseButton(0))
-        {
-            Harvest();
-        }
     }
 }
