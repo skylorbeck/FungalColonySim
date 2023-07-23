@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using TMPro;
@@ -10,9 +8,19 @@ using UnityEngine.UI;
 
 public class ModeMaster : MonoBehaviour
 {
+    public enum Gamemode
+    {
+        BrownFarm,
+        RedFarm,
+        BlueFarm,
+        Hivemind,
+        Potions,
+        Marketplace,
+    }
+
     //TODO check for current mode and enable/disable processing intensive things
     public int distance = 200;
-    public float duration =1;
+    public float duration = 1;
 
     public GameObject BrownFarm;
     public GameObject BrownFarmUpgrades;
@@ -34,8 +42,8 @@ public class ModeMaster : MonoBehaviour
     public Button previousButton;
 
     public Image[] dots;
-    public UnityAction OnModeChange;
     [SerializeField] private Gamemode[] modesToDisableCamera;
+    public UnityAction OnModeChange;
 
     private void Start()
     {
@@ -45,10 +53,16 @@ public class ModeMaster : MonoBehaviour
         HivemindUpgrades.SetActive(false);
         PotionsUpgrades.SetActive(false);
         MarketplaceUpgrades.SetActive(false);
-        
+
         currentMode = Gamemode.Hivemind;
         SetMode(Gamemode.BrownFarm);
         UpdateButton();
+        BrownFarm.transform.position = new Vector3(0, 0, 0);
+        RedFarm.transform.position = new Vector3(distance, 0, 0);
+        BlueFarm.transform.position = new Vector3(distance * 2, 0, 0);
+        Hivemind.transform.position = new Vector3(distance * 3, 0, 0);
+        Potions.transform.position = new Vector3(distance * 4, 0, 0);
+        Marketplace.transform.position = new Vector3(distance * 5, 0, 0);
     }
 
     public void UpdateButton()
@@ -70,7 +84,7 @@ public class ModeMaster : MonoBehaviour
             mode++;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked&& mode == Gamemode.BlueFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked && mode == Gamemode.BlueFarm)
         {
             mode++;
         }
@@ -84,7 +98,7 @@ public class ModeMaster : MonoBehaviour
         {
             mode++;
         }
-        
+
         if (!(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked) && mode == Gamemode.Marketplace)
         {
             mode++;
@@ -108,7 +122,7 @@ public class ModeMaster : MonoBehaviour
         {
             mode = Gamemode.Marketplace;
         }
-        
+
         if (!(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked) && mode == Gamemode.Marketplace)
         {
             mode--;
@@ -124,18 +138,16 @@ public class ModeMaster : MonoBehaviour
             mode--;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked&& mode == Gamemode.BlueFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked && mode == Gamemode.BlueFarm)
         {
             mode--;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked&& mode == Gamemode.RedFarm)
+        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked && mode == Gamemode.RedFarm)
         {
             mode--;
         }
 
-
-      
 
         SetMode(mode, true);
     }
@@ -144,13 +156,6 @@ public class ModeMaster : MonoBehaviour
     {
         lastMode = currentMode;
         currentMode = gamemode;
-        
-        BrownFarm.transform.DOComplete();
-        RedFarm.transform.DOComplete();
-        BlueFarm.transform.DOComplete();
-        Hivemind.transform.DOComplete();
-        Potions.transform.DOComplete();
-        Marketplace.transform.DOComplete();
 
         BrownFarmUpgrades.transform.DOComplete();
         RedFarmUpgrades.transform.DOComplete();
@@ -161,20 +166,17 @@ public class ModeMaster : MonoBehaviour
 
         UpdateDots();
 
-        int dist = left ? distance : -distance;
-
+        //zoom out the ui
         switch (lastMode)
         {
             case Gamemode.BrownFarm:
-                BrownFarm.transform.DOMoveX(dist, duration);
                 BrownFarmUpgrades.transform.DOScale(5, duration).onComplete = () =>
-                    {
-                        BrownFarmUpgrades.transform.localScale = Vector3.one;
-                        BrownFarmUpgrades.SetActive(false);
-                    };
+                {
+                    BrownFarmUpgrades.transform.localScale = Vector3.one;
+                    BrownFarmUpgrades.SetActive(false);
+                };
                 break;
             case Gamemode.RedFarm:
-                RedFarm.transform.DOMoveX(dist, duration);
                 RedFarmUpgrades.transform.DOScale(5, duration).onComplete = () =>
                 {
                     RedFarmUpgrades.transform.localScale = Vector3.one;
@@ -182,7 +184,6 @@ public class ModeMaster : MonoBehaviour
                 };
                 break;
             case Gamemode.BlueFarm:
-                BlueFarm.transform.DOMoveX(dist, duration);
                 BlueFarmUpgrades.transform.DOScale(5, duration).onComplete = () =>
                 {
                     BlueFarmUpgrades.transform.localScale = Vector3.one;
@@ -190,7 +191,6 @@ public class ModeMaster : MonoBehaviour
                 };
                 break;
             case Gamemode.Hivemind:
-                Hivemind.transform.DOMoveX(dist, duration);
                 HivemindUpgrades.transform.DOScale(5, duration).onComplete = () =>
                 {
                     HivemindUpgrades.transform.localScale = Vector3.one;
@@ -198,7 +198,6 @@ public class ModeMaster : MonoBehaviour
                 };
                 break;
             case Gamemode.Potions:
-                Potions.transform.DOMoveX(dist, duration);
                 PotionsUpgrades.transform.DOScale(5, duration).onComplete = () =>
                 {
                     PotionsUpgrades.transform.localScale = Vector3.one;
@@ -206,7 +205,6 @@ public class ModeMaster : MonoBehaviour
                 };
                 break;
             case Gamemode.Marketplace:
-                Marketplace.transform.DOMoveX(dist, duration);
                 MarketplaceUpgrades.transform.DOScale(5, duration).onComplete = () =>
                 {
                     MarketplaceUpgrades.transform.localScale = Vector3.one;
@@ -219,56 +217,52 @@ public class ModeMaster : MonoBehaviour
 
         modeText.DOComplete();
         modeText.alpha = 1;
-        
+        //zoom in the ui, move the camera
+        GameMaster.instance.camera.transform.DOComplete();
+        GameMaster.instance.camera.transform.DOLocalMoveX(distance * (int)currentMode, duration);
         switch (currentMode)
         {
             case Gamemode.BrownFarm:
                 modeText.text = "Brown Mushroom Farm";
-                BrownFarm.transform.position = new Vector3(-dist, 0, 0);
-                BrownFarm.transform.DOMoveX(0, duration);
                 BrownFarmUpgrades.transform.localScale = Vector3.one * 5;
                 BrownFarmUpgrades.SetActive(true);
-                BrownFarmUpgrades.transform.DOScale(1, duration).onComplete = () => BrownFarmUpgrades.transform.localScale = Vector3.one;
+                BrownFarmUpgrades.transform.DOScale(1, duration).onComplete =
+                    () => BrownFarmUpgrades.transform.localScale = Vector3.one;
                 break;
             case Gamemode.RedFarm:
                 modeText.text = "Red Mushroom Farm";
-                RedFarm.transform.position = new Vector3(-dist, 0, 0);
-                RedFarm.transform.DOMoveX(0, duration).onComplete = () => RedFarmUpgrades.SetActive(true);
                 RedFarmUpgrades.transform.localScale = Vector3.one * 5;
                 RedFarmUpgrades.SetActive(true);
-                RedFarmUpgrades.transform.DOScale(1, duration).onComplete = () => RedFarmUpgrades.transform.localScale = Vector3.one;
+                RedFarmUpgrades.transform.DOScale(1, duration).onComplete =
+                    () => RedFarmUpgrades.transform.localScale = Vector3.one;
                 break;
             case Gamemode.BlueFarm:
                 modeText.text = "Blue Mushroom Farm";
-                BlueFarm.transform.position = new Vector3(-dist, 0, 0);
-                BlueFarm.transform.DOMoveX(0, duration).onComplete = () => BlueFarmUpgrades.SetActive(true);
                 BlueFarmUpgrades.transform.localScale = Vector3.one * 5;
                 BlueFarmUpgrades.SetActive(true);
-                BlueFarmUpgrades.transform.DOScale(1, duration).onComplete = () => BlueFarmUpgrades.transform.localScale = Vector3.one;
+                BlueFarmUpgrades.transform.DOScale(1, duration).onComplete =
+                    () => BlueFarmUpgrades.transform.localScale = Vector3.one;
                 break;
             case Gamemode.Hivemind:
                 modeText.text = "Plinko Board";
-                Hivemind.transform.position = new Vector3(-dist, 0, 0);
-                Hivemind.transform.DOMoveX(0, duration).onComplete = () => HivemindUpgrades.SetActive(true);
                 HivemindUpgrades.transform.localScale = Vector3.one * 5;
                 HivemindUpgrades.SetActive(true);
-                HivemindUpgrades.transform.DOScale(1, duration).onComplete = () => HivemindUpgrades.transform.localScale = Vector3.one;
+                HivemindUpgrades.transform.DOScale(1, duration).onComplete =
+                    () => HivemindUpgrades.transform.localScale = Vector3.one;
                 break;
             case Gamemode.Potions:
                 modeText.text = "Potions";
-                Potions.transform.position = new Vector3(-dist, 0, 0);
-                Potions.transform.DOMoveX(0, duration).onComplete = () => PotionsUpgrades.SetActive(true);
                 PotionsUpgrades.transform.localScale = Vector3.one * 5;
                 PotionsUpgrades.SetActive(true);
-                PotionsUpgrades.transform.DOScale(1, duration).onComplete = () => PotionsUpgrades.transform.localScale = Vector3.one;
+                PotionsUpgrades.transform.DOScale(1, duration).onComplete =
+                    () => PotionsUpgrades.transform.localScale = Vector3.one;
                 break;
             case Gamemode.Marketplace:
                 modeText.text = "Marketplace";
-                Marketplace.transform.position = new Vector3(-dist, 0, 0);
-                Marketplace.transform.DOMoveX(0, duration).onComplete = () => MarketplaceUpgrades.SetActive(true);
                 MarketplaceUpgrades.transform.localScale = Vector3.one * 5;
                 MarketplaceUpgrades.SetActive(true);
-                MarketplaceUpgrades.transform.DOScale(1, duration).onComplete = () => MarketplaceUpgrades.transform.localScale = Vector3.one;
+                MarketplaceUpgrades.transform.DOScale(1, duration).onComplete =
+                    () => MarketplaceUpgrades.transform.localScale = Vector3.one;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(gamemode), gamemode, "No such gamemode");
@@ -277,16 +271,6 @@ public class ModeMaster : MonoBehaviour
         modeText.DOFade(0, 0.5f).SetDelay(1.5f);
         CameraCheck();
         OnModeChange?.Invoke();
-    }
-
-    public enum Gamemode
-    {
-        BrownFarm,
-        RedFarm,
-        BlueFarm,
-        Hivemind,
-        Potions,
-        Marketplace,
     }
 
     public void UpdateDots()
@@ -312,5 +296,10 @@ public class ModeMaster : MonoBehaviour
         {
             GameMaster.instance.camera.GetComponent<CameraController>().Enable();
         }
+    }
+
+    public float PreCalculateCameraDistance()
+    {
+        return (int)currentMode * distance;
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,6 +6,7 @@ public class BackgroundMaster : MonoBehaviour
     public BackgroundPiece prefab;
     public int2 size;
     public float2 spacing;
+
     void Start()
     {
         for (int x = 0; x < size.x; x++)
@@ -18,17 +17,15 @@ public class BackgroundMaster : MonoBehaviour
                 piece.transform.localPosition = new Vector3(x * spacing.x, y * spacing.y, 0);
             }
         }
-        
-        this.transform.position = new Vector3(-size.x * spacing.x / 2, -size.y * spacing.y / 2, 0);
+
+        // this.transform.position = new Vector3(-size.x * spacing.x / 2, -size.y * spacing.y / 2, 0);
     }
 
     void Update()
     {
-        
     }
 
     void FixedUpdate()
     {
-        
     }
 }

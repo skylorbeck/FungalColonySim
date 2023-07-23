@@ -12480,7 +12480,8 @@ MonoBehaviour:
   camDist: 10
   isDragging: 0
   dragOrigin: {x: 0, y: 0, z: 0}
-  bounds: {x: 5, y: 5}
+  xBounds: {x: 0, y: 0}
+  yBounds: {x: 0, y: 0}
   grabCursor: {fileID: 890362490}
   grabCursorPointer: {fileID: 1111743794}
   dragSpeed: 2
@@ -28932,6 +28933,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1243412738}
     m_Modifications:
+    - target: {fileID: 579927101916653218, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3bd14436d1c285d41bf98043a98930b5, type: 3}
     - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
       propertyPath: m_Color.b
       value: 0.88
@@ -45035,7 +45040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1174103228553517396, guid: 705c08525bc87184c84657c826d8a0d0, type: 3}
   size:
-    x: 30
+    x: 150
     y: 20
   spacing:
     x: 4
@@ -52907,6 +52912,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1243412738}
     m_Modifications:
+    - target: {fileID: 579927101916653218, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3bd14436d1c285d41bf98043a98930b5, type: 3}
     - target: {fileID: 2472127503555520573, guid: a95b37f3af4210e4885feeb19e1dec70, type: 3}
       propertyPath: m_Color.b
       value: 0.88
