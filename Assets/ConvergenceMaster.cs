@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -15,46 +13,47 @@ public class ConvergenceMaster : MonoBehaviour
 
     [SerializeField] private Image rayBlocker;
 
-    [Header("convergence store")]
-    public bool inStore = false;
+    [Header("convergence store")] public bool inStore = false;
+
     [SerializeField] private TextMeshProUGUI totalSporeText;
     [SerializeField] private TextMeshProUGUI spendableSporeText;
-    
+
     [SerializeField] private Button farmXButton;
     [SerializeField] private TextMeshProUGUI farmXText;
     [SerializeField] private uint farmXCost = 100;
     [SerializeField] private TextMeshProUGUI farmXCostText;
-    
+
     [SerializeField] private Button farmYButton;
     [SerializeField] private TextMeshProUGUI farmYText;
     [SerializeField] private uint farmYCost = 100;
     [SerializeField] private TextMeshProUGUI farmYCostText;
-    
+
     [SerializeField] private Button mushroomMultiButton;
     [SerializeField] private TextMeshProUGUI mushroomMultiText;
     [SerializeField] private uint mushroomMultiCost = 100;
     [SerializeField] private TextMeshProUGUI mushroomMultiCostText;
-    
+
     [SerializeField] private Button mushroomSpeedButton;
     [SerializeField] private TextMeshProUGUI mushroomSpeedText;
     [SerializeField] private uint mushroomSpeedCost = 100;
     [SerializeField] private TextMeshProUGUI mushroomSpeedCostText;
-    
+
     [SerializeField] private TextMeshProUGUI convergencePointCostText;
     [SerializeField] private TextMeshProUGUI convergenceSkillPointCostText;
 
-    [Header("convergence menu")]
-    [SerializeField] private TextMeshProUGUI rewardText;
+    [Header("convergence menu")] [SerializeField]
+    private TextMeshProUGUI rewardText;
+
     [SerializeField] private TextMeshProUGUI skillRewardText;
     [SerializeField] private Button convergeButton;
     [SerializeField] private CurrencyVisualizer sporeVisualizer;
     [SerializeField] private Button confirmConvergeButton;
     [SerializeField] private Button exitStoreButton;
     [SerializeField] private Toggle agreeToggle;
-    
-    public uint reward= 0;
-    public uint skillReward= 0;
-    
+
+    public uint reward = 0;
+    public uint skillReward = 0;
+
     public float convergeWarningTimer = 0;
     public uint convergeWarningTimerMax = 5;
 
@@ -68,14 +67,55 @@ public class ConvergenceMaster : MonoBehaviour
         yield return new WaitUntil(() => GameMaster.instance.blueBlockMaster.isWorldCreated);
         yield return new WaitUntil(() => SaveSystem.instance != null);
         yield return new WaitUntil(() => SaveSystem.instance.loaded);
-        convergeButton.gameObject.SetActive(unlocked=(SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().statsTotal.converges >= 1));
+        convergeButton.gameObject.SetActive(unlocked =
+            (SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[0] >= 9 ||
+             SaveSystem.instance.GetSaveFile().statsTotal.converges >= 1));
         convergeButton.interactable = unlocked;
     }
 
     void Update()
     {
-        
-        
+    }
+
+    void FixedUpdate()
+    {
+        CalculateSporeReward();
+        CalculateHivemindPointsReward();
+
+        totalSporeText.text = "+" + reward + " : +" + skillReward;
+
+        if (reward > 5)
+        {
+            convergeWarningTimer += Time.fixedDeltaTime;
+        }
+
+        if (convergeWarningTimer > convergeWarningTimerMax)
+        {
+            convergeWarningTimer = 0;
+            totalSporeText.transform.DOPunchScale(Vector3.one * 0.5f, 1f, 1, 0.25f);
+        }
+
+        spendableSporeText.text = SaveSystem.instance.GetSaveFile().stats.spores + " Spores";
+        rewardText.text = "+" + reward;
+        skillRewardText.text = "+" + skillReward;
+        if (!unlocked)
+        {
+            unlocked =
+                (SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[0] >= 9 ||
+                 SaveSystem.instance.GetSaveFile().statsTotal.converges >= 1) &&
+                GameMaster.instance.brownBlockMaster.isWorldCreated &&
+                GameMaster.instance.redBlockMaster.isWorldCreated && GameMaster.instance.blueBlockMaster.isWorldCreated;
+            convergeButton.gameObject.SetActive(unlocked);
+            convergeButton.interactable = unlocked;
+            sporeVisualizer.gameObject.SetActive(unlocked);
+            return;
+        }
+
+        if (inStore)
+        {
+            UpdateUpgradeText();
+            return;
+        }
     }
 
     public void PurchaseFarmX()
@@ -86,9 +126,8 @@ public class ConvergenceMaster : MonoBehaviour
             SaveSystem.instance.GetSaveFile().farmSave.farmSize.x += 1;
             UpdateUpgradeText();
         }
-        
     }
-    
+
     public void PurchaseFarmY()
     {
         SFXMaster.instance.PlayMenuClick();
@@ -97,9 +136,8 @@ public class ConvergenceMaster : MonoBehaviour
             SaveSystem.instance.GetSaveFile().farmSave.farmSize.y += 1;
             UpdateUpgradeText();
         }
-        
     }
-    
+
     public void PurchaseMushroomMulti()
     {
         SFXMaster.instance.PlayMenuClick();
@@ -118,27 +156,51 @@ public class ConvergenceMaster : MonoBehaviour
             SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed += 1;
             UpdateUpgradeText();
         }
-        
     }
-    
+
     public void UpdateUpgradeText()
     {
-        farmXCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.1f, SaveSystem.instance.GetSaveFile().farmSave.farmSize.x));
-        farmYCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.1f, SaveSystem.instance.GetSaveFile().farmSave.farmSize.y));
-        farmXCostText.text = farmXCost.ToString();
-        farmYCostText.text = farmYCost.ToString();
-        
-        farmXText.text = (3 + SaveSystem.instance.GetSaveFile().farmSave.farmSize.x).ToString();
-        farmYText.text = (3 + SaveSystem.instance.GetSaveFile().farmSave.farmSize.y).ToString();
-        farmXButton.interactable = SaveSystem.instance.GetSaveFile().stats.spores >= farmXCost;
-        farmYButton.interactable = SaveSystem.instance.GetSaveFile().stats.spores >= farmYCost;
-        
-        mushroomMultiCost = (uint)Mathf.RoundToInt(10 * Mathf.Pow(1.2f, SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier));
+        if (SaveSystem.instance.GetSaveFile().farmSave.farmSize.x >=
+            7) //TODO expand max farm size and move farms apart? Separate scene? MetaMetaUpgrade
+        {
+            farmXCostText.text = "MAX";
+            farmXButton.interactable = false;
+            farmXText.text = "MAX";
+        }
+        else
+        {
+            farmXCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.1f,
+                SaveSystem.instance.GetSaveFile().farmSave.farmSize.x));
+            farmXCostText.text = farmXCost.ToString();
+            farmXText.text = (3 + SaveSystem.instance.GetSaveFile().farmSave.farmSize.x).ToString();
+            farmXButton.interactable = SaveSystem.instance.GetSaveFile().stats.spores >= farmXCost;
+        }
+
+        if (SaveSystem.instance.GetSaveFile().farmSave.farmSize.y >= 7)
+        {
+            farmYCostText.text = "MAX";
+            farmYButton.interactable = false;
+            farmYText.text = "MAX";
+        }
+        else
+        {
+            farmYCost = (uint)Mathf.RoundToInt(5 * Mathf.Pow(1.1f,
+                SaveSystem.instance.GetSaveFile().farmSave.farmSize.y));
+            farmYCostText.text = farmYCost.ToString();
+            farmYText.text = (3 + SaveSystem.instance.GetSaveFile().farmSave.farmSize.y).ToString();
+            farmYButton.interactable = SaveSystem.instance.GetSaveFile().stats.spores >= farmYCost;
+        }
+
+        mushroomMultiCost = (uint)Mathf.RoundToInt(10 * Mathf.Pow(1.2f,
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier));
         mushroomMultiCostText.text = mushroomMultiCost.ToString();
-        mushroomMultiText.text = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier + 1).ToString();
+        mushroomMultiText.text =
+            (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier + 1).ToString();
         mushroomMultiButton.interactable = SaveSystem.instance.GetSaveFile().stats.spores >= mushroomMultiCost;
-        
-        mushroomSpeedCost = (uint)Mathf.RoundToInt(2 * Mathf.Pow(1.2f, SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed));
+
+        mushroomSpeedCost =
+            (uint)Mathf.RoundToInt(2 * Mathf.Pow(1.2f,
+                SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed));
         mushroomSpeedCostText.text = mushroomSpeedCost.ToString();
         mushroomSpeedText.text = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed).ToString();
         mushroomSpeedButton.interactable = SaveSystem.instance.GetSaveFile().stats.spores >= mushroomSpeedCost;
@@ -149,7 +211,7 @@ public class ConvergenceMaster : MonoBehaviour
         confirmConvergeButton.interactable = agreeToggle.isOn;
         SFXMaster.instance.PlayMenuClick();
     }
-    
+
     public void ShowMenu()
     {
         SFXMaster.instance.PlayMenuClick();
@@ -164,7 +226,7 @@ public class ConvergenceMaster : MonoBehaviour
         rayBlocker.DOFade(0, 0.5f).onComplete += () => rayBlocker.gameObject.SetActive(false);
         StartCoroutine(HideMenu());
     }
-    
+
     public IEnumerator HideMenu()
     {
         SFXMaster.instance.PlayMenuClick();
@@ -180,7 +242,7 @@ public class ConvergenceMaster : MonoBehaviour
     {
         StartCoroutine(Converge());
     }
-    
+
     public IEnumerator Converge()
     {
         // SFXMaster.instance.PlayMenuClick();
@@ -193,11 +255,10 @@ public class ConvergenceMaster : MonoBehaviour
         confirmConvergeButton.interactable = false;
         yield return StartCoroutine(HideMenu());
         ShowStoreMenu();
-        if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.BrownFarm)
+        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.BrownFarm)
         {
             GameMaster.instance.ModeMaster.SetMode(ModeMaster.Gamemode.BrownFarm);
         }
-
     }
 
     public void ShowStoreMenu()
@@ -217,7 +278,7 @@ public class ConvergenceMaster : MonoBehaviour
     {
         StartCoroutine(CloseStoreMenu());
     }
-    
+
     public IEnumerator CloseStoreMenu()
     {
         inStore = false;
@@ -231,62 +292,38 @@ public class ConvergenceMaster : MonoBehaviour
         yield return new WaitForSeconds(duration);
         yield return StartCoroutine(GameMaster.instance.Prestige());
         convergeButton.interactable = true;
-
     }
 
-    void FixedUpdate()
-    {
-        CalculateSporeReward();
-        CalculateHivemindPointsReward();
-
-        totalSporeText.text = "+" + reward +" : +"+ skillReward;
-
-        if (reward>5)
-        {
-            convergeWarningTimer += Time.fixedDeltaTime;
-        }
-        if (convergeWarningTimer > convergeWarningTimerMax)
-        {
-            convergeWarningTimer = 0;
-            totalSporeText.transform.DOPunchScale(Vector3.one*0.5f, 1f, 1, 0.25f);
-        }
-
-        spendableSporeText.text = SaveSystem.instance.GetSaveFile().stats.spores + " Spores";
-        rewardText.text = "+" + reward;
-        skillRewardText.text = "+" + skillReward;
-        if (!unlocked)
-        {
-            unlocked = (SaveSystem.instance.GetSaveFile().farmSave.mushroomBlockCount[0] >=9 || SaveSystem.instance.GetSaveFile().statsTotal.converges >= 1) && GameMaster.instance.brownBlockMaster.isWorldCreated && GameMaster.instance.redBlockMaster.isWorldCreated && GameMaster.instance.blueBlockMaster.isWorldCreated;
-            convergeButton.gameObject.SetActive(unlocked);
-            convergeButton.interactable = unlocked ;
-            sporeVisualizer.gameObject.SetActive(unlocked);
-            return;
-        }
-        if (inStore)
-        {
-            UpdateUpgradeText();
-            return;
-        }
-    }
-    
-    
 
     private void CalculateSporeReward()
     {
-        double sporeCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().statsTotal.spores );
-        float brownMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier * GameMaster.instance.Marketplace.brownValueMultiplierGain);
-        uint brownValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Brown]*brownMultiplier, 1.1f);
+        double sporeCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().statsTotal.spores);
+        float brownMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier *
+                                     GameMaster.instance.Marketplace.brownValueMultiplierGain);
+        uint brownValue =
+            (uint)Mathf.Pow(
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Brown] *
+                brownMultiplier, 1.1f);
 
-        float redMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.redMultiplier * GameMaster.instance.Marketplace.redValueMultiplierGain);//
-        uint redValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Red]*redMultiplier, 1.3f);
+        float redMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.redMultiplier *
+                                   GameMaster.instance.Marketplace.redValueMultiplierGain); //
+        uint redValue =
+            (uint)Mathf.Pow(
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Red] * redMultiplier,
+                1.3f);
 
-        float blueMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueMultiplier * GameMaster.instance.Marketplace.blueValueMultiplierGain);
-        uint blueValue = (uint)Mathf.Pow(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Blue]*blueMultiplier, 1.5f);
-        
-        convergencePointCostText.text = "(" +brownValue + "+" + redValue + "+" + blueValue + ")\n" + sporeCost.ToString("0.00");
+        float blueMultiplier = 1 + (SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueMultiplier *
+                                    GameMaster.instance.Marketplace.blueValueMultiplierGain);
+        uint blueValue =
+            (uint)Mathf.Pow(
+                SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Blue] *
+                blueMultiplier, 1.5f);
+
+        convergencePointCostText.text =
+            "(" + brownValue + "+" + redValue + "+" + blueValue + ")\n" + sporeCost.ToString("0.00");
 
         // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(mushValue/sporeCost)));
-        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)((brownValue+redValue+blueValue) / sporeCost)));
+        int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)((brownValue + redValue + blueValue) / sporeCost)));
         uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);
         reward = rewardLog;
     }
@@ -295,8 +332,8 @@ public class ConvergenceMaster : MonoBehaviour
     {
         double pointCost = Math.Pow(1.1, SaveSystem.instance.GetSaveFile().statsTotal.skillPoints);
         float pointMultiplier = SaveSystem.instance.GetSaveFile().farmSave.upgrades.sporeMultiplier;
-        uint pointValue = (uint)Mathf.Pow(reward*pointMultiplier, 1.5f);
-        convergenceSkillPointCostText.text = pointValue.ToString("0.00")+"\n"+pointCost.ToString("0.00");
+        uint pointValue = (uint)Mathf.Pow(reward * pointMultiplier, 1.5f);
+        convergenceSkillPointCostText.text = pointValue.ToString("0.00") + "\n" + pointCost.ToString("0.00");
         // uint rewardSqrt = (uint)(Mathf.Sqrt((float)(pointValue/sporeCost)));
         int rewardLogAsInt = Mathf.RoundToInt(Mathf.Log((float)(pointValue / pointCost)));
         uint rewardLog = (uint)Mathf.Max(0, rewardLogAsInt);
