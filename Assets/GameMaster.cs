@@ -12,7 +12,7 @@ public class GameMaster : MonoBehaviour
     public Tooltip tooltip;
     public Toggle fpsToggle;
     public DayNightSystem dayNightSystem;
-    
+
     public ModeMaster ModeMaster;
     public UpgradeMaster brownUpgradeMaster;
     public UpgradeMaster redUpgradeMaster;
@@ -26,7 +26,7 @@ public class GameMaster : MonoBehaviour
     public Marketplace Marketplace;
 
     public int saveTimer = 0;
-    
+
     public float inputDelay = 1f;
 
     public Color[] mushroomColors = new Color[3];
@@ -47,25 +47,13 @@ public class GameMaster : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Application.targetFrameRate = PlayerPrefs.GetInt("targetFPS", Screen.currentResolution.refreshRate);
+
+        Application.targetFrameRate =
+            PlayerPrefs.GetInt("targetFPS", (int)Screen.currentResolution.refreshRateRatio.value);
         fpsToggle.SetIsOnWithoutNotify(Application.targetFrameRate != 30);
         camera = Camera.main;
         yield return new WaitUntil(() => SaveSystem.instance != null);
         SaveSystem.instance.Load();
-    }
-
-    public void ToggleFPS(bool value)
-    {
-        if (value)
-        {
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
-            PlayerPrefs.SetInt("targetFPS", Screen.currentResolution.refreshRate);
-        }
-        else
-        {
-            Application.targetFrameRate = 30;
-            PlayerPrefs.SetInt("targetFPS", 30);
-        }
     }
 
     void Update()
@@ -75,11 +63,13 @@ public class GameMaster : MonoBehaviour
         {
             Application.Quit();
         }
-        if(inputDelay > 0)
+
+        if (inputDelay > 0)
         {
             inputDelay -= Time.deltaTime;
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             ModeMaster.PreviousMode();
@@ -93,6 +83,30 @@ public class GameMaster : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        TickSaver();
+    }
+
+    public void OnDestroy()
+    {
+        SaveSystem.SaveS();
+    }
+
+    public void ToggleFPS(bool value)
+    {
+        if (value)
+        {
+            Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
+            PlayerPrefs.SetInt("targetFPS", (int)Screen.currentResolution.refreshRateRatio.value);
+        }
+        else
+        {
+            Application.targetFrameRate = 30;
+            PlayerPrefs.SetInt("targetFPS", 30);
+        }
+    }
+
     public IEnumerator Prestige()
     {
         isConverging = true;
@@ -102,38 +116,29 @@ public class GameMaster : MonoBehaviour
         yield return brown;
         yield return red;
         yield return blue;
-        
+
         Coroutine brown2 = StartCoroutine(brownBlockMaster.CreateWorld());
         Coroutine red2 = StartCoroutine(redBlockMaster.CreateWorld());
         Coroutine blue2 = StartCoroutine(blueBlockMaster.CreateWorld());
         yield return brown2;
         yield return red2;
         yield return blue2;
-        
+
         SaveSystem.instance.GetSaveFile().statsTotal.converges++;
         SaveSystem.SaveS();
         ModeMaster.UpdateButton();
         isConverging = false;
     }
 
-    void FixedUpdate()
-    {
-        TickSaver();
-    }
-
     private void TickSaver()
     {
         saveTimer++;
-        if (saveTimer > 500 && !convergenceMaster.inStore && !isConverging && (brownBlockMaster.isWorldCreated && redBlockMaster.isWorldCreated && blueBlockMaster.isWorldCreated))
+        if (saveTimer > 500 && !convergenceMaster.inStore && !isConverging && (brownBlockMaster.isWorldCreated &&
+                                                                               redBlockMaster.isWorldCreated &&
+                                                                               blueBlockMaster.isWorldCreated))
         {
             saveTimer = 0;
             SaveSystem.SaveS();
-            
         }
-    }
-
-    public void OnDestroy()
-    {
-        SaveSystem.SaveS();
     }
 }
