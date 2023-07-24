@@ -1,97 +1,102 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Marketplace : MonoBehaviour
 {
+    public int ticksToRefreshDefault = 15000;
+    public int tickRange = 5000;
+    public MarketPreview buyPreview;
+    public MarketPreview sellPreview;
+
+    public Merchant merchant;
+
+    public TextMeshProUGUI timerText;
+
+    [Header("BrownValue")] public UpgradeContainer brownValueButton;
+
+    public uint brownValueCost = 5;
+    public uint brownValueRatio = 3;
+    public uint brownValueMax = 20;
+    public float brownValueMultiplierGain = 0.5f;
+
+    [Header("RedValue")] public UpgradeContainer redValueButton;
+
+    public uint redValueCost = 5;
+    public uint redValueRatio = 3;
+    public uint redValueMax = 20;
+    public float redValueMultiplierGain = 0.5f;
+
+    [Header("BlueValue")] public UpgradeContainer blueValueButton;
+
+    public uint blueValueCost = 5;
+    public uint blueValueRatio = 3;
+    public uint blueValueMax = 20;
+    public float blueValueMultiplierGain = 0.5f;
+
+    [Header("SporeValue")] public UpgradeContainer sporeValueButton;
+
+    public uint sporeValueCost = 1000;
+    public uint sporeValueRatio = 10;
+    public uint sporeValueMax = 20;
+
+    [Header("BetterCauldron")] public UpgradeContainer betterCauldronButton;
+
+    public uint betterCauldronCost = 100000;
+
+    [Header("AutoWood")] public UpgradeContainer autoWoodButton;
+
+    public uint autoWoodCost = 5000;
+
+    [Header("PercentButtons")] public UpgradeContainer percentButtonsUpgradeContainer;
+
+    public uint percentButtonsCost = 5000;
+
+    [Header("EventAmount")] public UpgradeContainer evenAmountButton;
+
+    public uint eventAmountCost = 5000;
+
+    [Header("BallGenerationSpeed")] public UpgradeContainer ballGenerationSpeedButton;
+
+    public uint ballGenerationSpeedCost = 5000;
+    public uint ballGenerationSpeedBaseCost = 5000;
+    public uint ballGenerationSpeedMax = 10;
+
+    [Header("BallGenerationAmount")] public UpgradeContainer ballGenerationAmountButton;
+
+    public uint ballGenerationAmountBaseCost = 5000;
+    public uint ballGenerationAmountCost = 5000;
+    public float ballGenerationAmountCostMultiplier = 2.25f;
+    public float ballGenerationAmountMax = 10;
+
+    [Header("BallSoftCap")] public UpgradeContainer ballSoftCapButton;
+
+    public uint ballSoftCapCost = 50000;
+
+    [Header("GoldenBall")] public UpgradeContainer goldenBallButton;
+
+    public uint goldenBallCost = 50000;
+
+    [Header("GoldenPeg")] public UpgradeContainer goldenPegButton;
+
+    public uint goldenPegCost = 25000;
+
+    [Header("AutoFire")] public UpgradeContainer autoFireButton;
+
+    public uint autoFireCost = 100000;
+
+    [Header("CauldronClickPower")] public UpgradeContainer cauldronClickPowerButton;
+
+    public uint cauldronClickPowerBaseCost = 100000;
+    public uint cauldronClickPowerCost = 100000;
+    public float cauldronClickPowerCostMultiplier = 2.25f;
+    public float cauldronClickPowerMax = 9;
+
     public uint ticksToRefresh
     {
         get => SaveSystem.instance.GetSaveFile().marketSave.shopTicks;
         set => SaveSystem.instance.GetSaveFile().marketSave.shopTicks = value;
     }
 
-    public int ticksToRefreshDefault = 15000;
-    public int tickRange = 5000;
-    public MarketPreview buyPreview;
-    public MarketPreview sellPreview;
-    
-    public Merchant merchant;
-    
-    public TextMeshProUGUI timerText;
-    
-    [Header("BrownValue")]
-    public UpgradeContainer brownValueButton;
-    public uint brownValueCost = 5;
-    public uint brownValueRatio = 3;
-    public uint brownValueMax = 20;
-    public float brownValueMultiplierGain = 0.5f;
-    
-    [Header("RedValue")]
-    public UpgradeContainer redValueButton;
-    public uint redValueCost = 5;
-    public uint redValueRatio = 3;
-    public uint redValueMax = 20;
-    public float redValueMultiplierGain = 0.5f;
-    
-    [Header("BlueValue")]
-    public UpgradeContainer blueValueButton;
-    public uint blueValueCost = 5;
-    public uint blueValueRatio = 3;
-    public uint blueValueMax = 20;
-    public float blueValueMultiplierGain = 0.5f;
-    
-    [Header("SporeValue")]
-    public UpgradeContainer sporeValueButton;
-    public uint sporeValueCost = 1000;
-    public uint sporeValueRatio = 10;
-    public uint sporeValueMax = 20;
-    
-    [Header("BetterCauldron")]
-    public UpgradeContainer betterCauldronButton;
-    public uint betterCauldronCost = 100000;
-    
-    [Header("AutoWood")]
-    public UpgradeContainer autoWoodButton;
-    public uint autoWoodCost = 5000;
-    
-    [Header("PercentButtons")]
-    public UpgradeContainer percentButtonsUpgradeContainer;
-    public uint percentButtonsCost = 5000;
-    
-    [Header("EventAmount")]
-    public UpgradeContainer evenAmountButton;
-    public uint eventAmountCost = 5000;
-    
-    [Header("BallGenerationSpeed")]
-    public UpgradeContainer ballGenerationSpeedButton;
-    public uint ballGenerationSpeedCost = 5000;
-    public uint ballGenerationSpeedBaseCost = 5000;
-    public uint ballGenerationSpeedMax = 10;
-    
-    [Header("BallGenerationAmount")]
-    public UpgradeContainer ballGenerationAmountButton;
-    public uint ballGenerationAmountBaseCost = 5000;
-    public uint ballGenerationAmountCost = 5000;
-    public float ballGenerationAmountCostMultiplier = 2.25f;
-    public float ballGenerationAmountMax = 10;
-
-    [Header("BallSoftCap")]
-    public UpgradeContainer ballSoftCapButton;
-    public uint ballSoftCapCost = 50000;
-    
-    [Header("GoldenBall")]
-    public UpgradeContainer goldenBallButton;
-    public uint goldenBallCost = 50000;
-    
-    [Header("GoldenPeg")]
-    public UpgradeContainer goldenPegButton;
-    public uint goldenPegCost = 25000;
-    
-    [Header("AutoFire")]
-    public UpgradeContainer autoFireButton;
-    public uint autoFireCost = 100000;
     void Start()
     {
         GameMaster.instance.ModeMaster.OnModeChange += sellPreview.Clear;
@@ -111,6 +116,7 @@ public class Marketplace : MonoBehaviour
         goldenBallButton.SetIcon(coinSprite);
         goldenPegButton.SetIcon(coinSprite);
         autoFireButton.SetIcon(coinSprite);
+        cauldronClickPowerButton.SetIcon(coinSprite);
 
         UpdateBrownValueText();
         UpdateRedValueText();
@@ -126,9 +132,9 @@ public class Marketplace : MonoBehaviour
         goldenBallButton.SetCostText(goldenBallCost.ToString("N0"));
         goldenPegButton.SetCostText(goldenPegCost.ToString("N0"));
         autoFireButton.SetCostText(autoFireCost.ToString("N0"));
+        UpdateCauldronClickPowerText();
     }
 
-    
 
     void FixedUpdate()
     {
@@ -137,9 +143,18 @@ public class Marketplace : MonoBehaviour
         TickUpgrades();
     }
 
+    private void UpdateCauldronClickPowerText()
+    {
+        cauldronClickPowerCost = (uint)(cauldronClickPowerBaseCost * cauldronClickPowerCostMultiplier *
+                                        (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.cauldronClickPower +
+                                         1));
+        cauldronClickPowerButton.SetCostText(cauldronClickPowerCost.ToString("N0"));
+    }
+
     private void TickUpgrades()
     {
-        if (brownValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier >= brownValueMax)
+        if (brownValueButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier >= brownValueMax)
         {
             brownValueButton.gameObject.SetActive(false);
         }
@@ -148,7 +163,8 @@ public class Marketplace : MonoBehaviour
             brownValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= brownValueCost);
         }
 
-        if (redValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.redMultiplier >= redValueMax)
+        if (redValueButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.redMultiplier >= redValueMax)
         {
             redValueButton.gameObject.SetActive(false);
         }
@@ -158,7 +174,8 @@ public class Marketplace : MonoBehaviour
                                         SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked);
         }
 
-        if (blueValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueMultiplier >= blueValueMax)
+        if (blueValueButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueMultiplier >= blueValueMax)
         {
             blueValueButton.gameObject.SetActive(false);
         }
@@ -167,8 +184,9 @@ public class Marketplace : MonoBehaviour
             blueValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= blueValueCost &&
                                          SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked);
         }
-        
-        if (sporeValueButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().farmSave.upgrades.sporeMultiplier >= sporeValueMax)
+
+        if (sporeValueButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.sporeMultiplier >= sporeValueMax)
         {
             sporeValueButton.gameObject.SetActive(false);
         }
@@ -176,8 +194,9 @@ public class Marketplace : MonoBehaviour
         {
             sporeValueButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= sporeValueCost);
         }
-        
-        if (betterCauldronButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.betterCauldron)
+
+        if (betterCauldronButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.betterCauldron)
         {
             betterCauldronButton.gameObject.SetActive(false);
         }
@@ -185,7 +204,7 @@ public class Marketplace : MonoBehaviour
         {
             betterCauldronButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= betterCauldronCost);
         }
-        
+
         if (autoWoodButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood)
         {
             autoWoodButton.gameObject.SetActive(false);
@@ -194,16 +213,18 @@ public class Marketplace : MonoBehaviour
         {
             autoWoodButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= autoWoodCost);
         }
-        
-        if (percentButtonsUpgradeContainer.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.percentButtons)
+
+        if (percentButtonsUpgradeContainer.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.percentButtons)
         {
             percentButtonsUpgradeContainer.gameObject.SetActive(false);
         }
         else
         {
-            percentButtonsUpgradeContainer.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= percentButtonsCost);
+            percentButtonsUpgradeContainer.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >=
+                                                        percentButtonsCost);
         }
-        
+
         if (evenAmountButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.evenAmount)
         {
             evenAmountButton.gameObject.SetActive(false);
@@ -212,25 +233,29 @@ public class Marketplace : MonoBehaviour
         {
             evenAmountButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= eventAmountCost);
         }
-        
-        if (ballGenerationSpeedButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed >= ballGenerationSpeedMax-0.01f)
+
+        if (ballGenerationSpeedButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed >= ballGenerationSpeedMax - 0.01f)
         {
             ballGenerationSpeedButton.gameObject.SetActive(false);
         }
         else
         {
-            ballGenerationSpeedButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= ballGenerationSpeedCost);
+            ballGenerationSpeedButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >=
+                                                   ballGenerationSpeedCost);
         }
-        
-        if (ballGenerationAmountButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenAmount >= ballGenerationAmountMax)
+
+        if (ballGenerationAmountButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenAmount >= ballGenerationAmountMax)
         {
             ballGenerationAmountButton.gameObject.SetActive(false);
         }
         else
         {
-            ballGenerationAmountButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= ballGenerationAmountCost);
+            ballGenerationAmountButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >=
+                                                    ballGenerationAmountCost);
         }
-        
+
         if (ballSoftCapButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap >= 100)
         {
             ballSoftCapButton.gameObject.SetActive(false);
@@ -248,7 +273,7 @@ public class Marketplace : MonoBehaviour
         {
             goldenBallButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= goldenBallCost);
         }
-        
+
         if (goldenPegButton.isActiveAndEnabled && SaveSystem.instance.GetSaveFile().plinkoSave.goldenPegsUnlocked)
         {
             goldenPegButton.gameObject.SetActive(false);
@@ -266,6 +291,17 @@ public class Marketplace : MonoBehaviour
         {
             autoFireButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >= autoFireCost);
         }
+
+        if (cauldronClickPowerButton.isActiveAndEnabled &&
+            SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.cauldronClickPower >= cauldronClickPowerMax - 0.01f)
+        {
+            cauldronClickPowerButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            cauldronClickPowerButton.ToggleButton(SaveSystem.instance.GetSaveFile().marketSave.coins >=
+                                                  cauldronClickPowerCost);
+        }
     }
 
     private void TickTimer()
@@ -278,9 +314,9 @@ public class Marketplace : MonoBehaviour
 
         if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Marketplace)
         {
-            
             return;
         }
+
         buyPreview.CheckButton();
         sellPreview.CheckButton();
         //format tickstoRefresh to minutes and seconds. 50 ticks = 1 second
@@ -298,10 +334,11 @@ public class Marketplace : MonoBehaviour
             buyPreview.Refresh();
             sellPreview.Refresh();
         } while (buyPreview.currency == sellPreview.currency);
+
         sellPreview.ValidateAmount();
     }
-    
-      
+
+
     public void BrownValue()
     {
         if (SaveSystem.instance.SpendCoins(brownValueCost))
@@ -315,7 +352,8 @@ public class Marketplace : MonoBehaviour
 
     private void UpdateBrownValueText()
     {
-        brownValueCost = (uint)(Mathf.Pow(brownValueRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier));
+        brownValueCost = (uint)(Mathf.Pow(brownValueRatio,
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.brownMultiplier));
         brownValueButton.SetCostText(brownValueCost.ToString("N0"));
     }
 
@@ -332,10 +370,11 @@ public class Marketplace : MonoBehaviour
 
     private void UpdateRedValueText()
     {
-        redValueCost = (uint)(Mathf.Pow(redValueRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.redMultiplier));
+        redValueCost =
+            (uint)(Mathf.Pow(redValueRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.redMultiplier));
         redValueButton.SetCostText(redValueCost.ToString("N0"));
     }
-    
+
     public void BlueValue()
     {
         if (SaveSystem.instance.SpendCoins(blueValueCost))
@@ -349,9 +388,11 @@ public class Marketplace : MonoBehaviour
 
     private void UpdateBlueValueText()
     {
-        blueValueCost = (uint)(Mathf.Pow(blueValueRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueMultiplier));
+        blueValueCost = (uint)(Mathf.Pow(blueValueRatio,
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueMultiplier));
         blueValueButton.SetCostText(blueValueCost.ToString("N0"));
     }
+
     public void SporeValue()
     {
         if (SaveSystem.instance.SpendCoins(sporeValueCost))
@@ -362,13 +403,14 @@ public class Marketplace : MonoBehaviour
             UpdateSporeValueText();
         }
     }
-    
+
     private void UpdateSporeValueText()
     {
-        sporeValueCost = (uint)(Mathf.Pow(sporeValueRatio, SaveSystem.instance.GetSaveFile().farmSave.upgrades.sporeMultiplier));
+        sporeValueCost = (uint)(Mathf.Pow(sporeValueRatio,
+            SaveSystem.instance.GetSaveFile().farmSave.upgrades.sporeMultiplier));
         sporeValueButton.SetCostText(sporeValueCost.ToString("N0"));
     }
-    
+
     public void BetterCauldron()
     {
         if (SaveSystem.instance.SpendCoins(betterCauldronCost))
@@ -392,7 +434,7 @@ public class Marketplace : MonoBehaviour
             autoWoodButton.gameObject.SetActive(false);
         }
     }
-    
+
     public void PercentButtons()
     {
         if (SaveSystem.instance.SpendCoins(percentButtonsCost))
@@ -404,7 +446,7 @@ public class Marketplace : MonoBehaviour
             percentButtonsUpgradeContainer.gameObject.SetActive(false);
         }
     }
-    
+
     public void EvenAmount()
     {
         if (SaveSystem.instance.SpendCoins(eventAmountCost))
@@ -430,10 +472,11 @@ public class Marketplace : MonoBehaviour
 
     private void UpdateBallGenerationSpeedText()
     {
-        ballGenerationSpeedCost = (uint)(ballGenerationSpeedBaseCost * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed);
+        ballGenerationSpeedCost =
+            (uint)(ballGenerationSpeedBaseCost * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed);
         ballGenerationSpeedButton.SetCostText(ballGenerationSpeedCost.ToString("N0"));
     }
-    
+
     public void BallGenerationAmount()
     {
         if (SaveSystem.instance.SpendCoins(ballGenerationAmountCost))
@@ -463,7 +506,7 @@ public class Marketplace : MonoBehaviour
             GameMaster.instance.Hivemind.plinkoMachine.UpdateSoftCap();
         }
     }
-    
+
     public void GoldenBalls()
     {
         if (SaveSystem.instance.SpendCoins(goldenBallCost))
@@ -494,6 +537,17 @@ public class Marketplace : MonoBehaviour
             SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked = true;
             SaveSystem.SaveS();
             autoFireButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void CauldronClickPower()
+    {
+        if (SaveSystem.instance.SpendCoins(cauldronClickPowerCost))
+        {
+            SFXMaster.instance.PlayMenuClick();
+            SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.cauldronClickPower += 1;
+            SaveSystem.SaveS();
+            UpdateCauldronClickPowerText();
         }
     }
 }

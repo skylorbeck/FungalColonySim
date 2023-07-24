@@ -1,13 +1,25 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CurrencyVisualizer : MonoBehaviour
 {
+    public enum Currency
+    {
+        BrownMushroom,
+        RedMushroom,
+        BlueMushroom,
+        Spore,
+        SkillPoint,
+        BrownPotion,
+        RedPotion,
+        BluePotion,
+        Coin,
+        PlinkoBall,
+        Collectible,
+    }
+
     public Currency currency;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Image image;
@@ -17,16 +29,16 @@ public class CurrencyVisualizer : MonoBehaviour
         SetCurrencyAndUpdateVisuals(currency);
     }
 
+    private void FixedUpdate()
+    {
+        SetCurrency(currency);
+    }
+
 
     public void SetCurrencyAndUpdateVisuals(Currency currency)
     {
         SetCurrency(currency);
         UpdateVisuals();
-    }
-
-    private void FixedUpdate()
-    {
-        SetCurrency(currency);
     }
 
     public void SetCurrency(Currency currency)
@@ -65,7 +77,7 @@ public class CurrencyVisualizer : MonoBehaviour
                 text.text = SaveSystem.instance.GetSaveFile().plinkoSave.balls.ToString("N0");
                 break;
             case Currency.Collectible:
-                text.text = SaveSystem.instance.GetSaveFile().collectionItems.Count.ToString("N0");
+                text.text = SaveSystem.instance.GetSaveFile().GetCollectionMultiplier().ToString("N0");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
@@ -112,20 +124,5 @@ public class CurrencyVisualizer : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
         }
-    }
-
-    public enum Currency
-    {
-        BrownMushroom,
-        RedMushroom,
-        BlueMushroom,
-        Spore,
-        SkillPoint,
-        BrownPotion,
-        RedPotion,
-        BluePotion,
-        Coin,
-        PlinkoBall,
-        Collectible,
     }
 }

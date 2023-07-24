@@ -131,8 +131,8 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     {
         if (cauldronSave.isOn && !cauldronSave.isDone)
         {
-            cauldronSave.progress += 1f; //TODO good place to upgrade
-            damageNumberMesh.Spawn(cauldronSprite.transform.position, 1);
+            cauldronSave.progress += 1f + cauldronSave.upgrades.cauldronClickPower; //TODO good place to upgrade
+            damageNumberMesh.Spawn(cauldronSprite.transform.position, 1 + cauldronSave.upgrades.cauldronClickPower);
             cauldronSprite.transform.DOComplete();
             cauldronSprite.transform.DOPunchScale(Vector3.one * punchSize, 0.1f, 1, 0.5f);
             SFXMaster.instance.PlayCauldronPop();
@@ -613,4 +613,5 @@ public class CauldronUpgrades
     public bool autoWood = false;
     public bool percentButtons = false;
     public bool evenAmount = false;
+    public uint cauldronClickPower = 1;
 }

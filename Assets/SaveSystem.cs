@@ -157,6 +157,11 @@ public class SaveFile
     public MarketSave marketSave = new MarketSave();
     public PlinkoSave plinkoSave = new PlinkoSave();
     public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
+
+    public float GetCollectionMultiplier()
+    {
+        return collectionItems.Count * 0.1f;
+    }
 }
 
 [Serializable]
