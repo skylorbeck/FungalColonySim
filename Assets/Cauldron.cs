@@ -1,23 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DamageNumbersPro;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Pool;
-using Button = UnityEngine.UI.Button;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-
-
-public class Cauldron : MonoBehaviour
+public class Cauldron : MonoBehaviour, IPointerClickHandler
 {
     public SpriteRenderer cauldronSprite;
     public SpriteRenderer progressSprite;
     public SpriteRenderer[] fire;
     public SpriteRenderer[] wood;
-    public Button fuelButton;//TODO turn off when has auto-fuel upgrade
+    public Button fuelButton; //TODO turn off when has auto-fuel upgrade
     public Button onButton;
     public Button gatherButton;
     public SpriteRenderer potionSprite;
@@ -35,12 +34,11 @@ public class Cauldron : MonoBehaviour
     public TMP_InputField desiredPotionsText;
     public Button decreaseDesiredPotionsButton;
     public Button increaseDesiredPotionsButton;
-    public GameObject percentButtons;//TODO turn on when has upgrade
-    public GameObject evenPotionButtons;//TODO turn on when has upgrade
+    public GameObject percentButtons; //TODO turn on when has upgrade
+    public GameObject evenPotionButtons; //TODO turn on when has upgrade
 
     public SpriteRenderer ingredientSprite;
     public Image ingredientPreviewImage;
-    public ObjectPool<SpriteRenderer> ingredientPool;
     public TMP_InputField ingredientAmountText;
     public TextMeshProUGUI ingredientNameText;
     public Button addIngredientButton;
@@ -51,12 +49,15 @@ public class Cauldron : MonoBehaviour
     public List<CauldronIngredient> ingredientPreviews;
     public RatioBar ingredientBar;
     public TextMeshProUGUI timeLeftText;
-    
+
     public AudioClip addIngredientSound;
     public AudioClip removeIngredientSound;
     public AudioClip brewSound;
     public AudioClip gatherSound;
     public AudioClip finishSound;
+
+    public DamageNumberMesh damageNumberMesh;
+    public ObjectPool<SpriteRenderer> ingredientPool;
 
     private CauldronSave cauldronSave => SaveSystem.instance.GetSaveFile().cauldronSave;
     private uint[] potions => SaveSystem.instance.GetSaveFile().marketSave.potionsCount;
@@ -64,7 +65,7 @@ public class Cauldron : MonoBehaviour
     IEnumerator Start()
     {
         GameMaster.instance.ModeMaster.OnModeChange += ChangeScreen;
-        
+
         ingredientPool = new ObjectPool<SpriteRenderer>(() =>
         {
             var ingredient = Instantiate(ingredientSprite, ingredientSprite.transform.parent);
@@ -80,19 +81,20 @@ public class Cauldron : MonoBehaviour
             ingredient.gameObject.SetActive(true);
         }, ingredient => { ingredient.gameObject.SetActive(false); });
 
-        yield return new WaitUntil(()=> SaveSystem.instance != null);
-        yield return new WaitUntil(()=> SaveSystem.instance.loaded);
-        
+        yield return new WaitUntil(() => SaveSystem.instance != null);
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
+
         foreach (CauldronIngredient preview in ingredientPreviews)
         {
             preview.Disable();
         }
+
         foreach (MushroomBlock.MushroomType saveIngredient in cauldronSave.ingredients)
         {
             ingredientPreviews[(int)saveIngredient].Enable();
             ingredientPreviews[(int)saveIngredient].SetIngredient(saveIngredient);
         }
-        
+
         foreach (var renderer in fire)
         {
             renderer.enabled = cauldronSave.isOn && !cauldronSave.isDone;
@@ -102,6 +104,7 @@ public class Cauldron : MonoBehaviour
         {
             renderer.enabled = cauldronSave.hasFuel;
         }
+
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
         UpdateIngredient();
         UpdateNeededIngredients();
@@ -114,7 +117,30 @@ public class Cauldron : MonoBehaviour
 
     void Update()
     {
+    }
 
+
+    void FixedUpdate()
+    {
+        ProgressState();
+        progressMask.transform.localPosition =
+            new Vector3(0, maskOffset * (cauldronSave.progress / cauldronSave.progressMax), 0);
+    }
+
+    public virtual void OnPointerClick(PointerEventData eventData)
+    {
+        if (cauldronSave.isOn && !cauldronSave.isDone)
+        {
+            cauldronSave.progress += 1f; //TODO good place to upgrade
+            damageNumberMesh.Spawn(cauldronSprite.transform.position, 1);
+            cauldronSprite.transform.DOComplete();
+            cauldronSprite.transform.DOPunchScale(Vector3.one * punchSize, 0.1f, 1, 0.5f);
+            SFXMaster.instance.PlayCauldronPop();
+        }
+        else if (cauldronSave.isDone)
+        {
+            TakePotion();
+        }
     }
 
     public void AddFuel()
@@ -126,6 +152,7 @@ public class Cauldron : MonoBehaviour
             renderer.enabled = true;
             renderer.transform.DOPunchScale(Vector3.one * punchSize, 0.5f, 1, 0.5f);
         }
+
         UpdateButtons();
     }
 
@@ -153,17 +180,18 @@ public class Cauldron : MonoBehaviour
         {
             preview.hopping = true;
         }
-        
+
         foreach (MushroomBlock.MushroomType mushroomType in cauldronSave.ingredients)
         {
-            SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] -= (uint)cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(mushroomType)];
+            SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] -=
+                (uint)cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(mushroomType)];
             ScoreMaster.instance.UpdateMushroomText();
         }
+
         UpdateButtons();
         SaveSystem.SaveS();
     }
 
- 
 
     public void TurnOff()
     {
@@ -175,7 +203,6 @@ public class Cauldron : MonoBehaviour
 
         cauldronSprite.transform.DOKill();
         cauldronSprite.transform.DORotate(Vector3.zero, 0.5f);
-
     }
 
     public void RemoveFuel()
@@ -201,7 +228,7 @@ public class Cauldron : MonoBehaviour
         {
             return;
         }
-        
+
         if (cauldronSave.ingredients.Contains(ingredient))
         {
             cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)] += amount;
@@ -210,9 +237,8 @@ public class Cauldron : MonoBehaviour
         {
             cauldronSave.ingredients.Add(ingredient);
             cauldronSave.ingredientAmounts.Add(amount);
-            
         }
-        
+
         var ingredientSprite = ingredientPool.Get();
         ingredientSprite.sprite = MushroomBlock.GetMushroomSprite(ingredient);
         Transform ingredientSpriteTransform;
@@ -236,7 +262,10 @@ public class Cauldron : MonoBehaviour
 
         CheckFueledAndReady();
         UpdateNeededIngredients();
-        cauldronSave.progressMax = baseBrewTime + (baseBrewTime * ((cauldronSave.ingredientTotal-neededIngredients) /neededIngredients) *additionalBrewRatio);//TODO good place for upgrades
+        cauldronSave.progressMax = baseBrewTime + (baseBrewTime *
+                                                   ((cauldronSave.ingredientTotal - neededIngredients) /
+                                                    neededIngredients) *
+                                                   additionalBrewRatio); //TODO good place for upgrades
         if (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.spoonEnchanted)
         {
             int total = 0;
@@ -245,26 +274,30 @@ public class Cauldron : MonoBehaviour
             {
                 total += cauldronSave.ingredientAmounts[i];
             }
-            
+
             for (var i = 0; i < cauldronSave.ingredients.Count; i++)
             {
-                percent += MathF.Min((float)cauldronSave.ingredientAmounts[i]/total,.1f);
+                percent += MathF.Min((float)cauldronSave.ingredientAmounts[i] / total, .1f);
             }
 
             cauldronSave.progressMax -= cauldronSave.progressMax * percent;
         }
+
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
-        int hours = (int) (cauldronSave.progressMax) / 3600;
-        int minutes = (int) ((cauldronSave.progressMax) % 3600) / 60;
-        int seconds = (int) (cauldronSave.progressMax) % 60;
-        
+        int hours = (int)(cauldronSave.progressMax) / 3600;
+        int minutes = (int)((cauldronSave.progressMax) % 3600) / 60;
+        int seconds = (int)(cauldronSave.progressMax) % 60;
+
         timeLeftText.text = hours.ToString("00") + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
         // timeLeftText.text =(cauldronSave.progressMax).ToString("F");
     }
 
     public void UpdateNeededIngredients()
     {
-        neededIngredients = neededIngredientsBase -(SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms?Mathf.FloorToInt(neededIngredientsBase*.25f):0); //TODO good place for upgrades //TODO finish this
+        neededIngredients = neededIngredientsBase -
+                            (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms
+                                ? Mathf.FloorToInt(neededIngredientsBase * .25f)
+                                : 0); //TODO good place for upgrades //TODO finish this
         ingredientBar.ratio = neededIngredients;
     }
 
@@ -276,7 +309,8 @@ public class Cauldron : MonoBehaviour
             if (cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)] <= 0)
             {
                 cauldronSave.ingredients.Remove(ingredient);
-                cauldronSave.ingredientAmounts.Remove(cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)]);
+                cauldronSave.ingredientAmounts.Remove(
+                    cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(ingredient)]);
             }
         }
     }
@@ -287,7 +321,7 @@ public class Cauldron : MonoBehaviour
         RemoveAllIngredients();
         UpdateButtons();
     }
-    
+
     public void RemoveAllIngredients()
     {
         SFXMaster.instance.PlayOneShot(removeIngredientSound);
@@ -299,14 +333,8 @@ public class Cauldron : MonoBehaviour
         {
             preview.Disable();
         }
-        CheckFueledAndReady();
-    }
 
-
-    void FixedUpdate()
-    {
-        ProgressState();
-        progressMask.transform.localPosition = new Vector3(0, maskOffset * (cauldronSave.progress / cauldronSave.progressMax), 0);
+        UpdateButtons();
     }
 
     private void ProgressState()
@@ -314,17 +342,20 @@ public class Cauldron : MonoBehaviour
         if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
             float progress = Time.fixedDeltaTime * progressSpeed;
-            progress += SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.betterCauldron?Time.fixedDeltaTime * progressSpeed*.25f:0;//TODO good place for upgrades
+            progress += SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.betterCauldron
+                ? Time.fixedDeltaTime * progressSpeed * .25f
+                : 0; //TODO good place for upgrades
             cauldronSave.progress += progress;
             //convert to hours, minutes and seconds left
-            int hours = (int) (cauldronSave.progressMax - cauldronSave.progress) / 3600;
-            int minutes = (int) ((cauldronSave.progressMax - cauldronSave.progress) % 3600) / 60;
-            int seconds = (int) (cauldronSave.progressMax - cauldronSave.progress) % 60;
-            
+            int hours = (int)(cauldronSave.progressMax - cauldronSave.progress) / 3600;
+            int minutes = (int)((cauldronSave.progressMax - cauldronSave.progress) % 3600) / 60;
+            int seconds = (int)(cauldronSave.progressMax - cauldronSave.progress) % 60;
+
             timeLeftText.text = hours.ToString("00") + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
             // timeLeftText.text =(cauldronSave.progressMax - cauldronSave.progress).ToString("F");
             cauldronSprite.transform.rotation = Quaternion.Euler(0, 0,
-                Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) * (cauldronSave.progress / cauldronSave.progressMax));
+                Mathf.Sin(Time.fixedTime * rotationSpeed) * (rotationDegree) *
+                (cauldronSave.progress / cauldronSave.progressMax));
             if (cauldronSave.progress >= cauldronSave.progressMax)
             {
                 SFXMaster.instance.PlayOneShot(finishSound);
@@ -335,24 +366,26 @@ public class Cauldron : MonoBehaviour
                 {
                     renderer.enabled = false;
                 }
+
                 UpdateButtons();
                 foreach (CauldronIngredient preview in ingredientPreviews)
                 {
                     preview.hopping = false;
                 }
             }
-        } else if (cauldronSave.isDone)
+        }
+        else if (cauldronSave.isDone)
         {
             timeLeftText.text = "!";
             cauldronSprite.transform.rotation = Quaternion.Euler(0, 0,
-                Mathf.Sin(Time.fixedTime * rotationSpeed*0.25f) * (rotationDegree*2));
+                Mathf.Sin(Time.fixedTime * rotationSpeed * 0.25f) * (rotationDegree * 2));
         }
     }
 
     public void TakePotion()
     {
         potionSprite.enabled = true;
-        
+
         int random = Random.Range(0, cauldronSave.ingredientTotal);
         MushroomBlock.MushroomType potionType = MushroomBlock.MushroomType.Brown;
         int current = 0;
@@ -367,10 +400,11 @@ public class Cauldron : MonoBehaviour
             }
         }
 
-        int potionAmount = Mathf.FloorToInt(cauldronSave.ingredientTotal / (float)neededIngredients);//TODO good place for upgrades
-        
+        int potionAmount =
+            Mathf.FloorToInt(cauldronSave.ingredientTotal / (float)neededIngredients); //TODO good place for upgrades
+
         potions[(int)potionType] += (uint)potionAmount;
-        
+
         potionSprite.transform.DOComplete();
         timeLeftText.text = "+" + potionAmount.ToString();
         SFXMaster.instance.PlayOneShot(gatherSound);
@@ -395,18 +429,21 @@ public class Cauldron : MonoBehaviour
         {
             ingredientPreview.Disable();
         }
+
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
     }
-    
+
     public void UpdateButtons()
     {
         CheckFueledAndReady();
         ProcessDesiredPotions();
         fuelButton.interactable = !cauldronSave.hasFuel && !cauldronSave.isOn;
-        onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel && cauldronSave.ingredientTotal >= neededIngredients && !cauldronSave.isOn;
+        onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel &&
+                                cauldronSave.ingredientTotal >= neededIngredients && !cauldronSave.isOn;
         gatherButton.interactable = cauldronSave.isDone;
         removeIngredientsButton.interactable = cauldronSave.ingredients.Count > 0 && !cauldronSave.isOn;
-        addIngredientButton.interactable = !cauldronSave.isOn && !cauldronSave.isDone && int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
+        addIngredientButton.interactable = !cauldronSave.isOn && !cauldronSave.isDone &&
+                                           int.TryParse(ingredientAmountText.text, out int amount) && amount > 0;
     }
 
     public void NextIngredient()
@@ -416,6 +453,7 @@ public class Cauldron : MonoBehaviour
         {
             currentIngredient = 0;
         }
+
         SFXMaster.instance.PlayMenuClick();
         UpdateIngredient();
         ValidateValue();
@@ -428,6 +466,7 @@ public class Cauldron : MonoBehaviour
         {
             currentIngredient = MushroomBlock.MushroomType.Blue;
         }
+
         SFXMaster.instance.PlayMenuClick();
         UpdateIngredient();
         ValidateValue();
@@ -450,11 +489,14 @@ public class Cauldron : MonoBehaviour
                 {
                     alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
                 }
-                if (value > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave)
+
+                if (value > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] - alreadyHave)
                 {
-                    ingredientAmountText.text = (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave).ToString();
+                    ingredientAmountText.text =
+                        (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] - alreadyHave)
+                        .ToString();
                 }
-                
+
                 UpdateButtons();
                 return;
             }
@@ -471,8 +513,10 @@ public class Cauldron : MonoBehaviour
         {
             alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
         }
+
         ingredientAmountText.text = Mathf.RoundToInt(
-            (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient]-alreadyHave) * percent).ToString();
+                (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] - alreadyHave) * percent)
+            .ToString();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
     }
@@ -484,7 +528,7 @@ public class Cauldron : MonoBehaviour
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
     }
-    
+
     public void DecreasePotionAmount()
     {
         desiredPotions--;
@@ -506,10 +550,13 @@ public class Cauldron : MonoBehaviour
         {
             desiredPotions = 1;
         }
-        
-        if (desiredPotions > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients)
+
+        if (desiredPotions > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] /
+            neededIngredients)
         {
-            desiredPotions = Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / (float)neededIngredients);
+            desiredPotions =
+                Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] /
+                                 (float)neededIngredients);
         }
 
         if (desiredPotions < 0)
@@ -524,16 +571,19 @@ public class Cauldron : MonoBehaviour
 
     public void ProcessDesiredPotions()
     {
-        increaseDesiredPotionsButton.interactable = desiredPotions < SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] / neededIngredients;
+        increaseDesiredPotionsButton.interactable = desiredPotions <
+                                                    SaveSystem.instance.GetSaveFile().stats
+                                                        .mushrooms[(int)currentIngredient] / neededIngredients;
         decreaseDesiredPotionsButton.interactable = desiredPotions > 1;
         desiredPotionsText.text = desiredPotions + "";
     }
-    
+
     public static Sprite GetPotionSprite(MushroomBlock.MushroomType type)
     {
         return Resources.Load<Sprite>("Sprites/Potions/" + type + "Potion");
     }
 }
+
 [Serializable]
 public class CauldronSave
 {
@@ -547,8 +597,8 @@ public class CauldronSave
     public List<MushroomBlock.MushroomType> ingredients = new List<MushroomBlock.MushroomType>();
     public List<int> ingredientAmounts = new List<int>();
     public int ingredientTotal = 0;
-    
 }
+
 [Serializable]
 public class CauldronUpgrades
 {

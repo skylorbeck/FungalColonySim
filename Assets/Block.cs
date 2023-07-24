@@ -16,13 +16,11 @@ public class Block : MonoBehaviour, IPointerClickHandler
     [SerializeField] private int3 lastLightPos;
     [SerializeField] public bool isPlacing = false;
 
-    public Rigidbody2D rb;
     private Vector3 blockOffsetPrevious;
     private int3 blockPosPrevious;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void Update()

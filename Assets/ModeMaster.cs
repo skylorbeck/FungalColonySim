@@ -218,7 +218,7 @@ public class ModeMaster : MonoBehaviour
         modeText.DOComplete();
         modeText.alpha = 1;
         //zoom in the ui, move the camera
-        GameMaster.instance.camera.transform.DOComplete();
+        GameMaster.instance.camera.transform.DOKill();
         GameMaster.instance.camera.transform.DOLocalMoveX(distance * (int)currentMode, duration);
         switch (currentMode)
         {

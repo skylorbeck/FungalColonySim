@@ -1968,7 +1968,6 @@ MonoBehaviour:
     y: 0
     z: 0
   isPlacing: 0
-  rb: {fileID: 83030109}
 --- !u!212 &83030108
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10560,7 +10559,7 @@ Transform:
   m_GameObject: {fileID: 440484629}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalPosition: {x: 200, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10977,7 +10976,7 @@ Transform:
   m_GameObject: {fileID: 443011295}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalPosition: {x: 100, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16469,6 +16468,7 @@ MonoBehaviour:
   blockDestroy: {fileID: 8300000, guid: a34623fe7904aa647b71a9b95ccbd3c0, type: 3}
   blockPlace: {fileID: 8300000, guid: 92f9857f2131cd74e9f5a99edea8dea6, type: 3}
   menuClick: {fileID: 8300000, guid: aa2367880b111b540812539083c6cfcd, type: 3}
+  cauldronPop: {fileID: 8300000, guid: c85e6a8f965bf574a8f9ca709bc96eda, type: 3}
   muteToggle: {fileID: 1955071531}
 --- !u!4 &646568111
 Transform:
@@ -19586,7 +19586,7 @@ Transform:
   m_GameObject: {fileID: 781927645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalPosition: {x: 400, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -23404,6 +23404,73 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 125}
   m_SizeDelta: {x: 1000, y: 44.58}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &972902385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 972902386}
+  - component: {fileID: 972902387}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &972902386
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972902385}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1260714710}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &972902387
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972902385}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!224 &975911532 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8332969968376616675, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -26315,7 +26382,7 @@ Transform:
   m_GameObject: {fileID: 1112615074}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27509,7 +27576,6 @@ MonoBehaviour:
     y: 0
     z: 0
   isPlacing: 0
-  rb: {fileID: 1163624144}
 --- !u!212 &1163624143
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -29031,7 +29097,7 @@ Transform:
   m_GameObject: {fileID: 1243412737}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalPosition: {x: 500, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29401,6 +29467,7 @@ GameObject:
   - component: {fileID: 1260714710}
   - component: {fileID: 1260714711}
   - component: {fileID: 1260714712}
+  - component: {fileID: 1260714713}
   m_Layer: 0
   m_Name: Cauldron
   m_TagString: Untagged
@@ -29427,6 +29494,7 @@ Transform:
   - {fileID: 910266865}
   - {fileID: 421612514}
   - {fileID: 2143812974}
+  - {fileID: 972902386}
   m_Father: {fileID: 781927646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1260714711
@@ -29546,6 +29614,34 @@ MonoBehaviour:
   brewSound: {fileID: 8300000, guid: 8fbc6f018e566fb4fb5e1740fee9a823, type: 3}
   gatherSound: {fileID: 8300000, guid: 44b8e1d1d0c390240a3c597c3c86f98b, type: 3}
   finishSound: {fileID: 8300000, guid: 77ecd15b1358e3846bae4832afe4be6f, type: 3}
+  damageNumberMesh: {fileID: 893642172159263684, guid: 735b6a21d6b71c648817ddacd8652a97, type: 3}
+--- !u!50 &1260714713
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260714709}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1260912050
 GameObject:
   m_ObjectHideFlags: 0
@@ -30646,7 +30742,6 @@ MonoBehaviour:
     y: 0
     z: 0
   isPlacing: 0
-  rb: {fileID: 1299323282}
 --- !u!212 &1299323281
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -35957,7 +36052,7 @@ Transform:
   m_GameObject: {fileID: 1521564852}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalPosition: {x: 300, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:

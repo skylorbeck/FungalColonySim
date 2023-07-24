@@ -160,8 +160,8 @@ public class ConvergenceMaster : MonoBehaviour
 
     public void UpdateUpgradeText()
     {
-        if (SaveSystem.instance.GetSaveFile().farmSave.farmSize.x >=
-            7) //TODO expand max farm size and move farms apart? Separate scene? MetaMetaUpgrade
+        if (SaveSystem.instance.GetSaveFile().farmSave.farmSize.x >= 7)
+            //TODO expand max farm size and move farms apart? Separate scene? MetaMetaUpgrade
         {
             farmXCostText.text = "MAX";
             farmXButton.interactable = false;
