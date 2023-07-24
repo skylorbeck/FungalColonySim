@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class SaveSystem : MonoBehaviour
@@ -31,6 +28,11 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    public void Reset()
+    {
+        saveFile = new SaveFile();
+    }
+
     public SaveFile GetSaveFile()
     {
         return saveFile;
@@ -50,7 +52,7 @@ public class SaveSystem : MonoBehaviour
         instance.saveFile.stats.skillPoints -= amount;
         return true;
     }
-    
+
     public bool SpendCoins(uint amount)
     {
         if (instance.saveFile.marketSave.coins < amount) return false;
@@ -75,14 +77,30 @@ public class SaveSystem : MonoBehaviour
     public void Load()
     {
         Load("savefile", out saveFile);
-        if (saveFile.saveVersion<4)
+        if (saveFile.saveVersion < 4)
         {
             Reset();
             saveFile.saveVersion = 4;
         }
+
         if (saveFile.farmSave.upgrades.goldenMultiplier < 2)
         {
             saveFile.farmSave.upgrades.goldenMultiplier = 2;
+        }
+
+        if (saveFile.saveVersion < 5)
+        {
+            saveFile.saveVersion = 5;
+            int2 farmSize = saveFile.farmSave.farmSize;
+            if (farmSize.x > 7)
+            {
+                farmSize.x = 7;
+            }
+
+            if (farmSize.y > 7)
+            {
+                farmSize.y = 7;
+            }
         }
 
         loaded = true;
@@ -123,22 +141,15 @@ public class SaveSystem : MonoBehaviour
             File.Create(path).Dispose();
         }
 
-        string json = JsonUtility.ToJson(data,true);
+        string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(path, json);
     }
-
-    public void Reset()
-    {
-        saveFile = new SaveFile();
-    }
-
-   
 }
 
 [Serializable]
 public class SaveFile
 {
-    public uint saveVersion = 0;
+    public uint saveVersion = 5;
     public FarmSave farmSave = new FarmSave();
     public StatTracking stats = new StatTracking();
     public StatTracking statsTotal = new StatTracking();
@@ -174,6 +185,7 @@ public class FarmUpgrades
     public uint goldenChanceMultiplier;
     public uint sporeMultiplier = 1;
 }
+
 [Serializable]
 public class StatTracking
 {

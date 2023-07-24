@@ -321,6 +321,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     public void ChangeScreen()
     {
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Potions) return;
         if (cauldronSave.isOn) return;
         RemoveAllIngredients();
         UpdateButtons();
