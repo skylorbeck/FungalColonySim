@@ -51,7 +51,7 @@ public class GameMaster : MonoBehaviour
 
         Application.targetFrameRate =
             PlayerPrefs.GetInt("targetFPS", (int)Screen.currentResolution.refreshRateRatio.value);
-        DOTween.SetTweensCapacity(1000, 50);
+        DOTween.SetTweensCapacity(1500, 50);
         fpsToggle.SetIsOnWithoutNotify(Application.targetFrameRate != 30);
         camera = Camera.main;
         yield return new WaitUntil(() => SaveSystem.instance != null);

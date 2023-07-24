@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,18 +6,21 @@ public class SFXMaster : MonoBehaviour
 {
     public static SFXMaster instance;
     public AudioSource audioSource;
-    public AudioClip mushPops; //TODO move this to it's own source?
-    public AudioClip blockReplace;
-    public AudioClip blockDestroy;
-    public AudioClip blockPlace;
-    public AudioClip menuClick;
-    public AudioClip cauldronPop;
+    public AudioSource mushroomPopSource;
 
-    //todo replace the entire sfx library with blue magic
+    public List<AudioClip> mushPops;
+    public float timeSinceLastPop = 0;
+    public float timeBetweenPops = 0.1f;
+
+    public List<AudioClip> blockDestroy;
+    public List<AudioClip> blockPlace;
+    public AudioClip menuClick;
+    public AudioClip wood;
+    public List<AudioClip> cauldronPop;
 
     public Toggle muteToggle;
+    public bool canPop => timeSinceLastPop > timeBetweenPops;
 
-    //TODO too many sound effects killing the game. Maybe not an issue? Leaving this for the future
 
     void Start()
     {
@@ -32,6 +36,7 @@ public class SFXMaster : MonoBehaviour
         muteToggle.isOn = PlayerPrefs.GetInt("SFXMute", 1) == 1;
         ToggleSFX();
         audioSource.maxDistance = 10000;
+        mushroomPopSource.maxDistance = 10000;
     }
 
     void Update()
@@ -40,12 +45,22 @@ public class SFXMaster : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (timeSinceLastPop < timeBetweenPops)
+        {
+            timeSinceLastPop += Time.fixedDeltaTime;
+        }
     }
 
     public void Randomize()
     {
         audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.volume = 0.5f;
+    }
+
+    public void RandomizeMushPop()
+    {
+        mushroomPopSource.pitch = Random.Range(0.9f, 1.1f);
+        mushroomPopSource.volume = 0.5f;
     }
 
     public void PlayOneShot(AudioClip clip)
@@ -61,46 +76,23 @@ public class SFXMaster : MonoBehaviour
 
     public void PlayMushPop()
     {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
+        if (!canPop) return;
+        if (!muteToggle.isOn) return;
 
-        Randomize();
-        audioSource.PlayOneShot(mushPops);
+        timeSinceLastPop = 0;
+        RandomizeMushPop();
+        mushroomPopSource.PlayOneShot(mushPops[Random.Range(0, mushPops.Count)]);
     }
 
-    public void PlayBlockReplace()
-    {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
-
-        Randomize();
-        audioSource.PlayOneShot(blockReplace);
-    }
 
     public void PlayBlockDestroy()
     {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
-
-        Randomize();
-        audioSource.PlayOneShot(blockDestroy);
+        PlayOneShot(blockDestroy[Random.Range(0, blockDestroy.Count)]);
     }
 
     public void PlayBlockPlace()
     {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
-
-        Randomize();
-        audioSource.PlayOneShot(blockPlace);
+        PlayOneShot(blockPlace[Random.Range(0, blockPlace.Count)]);
     }
 
     public void PlayMenuClick()
@@ -116,13 +108,12 @@ public class SFXMaster : MonoBehaviour
 
     public void PlayCauldronPop()
     {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
+        PlayOneShot(cauldronPop[Random.Range(0, cauldronPop.Count)]);
+    }
 
-        Randomize();
-        audioSource.PlayOneShot(cauldronPop);
+    public void PlayWood()
+    {
+        PlayOneShot(wood);
     }
 
     public void ToggleSFX()
@@ -130,6 +121,7 @@ public class SFXMaster : MonoBehaviour
         if (muteToggle.isOn)
         {
             audioSource.Stop();
+            mushroomPopSource.Stop();
             PlayerPrefs.SetInt("SFXMute", 1);
         }
         else

@@ -141,12 +141,16 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         {
             TakePotion();
         }
+        else if (!cauldronSave.hasFuel)
+        {
+            AddFuel();
+        }
     }
 
     public void AddFuel()
     {
         cauldronSave.hasFuel = true;
-        SFXMaster.instance.PlayBlockReplace();
+        SFXMaster.instance.PlayWood();
         foreach (var renderer in wood)
         {
             renderer.enabled = true;

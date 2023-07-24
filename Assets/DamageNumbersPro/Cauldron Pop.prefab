@@ -703,7 +703,7 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.4
+        value: 0.74952805
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -791,7 +791,7 @@ MonoBehaviour:
     radius: 3
     pushOffset: 1
   updateDelay: 0.0125
-  enablePooling: 0
+  enablePooling: 1
   poolSize: 50
   disableOnSceneLoad: 1
 --- !u!210 &9019255112984198969
