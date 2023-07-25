@@ -9,7 +9,7 @@ public class GameMaster : MonoBehaviour
     public BlockMaster brownBlockMaster;
     public BlockMaster redBlockMaster;
     public BlockMaster blueBlockMaster;
-    public Camera camera;
+    public new Camera camera;
     public Tooltip tooltip;
     public Toggle fpsToggle;
     public DayNightSystem dayNightSystem;

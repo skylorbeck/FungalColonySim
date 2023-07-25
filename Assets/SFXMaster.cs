@@ -18,7 +18,7 @@ public class SFXMaster : MonoBehaviour
     public AudioClip wood;
     public List<AudioClip> cauldronPop;
 
-    public Toggle muteToggle;
+    public Slider volumeSlider;
     public bool canPop => timeSinceLastPop > timeBetweenPops;
 
 
@@ -33,8 +33,7 @@ public class SFXMaster : MonoBehaviour
             Destroy(gameObject);
         }
 
-        muteToggle.isOn = PlayerPrefs.GetInt("SFXMute", 1) == 1;
-        ToggleSFX();
+        volumeSlider.value = (PlayerPrefs.GetFloat("SFXVolume", 0.5f));
         audioSource.maxDistance = 10000;
         mushroomPopSource.maxDistance = 10000;
     }
@@ -54,21 +53,16 @@ public class SFXMaster : MonoBehaviour
     public void Randomize()
     {
         audioSource.pitch = Random.Range(0.9f, 1.1f);
-        audioSource.volume = 0.5f;
     }
 
     public void RandomizeMushPop()
     {
         mushroomPopSource.pitch = Random.Range(0.9f, 1.1f);
-        mushroomPopSource.volume = 0.5f;
     }
 
     public void PlayOneShot(AudioClip clip)
     {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
+        if (volumeSlider.value.Equals(0)) return;
 
         Randomize();
         audioSource.PlayOneShot(clip);
@@ -77,7 +71,7 @@ public class SFXMaster : MonoBehaviour
     public void PlayMushPop()
     {
         if (!canPop) return;
-        if (!muteToggle.isOn) return;
+        if (volumeSlider.value.Equals(0)) return;
 
         timeSinceLastPop = 0;
         RandomizeMushPop();
@@ -97,10 +91,7 @@ public class SFXMaster : MonoBehaviour
 
     public void PlayMenuClick()
     {
-        if (!muteToggle.isOn)
-        {
-            return;
-        }
+        if (volumeSlider.value.Equals(0)) return;
 
         Randomize();
         audioSource.PlayOneShot(menuClick);
@@ -116,17 +107,10 @@ public class SFXMaster : MonoBehaviour
         PlayOneShot(wood);
     }
 
-    public void ToggleSFX()
+    public void SetVolume(float volume)
     {
-        if (muteToggle.isOn)
-        {
-            audioSource.Stop();
-            mushroomPopSource.Stop();
-            PlayerPrefs.SetInt("SFXMute", 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("SFXMute", 0);
-        }
+        audioSource.volume = volume;
+        mushroomPopSource.volume = volume;
+        PlayerPrefs.SetFloat("SFXVolume", volume);
     }
 }

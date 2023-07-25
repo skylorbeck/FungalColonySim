@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private int camDistLast = 10;
     [SerializeField] private bool isDisabled = false;
-    private Camera camera;
+    private new Camera camera;
 
     void Start()
     {
