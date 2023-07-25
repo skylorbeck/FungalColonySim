@@ -63,13 +63,14 @@ public class MushroomBlock : Block, IPointerEnterHandler
                            (SaveSystem.instance.GetSaveFile().GetCollectionMultiplier() * Time.deltaTime * 0.01f);
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
-            spriteRenderer.transform.localPosition =
-                Vector3.Lerp(Vector3.down * verticalOffset, Vector3.zero, growthTimer / growthTime);
+            // spriteRenderer.transform.localPosition =
+            //     Vector3.Lerp(Vector3.down * verticalOffset, Vector3.zero, growthTimer / growthTime);
             if (growthTimer >= growthTime)
             {
                 growthTimer = 0;
                 isGrowing = false;
                 isGrown = true;
+                spriteRenderer.transform.localScale = Vector3.one;
                 UpdateSprite();
             }
         }
