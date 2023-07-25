@@ -75,13 +75,13 @@ public class GameMaster : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             ModeMaster.PreviousMode();
-            inputDelay = 1f;
+            // inputDelay = 1f;
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             ModeMaster.NextMode();
-            inputDelay = 1f;
+            // inputDelay = 1f;
         }
     }
 
