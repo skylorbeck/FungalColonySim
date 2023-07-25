@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using DamageNumbersPro;
 using DG.Tweening;
@@ -7,79 +5,62 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class PlinkoMachine : MonoBehaviour
 {
     public PlinkoBall ballPrefab;
     public GameObject ballHolder;
     public List<PlinkoBall> plinkoBalls;
-    public ObjectPool<PlinkoBall> ballPool;
 
     public GameObject pegPrefab;
     public GameObject pegHolder;
     public List<GameObject> plinkoPegs;
-    public ObjectPool<GameObject> pegPool;
 
     public PlinkoPrizeAwarder prizeAwarder;
     public TextMeshProUGUI prizeText;
     public CollectionItem prizePreview;
-    
-    public uint score
-    {
-        get => SaveSystem.instance.GetSaveFile().plinkoSave.score;
-        set => SaveSystem.instance.GetSaveFile().plinkoSave.score = value;
-    }
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI softCapText;
 
     public float spawnForce = 50;
     public float spawnRate = 60f;
-    public float spawnTimer
-    {
-        get => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress;
-        set => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress = value;
-    }
 
     public float autoFireTimer = 0;
     public float autoFireRate = 1f;
-    
+    public float fireTimer = 0;
+    public float fireRate = 0.5f;
+
     public Image spawnTimerBar;
 
     public int pegRows = 6;
     public int pegsPerRow = 10;
     public float pegDistance = 1.5f;
     public float rowDistance = 2f;
-    
+
     public float[] prizeWeights = new float[3];
 
     public DamageNumber numberPrefab;
     public RectTransform rectParent;
     public AudioClip jackpotSound;
     public AudioClip winSound;
+    public ObjectPool<PlinkoBall> ballPool;
+    public ObjectPool<GameObject> pegPool;
 
-    public void AwardCollectible()
+    public uint score
     {
-        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
-        {
-            SFXMaster.instance.PlayOneShot(jackpotSound);
-        }
-        CollectionItemSaveData saveData = prizeAwarder.currentPrize;
-        prizePreview.InsertSaveData(saveData);
-        prizePreview.gameObject.transform.DOKill();
-        prizePreview.gameObject.transform.localScale = Vector3.zero;
-        prizePreview.gameObject.transform.DOScale(2, 0.5f).SetEase(Ease.OutBack).onComplete = () =>
-        {
-            prizePreview.gameObject.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).SetDelay(1);
-        };
-        SaveSystem.instance.GetSaveFile().collectionItems.Add(saveData);
-        SaveSystem.SaveS();
-        GameMaster.instance.Hivemind.collectionShelf.AddItem(saveData);
-        prizeAwarder.UpdatePrize();
+        get => SaveSystem.instance.GetSaveFile().plinkoSave.score;
+        set => SaveSystem.instance.GetSaveFile().plinkoSave.score = value;
     }
 
-  
+    public float spawnTimer
+    {
+        get => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress;
+        set => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress = value;
+    }
+
+    public bool canFire => fireTimer <= 0;
+
 
     public void Start()
     {
@@ -99,7 +80,7 @@ public class PlinkoMachine : MonoBehaviour
             {
                 score += ball.GetScore();
                 DamageNumber damageNumber = numberPrefab.Spawn(Vector3.zero, ball.GetScore());
-                damageNumber.SetAnchoredPosition(rectParent, new Vector2(0,-100));
+                damageNumber.SetAnchoredPosition(rectParent, new Vector2(0, -100));
                 UpdateScoreText();
                 ball.SetScore(0);
                 plinkoBalls.Remove(ball);
@@ -107,7 +88,7 @@ public class PlinkoMachine : MonoBehaviour
             },
             ball => { Destroy(ball); }
         );
-        
+
         pegPool = new ObjectPool<GameObject>(
             () =>
             {
@@ -132,6 +113,71 @@ public class PlinkoMachine : MonoBehaviour
         // GeneratePegs();//use this to generate pegs, then copy them into the editor
     }
 
+    public void Update()
+    {
+        if (!(GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind &&
+              GameMaster.instance.Hivemind.mode == Hivemind.HiveMindMode.Plinko)) return;
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SpawnBall();
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        // if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
+        if (fireTimer > 0)
+        {
+            fireTimer -= Time.fixedDeltaTime;
+        }
+
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked)
+        {
+            autoFireTimer += Time.fixedDeltaTime; //TODO place for upgrades
+            if (autoFireTimer > autoFireRate)
+            {
+                autoFireTimer = 0;
+                SpawnBall(true);
+            }
+        }
+
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls >=
+            SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap) return;
+
+        spawnTimer += Time.fixedDeltaTime * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed;
+        if (spawnTimer > spawnRate)
+        {
+            spawnTimer = 0;
+            SaveSystem.instance.GetSaveFile().plinkoSave.balls +=
+                SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenAmount;
+        }
+
+        spawnTimerBar.fillAmount = spawnTimer / spawnRate;
+    }
+
+    public void AwardCollectible()
+    {
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        {
+            SFXMaster.instance.PlayOneShot(jackpotSound);
+        }
+
+        CollectionItemSaveData saveData = prizeAwarder.currentPrize;
+        prizePreview.InsertSaveData(saveData);
+        prizePreview.gameObject.transform.DOKill();
+        prizePreview.gameObject.transform.localScale = Vector3.zero;
+        prizePreview.gameObject.transform.DOScale(2, 0.5f).SetEase(Ease.OutBack).onComplete = () =>
+        {
+            prizePreview.gameObject.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).SetDelay(1);
+        };
+        SaveSystem.instance.GetSaveFile().collectionItems.Add(saveData);
+        SaveSystem.SaveS();
+        GameMaster.instance.Hivemind.collectionShelf.AddItem(saveData);
+        prizeAwarder.UpdatePrize();
+    }
+
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString("N0");
@@ -144,18 +190,19 @@ public class PlinkoMachine : MonoBehaviour
 
     public void GeneratePegs()
     {
-        pegHolder.transform.localPosition = new Vector3(-((pegsPerRow-1)*pegDistance*0.5f), 0, 0);
+        pegHolder.transform.localPosition = new Vector3(-((pegsPerRow - 1) * pegDistance * 0.5f), 0, 0);
         for (int i = 0; i < pegRows; i++)
         {
             for (int j = 0; j < pegsPerRow; j++)
             {
                 var peg = pegPool.Get();
-                peg.transform.localPosition = new Vector3(j * pegDistance + (i%2==0?0:pegDistance*0.5f), i * -rowDistance, 0);
+                peg.transform.localPosition = new Vector3(j * pegDistance + (i % 2 == 0 ? 0 : pegDistance * 0.5f),
+                    i * -rowDistance, 0);
                 plinkoPegs.Add(peg);
             }
         }
     }
-    
+
     public void ClearPegs()
     {
         foreach (var peg in plinkoPegs)
@@ -163,54 +210,22 @@ public class PlinkoMachine : MonoBehaviour
             pegPool.Release(peg);
         }
     }
-    
+
     public void RegeneratePegs()
     {
         ClearPegs();
         GeneratePegs();
     }
 
-    public void Update()
+    public void SpawnBall(bool overrideTimer = false)
     {
-        if (!(GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind &&
-             GameMaster.instance.Hivemind.mode == Hivemind.HiveMindMode.Plinko)) return;
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!overrideTimer)
         {
-            SpawnBall();
+            if (!canFire) return;
         }
-    }
 
-    public void FixedUpdate()
-    {
-        // if (GameMaster.instance.ModeMaster.currentMode!=ModeMaster.Gamemode.Hivemind) return;
-
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked)
-        {
-            autoFireTimer += Time.fixedDeltaTime;//TODO place for upgrades
-            if (autoFireTimer > autoFireRate)
-            {
-                autoFireTimer = 0;
-                SpawnBall();
-            }
-        }
-        
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls >=
-            SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap) return;
-        
-        spawnTimer += Time.fixedDeltaTime * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed;
-        if (spawnTimer > spawnRate)
-        {
-            spawnTimer = 0;
-            SaveSystem.instance.GetSaveFile().plinkoSave.balls +=
-                SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenAmount;
-        }
-        spawnTimerBar.fillAmount = spawnTimer / spawnRate;
-    }
-
-    public void SpawnBall()
-    {
-        
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls>0)
+        fireTimer = fireRate;
+        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls > 0)
         {
             SaveSystem.instance.GetSaveFile().plinkoSave.balls--;
         }
@@ -218,30 +233,33 @@ public class PlinkoMachine : MonoBehaviour
         {
             return;
         }
+
         if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
         {
             SFXMaster.instance.PlayMenuClick();
         }
+
         var ball = ballPool.Get();
         if (SaveSystem.instance.GetSaveFile().plinkoSave.goldenBallsUnlocked)
         {
             ball.SetGolden(Random.Range(0, 100) < ball.goldChance);
         }
-        ball.rb.AddForce(Vector2.up*spawnForce);
+
+        ball.rb.AddForce(Vector2.up * spawnForce);
         plinkoBalls.Add(ball);
     }
-    
+
     public void SpawnPeg()
     {
         var peg = pegPool.Get();
         plinkoPegs.Add(peg);
     }
-    
+
     public void RemoveBall(PlinkoBall ball)
     {
         ballPool.Release(ball);
     }
-    
+
     public void RemovePeg(GameObject peg)
     {
         pegPool.Release(peg);
@@ -253,15 +271,16 @@ public class PlinkoMachine : MonoBehaviour
         {
             SFXMaster.instance.PlayOneShot(winSound);
         }
+
         float totalWeight = 0;
         foreach (var weight in prizeWeights)
         {
             totalWeight += weight;
         }
-        
+
         float random = Random.Range(0, totalWeight);
         float currentWeight = 0;
-        
+
         for (int i = 0; i < prizeWeights.Length; i++)
         {
             currentWeight += prizeWeights[i];
@@ -270,42 +289,43 @@ public class PlinkoMachine : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        uint spores = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().stats.spores +=spores;
+                        uint spores = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().stats.spores += spores;
                         prizeText.text = "Spores +" + spores;
                         break;
                     case 2:
-                        uint hivemindPoints = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().stats.skillPoints +=hivemindPoints;
+                        uint hivemindPoints = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().stats.skillPoints += hivemindPoints;
                         prizeText.text = "Skill Points +" + hivemindPoints;
                         break;
                     case 3:
-                        uint bpotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] +=bpotions;
+                        uint bpotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] += bpotions;
                         prizeText.text = "Brown Potions +" + bpotions;
                         break;
                     case 4:
-                        uint rpotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] +=rpotions;
+                        uint rpotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] += rpotions;
                         prizeText.text = "Red Potions +" + rpotions;
                         break;
                     case 5:
-                        uint bupotions = (uint)Random.Range(1, 5);//TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] +=bupotions;
+                        uint bupotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] += bupotions;
                         prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:
-                        uint balls = (uint)Random.Range(1, 5);//TODO good place for upgrades
+                        uint balls = (uint)Random.Range(1, 5); //TODO good place for upgrades
                         SaveSystem.instance.GetSaveFile().plinkoSave.balls += balls;
                         prizeText.text = "Balls +" + balls;
                         break;
                 }
+
                 break;
             }
         }
-        
+
         SaveSystem.SaveS();
-        
+
         prizeText.gameObject.transform.DOKill();
         prizeText.gameObject.transform.localScale = Vector3.zero;
         prizeText.gameObject.transform.DOScale(2, 0.5f).SetEase(Ease.OutBack).onComplete = () =>

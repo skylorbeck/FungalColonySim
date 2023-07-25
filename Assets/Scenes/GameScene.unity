@@ -11273,7 +11273,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1459328412}
         m_TargetAssemblyTypeName: PlinkoMachine, Assembly-CSharp
         m_MethodName: SpawnBall
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -35910,6 +35910,8 @@ MonoBehaviour:
   spawnRate: 60
   autoFireTimer: 0
   autoFireRate: 1
+  fireTimer: 0
+  fireRate: 0.2
   spawnTimerBar: {fileID: 202618297}
   pegRows: 6
   pegsPerRow: 10
