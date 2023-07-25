@@ -150,7 +150,7 @@ public class MushroomBlock : Block, IPointerEnterHandler
             growthTimer += 1;
         }
 
-        base.OnPointerClick(eventData);
+        // base.OnPointerClick(eventData);
     }
 
     private void Harvest()

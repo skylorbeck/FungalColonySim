@@ -321,7 +321,6 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     public void ChangeScreen()
     {
-        if (GameMaster.instance.ModeMaster.lastMode != ModeMaster.Gamemode.Potions) return;
         if (cauldronSave.isOn) return;
         RemoveAllIngredients();
         UpdateButtons();
@@ -329,7 +328,12 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     public void RemoveAllIngredients()
     {
-        SFXMaster.instance.PlayOneShot(removeIngredientSound);
+        if (GameMaster.instance.ModeMaster.lastMode == ModeMaster.Gamemode.Potions)
+        {
+            SFXMaster.instance.PlayOneShot(removeIngredientSound);
+        }
+
+        ;
         cauldronSave.ingredients.Clear();
         cauldronSave.ingredientAmounts.Clear();
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
@@ -613,5 +617,5 @@ public class CauldronUpgrades
     public bool autoWood = false;
     public bool percentButtons = false;
     public bool evenAmount = false;
-    public uint cauldronClickPower = 1;
+    public uint cauldronClickPower = 0;
 }
