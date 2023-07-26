@@ -51,19 +51,15 @@ public class MushroomBlock : Block, IPointerEnterHandler
         }
     }
 
-    protected override void Update()
+    protected void FixedUpdate()
     {
         if (isGrowing)
         {
-            growthTimer += Time.deltaTime +
-                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades
-                                .growthSpeedBonus[(int)mushroomType] * //farm upgrade
-                            Time.deltaTime * 0.1f) +
-                           (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed *
-                            Time.deltaTime * //convergence
-                            0.05f) +
-                           (SaveSystem.instance.GetSaveFile().GetCollectionMultiplier() * Time.deltaTime *
-                            0.01f); //collection bonus
+            growthTimer += Time.fixedDeltaTime + Time.fixedDeltaTime *
+                ((SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[(int)mushroomType] *
+                  0.1f) + //farm
+                 (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * 0.05f) + //convergence
+                 (SaveSystem.instance.GetSaveFile().GetCollectionMultiplier() * 0.01f)); //collection
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
             // spriteRenderer.transform.localPosition =
@@ -79,9 +75,9 @@ public class MushroomBlock : Block, IPointerEnterHandler
         }
         else if (isGrown && SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvest[(int)mushroomType])
         {
-            harvestTimer += Time.deltaTime +
+            harvestTimer += Time.fixedDeltaTime +
                             (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[(int)mushroomType] *
-                             Time.deltaTime *
+                             Time.fixedDeltaTime *
                              0.1f);
             if (harvestTimer >= harvestTime)
             {
@@ -97,7 +93,7 @@ public class MushroomBlock : Block, IPointerEnterHandler
             UpdateGrowthTime();
         }
 
-        base.Update();
+        // base.Update();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
