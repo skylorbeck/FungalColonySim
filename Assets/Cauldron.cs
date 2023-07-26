@@ -322,13 +322,14 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public void ChangeScreen()
     {
         if (cauldronSave.isOn) return;
+        if (GameMaster.instance.ModeMaster.lastMode != ModeMaster.Gamemode.Potions) return;
         RemoveAllIngredients();
         UpdateButtons();
     }
 
     public void RemoveAllIngredients()
     {
-        if (GameMaster.instance.ModeMaster.lastMode == ModeMaster.Gamemode.Potions)
+        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Potions)
         {
             SFXMaster.instance.PlayOneShot(removeIngredientSound);
         }

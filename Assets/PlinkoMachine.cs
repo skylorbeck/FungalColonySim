@@ -173,7 +173,7 @@ public class PlinkoMachine : MonoBehaviour
             prizePreview.gameObject.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).SetDelay(1);
         };
         SaveSystem.instance.GetSaveFile().collectionItems.Add(saveData);
-        SaveSystem.SaveS();
+        // SaveSystem.SaveS();
         GameMaster.instance.Hivemind.collectionShelf.AddItem(saveData);
         prizeAwarder.UpdatePrize();
     }
@@ -324,7 +324,7 @@ public class PlinkoMachine : MonoBehaviour
             }
         }
 
-        SaveSystem.SaveS();
+        // SaveSystem.SaveS();
 
         prizeText.gameObject.transform.DOKill();
         prizeText.gameObject.transform.localScale = Vector3.zero;
