@@ -3896,6 +3896,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4840588678281204973, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: m_StartCorner
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840588678281204973, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: m_ChildAlignment
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6542298498364286962, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -42821,6 +42829,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4840588678281204973, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: m_StartCorner
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840588678281204973, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: m_ChildAlignment
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7188854764770665102, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -52940,8 +52956,8 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 8
-  m_StartCorner: 3
+  m_ChildAlignment: 0
+  m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 200, y: 130}
   m_Spacing: {x: 20, y: 5}
@@ -52964,8 +52980,8 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 8
-  m_StartCorner: 3
+  m_ChildAlignment: 0
+  m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 200, y: 130}
   m_Spacing: {x: 20, y: 5}
@@ -52988,8 +53004,8 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 8
-  m_StartCorner: 3
+  m_ChildAlignment: 0
+  m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 200, y: 130}
   m_Spacing: {x: 20, y: 5}
