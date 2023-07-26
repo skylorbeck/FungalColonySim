@@ -56,10 +56,10 @@ public class MushroomBlock : Block, IPointerEnterHandler
         if (isGrowing)
         {
             growthTimer += Time.fixedDeltaTime + Time.fixedDeltaTime *
-                ((SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[(int)mushroomType] *
+                ((SaveSystem.save.farmSave.upgrades.growthSpeedBonus[(int)mushroomType] *
                   0.1f) + //farm
-                 (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * 0.05f) + //convergence
-                 (SaveSystem.instance.GetSaveFile().GetCollectionMultiplier() * 0.01f)); //collection
+                 (SaveSystem.save.farmSave.upgrades.mushroomSpeed * 0.05f) + //convergence
+                 (SaveSystem.GetCollectibleMultiplierAsPercent())); //collection
             spriteRenderer.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, growthTimer / growthTime);
 
             // spriteRenderer.transform.localPosition =
@@ -73,10 +73,10 @@ public class MushroomBlock : Block, IPointerEnterHandler
                 UpdateSprite();
             }
         }
-        else if (isGrown && SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvest[(int)mushroomType])
+        else if (isGrown && SaveSystem.save.farmSave.upgrades.autoHarvest[(int)mushroomType])
         {
             harvestTimer += Time.fixedDeltaTime +
-                            (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[(int)mushroomType] *
+                            (SaveSystem.save.farmSave.upgrades.autoHarvestSpeed[(int)mushroomType] *
                              Time.fixedDeltaTime *
                              0.1f);
             if (harvestTimer >= harvestTime)
@@ -169,8 +169,8 @@ public class MushroomBlock : Block, IPointerEnterHandler
 
         ScoreMaster.instance.AddMushroom(mushroomType, isGolden);
 
-        isGolden = SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenSporeUnlocked && Random.value <
-            0.02f * SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenChanceMultiplier;
+        isGolden = SaveSystem.save.farmSave.upgrades.goldenSporeUnlocked && Random.value <
+            0.02f * SaveSystem.save.farmSave.upgrades.goldenChanceMultiplier;
         if (isGolden)
         {
             goldenParticles.Play();

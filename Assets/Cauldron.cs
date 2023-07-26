@@ -59,8 +59,8 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public DamageNumberMesh damageNumberMesh;
     public ObjectPool<SpriteRenderer> ingredientPool;
 
-    private CauldronSave cauldronSave => SaveSystem.instance.GetSaveFile().cauldronSave;
-    private uint[] potions => SaveSystem.instance.GetSaveFile().marketSave.potionsCount;
+    private CauldronSave cauldronSave => SaveSystem.save.cauldronSave;
+    private uint[] potions => SaveSystem.save.marketSave.potionsCount;
 
     IEnumerator Start()
     {
@@ -109,10 +109,10 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         UpdateIngredient();
         UpdateNeededIngredients();
         UpdateButtons();
-        fuelButton.gameObject.SetActive(!SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood);
-        cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood;
-        percentButtons.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.percentButtons);
-        evenPotionButtons.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.evenAmount);
+        fuelButton.gameObject.SetActive(!SaveSystem.save.cauldronSave.upgrades.autoWood);
+        cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.save.cauldronSave.upgrades.autoWood;
+        percentButtons.SetActive(SaveSystem.save.cauldronSave.upgrades.percentButtons);
+        evenPotionButtons.SetActive(SaveSystem.save.cauldronSave.upgrades.evenAmount);
     }
 
     void Update()
@@ -187,7 +187,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
         foreach (MushroomBlock.MushroomType mushroomType in cauldronSave.ingredients)
         {
-            SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] -=
+            SaveSystem.save.stats.mushrooms[(int)mushroomType] -=
                 (uint)cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(mushroomType)];
             ScoreMaster.instance.UpdateMushroomText();
         }
@@ -211,7 +211,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     public void RemoveFuel()
     {
-        if (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.autoWood) return;
+        if (SaveSystem.save.cauldronSave.upgrades.autoWood) return;
         cauldronSave.hasFuel = false;
         foreach (var renderer in wood)
         {
@@ -270,7 +270,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
                                                    ((cauldronSave.ingredientTotal - neededIngredients) /
                                                     neededIngredients) *
                                                    additionalBrewRatio); //TODO good place for upgrades
-        if (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.spoonEnchanted)
+        if (SaveSystem.save.cauldronSave.upgrades.spoonEnchanted)
         {
             int total = 0;
             float percent = 0;
@@ -299,7 +299,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public void UpdateNeededIngredients()
     {
         neededIngredients = neededIngredientsBase -
-                            (SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.potentShrooms
+                            (SaveSystem.save.cauldronSave.upgrades.potentShrooms
                                 ? Mathf.FloorToInt(neededIngredientsBase * .25f)
                                 : 0); //TODO good place for upgrades //TODO finish this
         ingredientBar.ratio = neededIngredients;
@@ -352,7 +352,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         if (cauldronSave.hasFuel && cauldronSave.isOn && !cauldronSave.isDone)
         {
             float progress = Time.fixedDeltaTime * progressSpeed;
-            progress += SaveSystem.instance.GetSaveFile().cauldronSave.upgrades.betterCauldron
+            progress += SaveSystem.save.cauldronSave.upgrades.betterCauldron
                 ? Time.fixedDeltaTime * progressSpeed * .25f
                 : 0; //TODO good place for upgrades
             cauldronSave.progress += progress;
@@ -500,10 +500,10 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
                     alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
                 }
 
-                if (value > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] - alreadyHave)
+                if (value > SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave)
                 {
                     ingredientAmountText.text =
-                        (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] - alreadyHave)
+                        (SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave)
                         .ToString();
                 }
 
@@ -525,7 +525,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         }
 
         ingredientAmountText.text = Mathf.RoundToInt(
-                (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] - alreadyHave) * percent)
+                (SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave) * percent)
             .ToString();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
@@ -561,11 +561,11 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
             desiredPotions = 1;
         }
 
-        if (desiredPotions > SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] /
+        if (desiredPotions > SaveSystem.save.stats.mushrooms[(int)currentIngredient] /
             neededIngredients)
         {
             desiredPotions =
-                Mathf.FloorToInt(SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)currentIngredient] /
+                Mathf.FloorToInt(SaveSystem.save.stats.mushrooms[(int)currentIngredient] /
                                  (float)neededIngredients);
         }
 
@@ -582,7 +582,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public void ProcessDesiredPotions()
     {
         increaseDesiredPotionsButton.interactable = desiredPotions <
-                                                    SaveSystem.instance.GetSaveFile().stats
+                                                    SaveSystem.save.stats
                                                         .mushrooms[(int)currentIngredient] / neededIngredients;
         decreaseDesiredPotionsButton.interactable = desiredPotions > 1;
         desiredPotionsText.text = desiredPotions + "";

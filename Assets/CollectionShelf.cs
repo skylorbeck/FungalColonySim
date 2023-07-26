@@ -20,7 +20,7 @@ public class CollectionShelf : MonoBehaviour
 
     void Start()
     {
-        var datas = SaveSystem.instance.GetSaveFile().collectionItems;
+        var datas = SaveSystem.save.collectionItems;
         for (var i = 0; i < datas.Count; i++)
         {
             var itemSaveData = datas[i];
@@ -113,7 +113,7 @@ public class CollectionShelf : MonoBehaviour
 
     public void UpdatePercentText()
     {
-        collectiblePercentText.text = "+" + SaveSystem.instance.GetSaveFile().GetCollectionMultiplier() + "%";
+        collectiblePercentText.text = "+" + SaveSystem.GetCollectionMultiplier() + "%";
     }
 }
 

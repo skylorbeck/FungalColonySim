@@ -14,6 +14,7 @@ public class SaveSystem : MonoBehaviour
     public TextMeshProUGUI saveText;
     public bool loaded = false;
     [SerializeField] private SaveFile saveFile;
+    public static SaveFile save => instance.saveFile;
 
     public void Awake()
     {
@@ -33,11 +34,83 @@ public class SaveSystem : MonoBehaviour
         saveFile = new SaveFile();
     }
 
-    public SaveFile GetSaveFile()
+    public static float GetMushroomSpeedAsPercent()
     {
-        return saveFile;
+        return (save.farmSave.upgrades.mushroomSpeed * .05f);
     }
 
+    public static float GetBrownFarmSpeedAsPercent()
+    {
+        return save.farmSave.upgrades.growthSpeedBonus[0] * .1f;
+    }
+
+    public static float GetRedFarmSpeedAsPercent()
+    {
+        return save.farmSave.upgrades.growthSpeedBonus[1] * .1f;
+    }
+
+    public static float GetBlueFarmSpeedAsPercent()
+    {
+        return save.farmSave.upgrades.growthSpeedBonus[2] * .1f;
+    }
+
+    public static float GetBrownAutoHarvestBonusAsPercent()
+    {
+        return save.farmSave.upgrades.autoHarvestSpeed[0] * .1f;
+    }
+
+    public static float GetRedAutoHarvestBonusAsPercent()
+    {
+        return save.farmSave.upgrades.autoHarvestSpeed[1] * .1f;
+    }
+
+    public static float GetBlueAutoHarvestBonusAsPercent()
+    {
+        return save.farmSave.upgrades.autoHarvestSpeed[2] * .1f;
+    }
+
+    public static float GetCollectionMultiplier()
+    {
+        return save.collectionItems.Count * 0.1f;
+    }
+
+    public static float GetCollectibleMultiplierAsPercent()
+    {
+        return GetCollectionMultiplier() * 0.01f;
+    }
+
+    public static float GetBrownGrowthTimeActual()
+    {
+        return (5 / (GetMushroomSpeedAsPercent() + GetBrownFarmSpeedAsPercent() + GetCollectibleMultiplierAsPercent() +
+                     1));
+    }
+
+    public static float GetRedGrowthTimeActual()
+    {
+        return (7 / (GetMushroomSpeedAsPercent() + GetRedFarmSpeedAsPercent() + GetCollectibleMultiplierAsPercent() +
+                     1));
+    }
+
+    public static float GetBlueGrowthTimeActual()
+    {
+        return (12 / (GetMushroomSpeedAsPercent() + GetBlueFarmSpeedAsPercent() + GetCollectibleMultiplierAsPercent() +
+                      1));
+    }
+
+    public static float GetBrownAutoHarvestTimeActual()
+    {
+        return (3 / (GetBrownAutoHarvestBonusAsPercent() + 1));
+    }
+
+    public static float GetRedAutoHarvestTimeActual()
+    {
+        return (3 / (GetRedAutoHarvestBonusAsPercent() + 1));
+    }
+
+    public static float GetBlueAutoHarvestTimeActual()
+    {
+        return (3 / (GetBlueAutoHarvestBonusAsPercent() + 1));
+    }
 
     public bool SpendSpores(uint amount)
     {
@@ -157,11 +230,6 @@ public class SaveFile
     public MarketSave marketSave = new MarketSave();
     public PlinkoSave plinkoSave = new PlinkoSave();
     public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
-
-    public float GetCollectionMultiplier()
-    {
-        return collectionItems.Count * 0.1f;
-    }
 }
 
 [Serializable]

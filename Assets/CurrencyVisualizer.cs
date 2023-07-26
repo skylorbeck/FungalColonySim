@@ -47,37 +47,37 @@ public class CurrencyVisualizer : MonoBehaviour
         switch (currency)
         {
             case Currency.BrownMushroom:
-                text.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[0].ToString("N0");
+                text.text = SaveSystem.save.stats.mushrooms[0].ToString("N0");
                 break;
             case Currency.RedMushroom:
-                text.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[1].ToString("N0");
+                text.text = SaveSystem.save.stats.mushrooms[1].ToString("N0");
                 break;
             case Currency.BlueMushroom:
-                text.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[2].ToString("N0");
+                text.text = SaveSystem.save.stats.mushrooms[2].ToString("N0");
                 break;
             case Currency.Spore:
-                text.text = SaveSystem.instance.GetSaveFile().stats.spores.ToString("N0");
+                text.text = SaveSystem.save.stats.spores.ToString("N0");
                 break;
             case Currency.SkillPoint:
-                text.text = SaveSystem.instance.GetSaveFile().stats.skillPoints.ToString("N0");
+                text.text = SaveSystem.save.stats.skillPoints.ToString("N0");
                 break;
             case Currency.BrownPotion:
-                text.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0].ToString("N0");
+                text.text = SaveSystem.save.marketSave.potionsCount[0].ToString("N0");
                 break;
             case Currency.RedPotion:
-                text.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[1].ToString("N0");
+                text.text = SaveSystem.save.marketSave.potionsCount[1].ToString("N0");
                 break;
             case Currency.BluePotion:
-                text.text = SaveSystem.instance.GetSaveFile().marketSave.potionsCount[2].ToString("N0");
+                text.text = SaveSystem.save.marketSave.potionsCount[2].ToString("N0");
                 break;
             case Currency.Coin:
-                text.text = SaveSystem.instance.GetSaveFile().marketSave.coins.ToString("N0");
+                text.text = SaveSystem.save.marketSave.coins.ToString("N0");
                 break;
             case Currency.PlinkoBall:
-                text.text = SaveSystem.instance.GetSaveFile().plinkoSave.balls.ToString("N0");
+                text.text = SaveSystem.save.plinkoSave.balls.ToString("N0");
                 break;
             case Currency.Collectible:
-                text.text = SaveSystem.instance.GetSaveFile().GetCollectionMultiplier().ToString("N0");
+                text.text = SaveSystem.GetCollectionMultiplier().ToString("N0");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);

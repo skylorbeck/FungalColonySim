@@ -34,8 +34,8 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        int larger = Mathf.Max(SaveSystem.instance.GetSaveFile().farmSave.farmSize.x,
-            SaveSystem.instance.GetSaveFile().farmSave.farmSize.y);
+        int larger = Mathf.Max(SaveSystem.save.farmSave.farmSize.x,
+            SaveSystem.save.farmSave.farmSize.y);
         float dist = GameMaster.instance.ModeMaster.PreCalculateCameraDistance();
         xBounds = new Vector2(-larger + dist, larger + dist);
         yBounds = new Vector2(-larger * 2, larger);

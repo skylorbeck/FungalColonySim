@@ -67,7 +67,7 @@ public class ModeMaster : MonoBehaviour
 
     public void UpdateButton()
     {
-        bool unlocked = (SaveSystem.instance.GetSaveFile().statsTotal.converges > 0);
+        bool unlocked = (SaveSystem.save.statsTotal.converges > 0);
         modeText.gameObject.SetActive(unlocked);
         nextButton.gameObject.SetActive(unlocked);
         previousButton.gameObject.SetActive(unlocked);
@@ -79,27 +79,27 @@ public class ModeMaster : MonoBehaviour
         Gamemode mode = currentMode;
         mode++;
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked && mode == Gamemode.RedFarm)
+        if (!SaveSystem.save.farmSave.upgrades.redUnlocked && mode == Gamemode.RedFarm)
         {
             mode++;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked && mode == Gamemode.BlueFarm)
+        if (!SaveSystem.save.farmSave.upgrades.blueUnlocked && mode == Gamemode.BlueFarm)
         {
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.save.statsTotal.converges > 0) && mode == Gamemode.Hivemind)
         {
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked) && mode == Gamemode.Potions)
+        if (!(SaveSystem.save.cauldronSave.isUnlocked) && mode == Gamemode.Potions)
         {
             mode++;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked) && mode == Gamemode.Marketplace)
+        if (!(SaveSystem.save.marketSave.isUnlocked) && mode == Gamemode.Marketplace)
         {
             mode++;
         }
@@ -123,27 +123,27 @@ public class ModeMaster : MonoBehaviour
             mode = Gamemode.Marketplace;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked) && mode == Gamemode.Marketplace)
+        if (!(SaveSystem.save.marketSave.isUnlocked) && mode == Gamemode.Marketplace)
         {
             mode--;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked) && mode == Gamemode.Potions)
+        if (!(SaveSystem.save.cauldronSave.isUnlocked) && mode == Gamemode.Potions)
         {
             mode--;
         }
 
-        if (!(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0) && mode == Gamemode.Hivemind)
+        if (!(SaveSystem.save.statsTotal.converges > 0) && mode == Gamemode.Hivemind)
         {
             mode--;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked && mode == Gamemode.BlueFarm)
+        if (!SaveSystem.save.farmSave.upgrades.blueUnlocked && mode == Gamemode.BlueFarm)
         {
             mode--;
         }
 
-        if (!SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked && mode == Gamemode.RedFarm)
+        if (!SaveSystem.save.farmSave.upgrades.redUnlocked && mode == Gamemode.RedFarm)
         {
             mode--;
         }
@@ -275,12 +275,12 @@ public class ModeMaster : MonoBehaviour
 
     public void UpdateDots()
     {
-        dots[1].gameObject.SetActive(SaveSystem.instance.GetSaveFile().farmSave.upgrades.redUnlocked);
-        dots[2].gameObject.SetActive(SaveSystem.instance.GetSaveFile().farmSave.upgrades.blueUnlocked);
-        dots[3].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0);
-        dots[0].gameObject.SetActive(SaveSystem.instance.GetSaveFile().statsTotal.converges > 0);
-        dots[4].gameObject.SetActive(SaveSystem.instance.GetSaveFile().cauldronSave.isUnlocked);
-        dots[5].gameObject.SetActive(SaveSystem.instance.GetSaveFile().marketSave.isUnlocked);
+        dots[1].gameObject.SetActive(SaveSystem.save.farmSave.upgrades.redUnlocked);
+        dots[2].gameObject.SetActive(SaveSystem.save.farmSave.upgrades.blueUnlocked);
+        dots[3].gameObject.SetActive(SaveSystem.save.statsTotal.converges > 0);
+        dots[0].gameObject.SetActive(SaveSystem.save.statsTotal.converges > 0);
+        dots[4].gameObject.SetActive(SaveSystem.save.cauldronSave.isUnlocked);
+        dots[5].gameObject.SetActive(SaveSystem.save.marketSave.isUnlocked);
 
         dots[(int)lastMode].transform.DOScale(1, 0.5f).SetEase(Ease.OutBack);
         dots[(int)currentMode].transform.DOScale(2, 0.5f).SetEase(Ease.OutBack);

@@ -1,11 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class ScoreMaster : MonoBehaviour
 {
@@ -14,6 +9,12 @@ public class ScoreMaster : MonoBehaviour
     [SerializeField] private TextMeshProUGUI brownMushroomText;
     [SerializeField] private TextMeshProUGUI redMushroomText;
     [SerializeField] private TextMeshProUGUI blueMushroomText;
+
+    public void Reset()
+    {
+        SaveSystem.save.stats.mushrooms = new uint[3];
+        UpdateMushroomText();
+    }
 
     void Start()
     {
@@ -29,12 +30,12 @@ public class ScoreMaster : MonoBehaviour
 
     public void AddMushroom(MushroomBlock.MushroomType mushroomType, bool golden = false)
     {
-        uint amount = 1 + SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomMultiplier;
-        amount *= golden ? SaveSystem.instance.GetSaveFile().farmSave.upgrades.goldenMultiplier : 1;
+        uint amount = 1 + SaveSystem.save.farmSave.upgrades.mushroomMultiplier;
+        amount *= golden ? SaveSystem.save.farmSave.upgrades.goldenMultiplier : 1;
         // Debug.Log("Adding " + amount + " " + mushroomType + " mushrooms");
         // Debug.Log(golden);
-        SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)mushroomType] +=amount;
-        SaveSystem.instance.GetSaveFile().statsTotal.mushrooms[(int)mushroomType] += amount;
+        SaveSystem.save.stats.mushrooms[(int)mushroomType] += amount;
+        SaveSystem.save.statsTotal.mushrooms[(int)mushroomType] += amount;
 
         switch (mushroomType)
         {
@@ -50,7 +51,6 @@ public class ScoreMaster : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(mushroomType), mushroomType, null);
         }
-
     }
 
     public void UpdateMushroomText()
@@ -62,33 +62,27 @@ public class ScoreMaster : MonoBehaviour
 
     public void UpdateBlueText()
     {
-        blueMushroomText.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Blue].ToString("N0");
+        blueMushroomText.text = SaveSystem.save.stats.mushrooms[(int)MushroomBlock.MushroomType.Blue].ToString("N0");
         GameMaster.instance.blueUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateRedText()
     {
-        redMushroomText.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Red].ToString("N0");
+        redMushroomText.text = SaveSystem.save.stats.mushrooms[(int)MushroomBlock.MushroomType.Red].ToString("N0");
         GameMaster.instance.redUpgradeMaster.UpdateButtons();
     }
 
     public void UpdateBrownText()
     {
-        brownMushroomText.text = SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)MushroomBlock.MushroomType.Brown].ToString("N0");
+        brownMushroomText.text = SaveSystem.save.stats.mushrooms[(int)MushroomBlock.MushroomType.Brown].ToString("N0");
         GameMaster.instance.brownUpgradeMaster.UpdateButtons();
     }
 
     public bool SpendMushrooms(MushroomBlock.MushroomType type, uint amount)
     {
-        if (SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)type] < amount) return false;
-        SaveSystem.instance.GetSaveFile().stats.mushrooms[(int)type] -= amount;
+        if (SaveSystem.save.stats.mushrooms[(int)type] < amount) return false;
+        SaveSystem.save.stats.mushrooms[(int)type] -= amount;
         UpdateMushroomText();
         return true;
-    }
-
-    public void Reset()
-    {
-        SaveSystem.instance.GetSaveFile().stats.mushrooms = new uint[3];
-        UpdateMushroomText();
     }
 }

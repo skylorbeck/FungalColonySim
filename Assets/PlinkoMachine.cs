@@ -49,14 +49,14 @@ public class PlinkoMachine : MonoBehaviour
 
     public uint score
     {
-        get => SaveSystem.instance.GetSaveFile().plinkoSave.score;
-        set => SaveSystem.instance.GetSaveFile().plinkoSave.score = value;
+        get => SaveSystem.save.plinkoSave.score;
+        set => SaveSystem.save.plinkoSave.score = value;
     }
 
     public float spawnTimer
     {
-        get => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress;
-        set => SaveSystem.instance.GetSaveFile().plinkoSave.ballProgress = value;
+        get => SaveSystem.save.plinkoSave.ballProgress;
+        set => SaveSystem.save.plinkoSave.ballProgress = value;
     }
 
     public bool canFire => fireTimer <= 0;
@@ -133,7 +133,7 @@ public class PlinkoMachine : MonoBehaviour
             fireTimer -= Time.fixedDeltaTime;
         }
 
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.autofireUnlocked)
+        if (SaveSystem.save.plinkoSave.autofireUnlocked)
         {
             autoFireTimer += Time.fixedDeltaTime; //TODO place for upgrades
             if (autoFireTimer > autoFireRate)
@@ -143,15 +143,15 @@ public class PlinkoMachine : MonoBehaviour
             }
         }
 
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls >=
-            SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap) return;
+        if (SaveSystem.save.plinkoSave.balls >=
+            SaveSystem.save.plinkoSave.ballSoftCap) return;
 
-        spawnTimer += Time.fixedDeltaTime * SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenSpeed;
+        spawnTimer += Time.fixedDeltaTime * SaveSystem.save.plinkoSave.ballRegenSpeed;
         if (spawnTimer > spawnRate)
         {
             spawnTimer = 0;
-            SaveSystem.instance.GetSaveFile().plinkoSave.balls +=
-                SaveSystem.instance.GetSaveFile().plinkoSave.ballRegenAmount;
+            SaveSystem.save.plinkoSave.balls +=
+                SaveSystem.save.plinkoSave.ballRegenAmount;
         }
 
         spawnTimerBar.fillAmount = spawnTimer / spawnRate;
@@ -172,7 +172,7 @@ public class PlinkoMachine : MonoBehaviour
         {
             prizePreview.gameObject.transform.DOScale(0, 0.5f).SetEase(Ease.InBack).SetDelay(1);
         };
-        SaveSystem.instance.GetSaveFile().collectionItems.Add(saveData);
+        SaveSystem.save.collectionItems.Add(saveData);
         // SaveSystem.SaveS();
         GameMaster.instance.Hivemind.collectionShelf.AddItem(saveData);
         prizeAwarder.UpdatePrize();
@@ -185,7 +185,7 @@ public class PlinkoMachine : MonoBehaviour
 
     public void UpdateSoftCap()
     {
-        softCapText.text = "Soft Cap: " + SaveSystem.instance.GetSaveFile().plinkoSave.ballSoftCap.ToString("N0");
+        softCapText.text = "Soft Cap: " + SaveSystem.save.plinkoSave.ballSoftCap.ToString("N0");
     }
 
     public void GeneratePegs()
@@ -225,9 +225,9 @@ public class PlinkoMachine : MonoBehaviour
         }
 
         fireTimer = fireRate;
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.balls > 0)
+        if (SaveSystem.save.plinkoSave.balls > 0)
         {
-            SaveSystem.instance.GetSaveFile().plinkoSave.balls--;
+            SaveSystem.save.plinkoSave.balls--;
         }
         else
         {
@@ -240,7 +240,7 @@ public class PlinkoMachine : MonoBehaviour
         }
 
         var ball = ballPool.Get();
-        if (SaveSystem.instance.GetSaveFile().plinkoSave.goldenBallsUnlocked)
+        if (SaveSystem.save.plinkoSave.goldenBallsUnlocked)
         {
             ball.SetGolden(Random.Range(0, 100) < ball.goldChance);
         }
@@ -290,32 +290,32 @@ public class PlinkoMachine : MonoBehaviour
                 {
                     case 1:
                         uint spores = (uint)Random.Range(1, 5); //TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().stats.spores += spores;
+                        SaveSystem.save.stats.spores += spores;
                         prizeText.text = "Spores +" + spores;
                         break;
                     case 2:
                         uint hivemindPoints = (uint)Random.Range(1, 5); //TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().stats.skillPoints += hivemindPoints;
+                        SaveSystem.save.stats.skillPoints += hivemindPoints;
                         prizeText.text = "Skill Points +" + hivemindPoints;
                         break;
                     case 3:
                         uint bpotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] += bpotions;
+                        SaveSystem.save.marketSave.potionsCount[0] += bpotions;
                         prizeText.text = "Brown Potions +" + bpotions;
                         break;
                     case 4:
                         uint rpotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] += rpotions;
+                        SaveSystem.save.marketSave.potionsCount[0] += rpotions;
                         prizeText.text = "Red Potions +" + rpotions;
                         break;
                     case 5:
                         uint bupotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().marketSave.potionsCount[0] += bupotions;
+                        SaveSystem.save.marketSave.potionsCount[0] += bupotions;
                         prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:
                         uint balls = (uint)Random.Range(1, 5); //TODO good place for upgrades
-                        SaveSystem.instance.GetSaveFile().plinkoSave.balls += balls;
+                        SaveSystem.save.plinkoSave.balls += balls;
                         prizeText.text = "Balls +" + balls;
                         break;
                 }

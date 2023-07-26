@@ -11,14 +11,14 @@ public class BonusStatDisplay : MonoBehaviour
     {
         if (GameMaster.instance.SettingsMenu.statsOpen)
         {
-            float mushSpd = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.mushroomSpeed * 5);
-            float brownFarmSpd = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[0] * 10);
-            float redFarmSpd = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[1] * 10);
-            float blueFarmSpd = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.growthSpeedBonus[2] * 10);
-            float brownAutoHarvest = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[0] * 10);
-            float redAutoHarvest = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[1] * 10);
-            float blueAutoHarvest = (SaveSystem.instance.GetSaveFile().farmSave.upgrades.autoHarvestSpeed[2] * 10);
-            float collectibleBonus = (SaveSystem.instance.GetSaveFile().GetCollectionMultiplier());
+            float mushSpd = (SaveSystem.GetMushroomSpeedAsPercent() * 100);
+            float brownFarmSpd = (SaveSystem.GetBrownFarmSpeedAsPercent() * 100);
+            float redFarmSpd = (SaveSystem.GetRedFarmSpeedAsPercent() * 100);
+            float blueFarmSpd = (SaveSystem.GetBlueFarmSpeedAsPercent() * 100);
+            float brownAutoHarvest = (SaveSystem.GetBrownAutoHarvestBonusAsPercent() * 100);
+            float redAutoHarvest = (SaveSystem.GetRedAutoHarvestBonusAsPercent() * 100);
+            float blueAutoHarvest = (SaveSystem.GetBlueAutoHarvestBonusAsPercent() * 100);
+            float collectibleBonus = (SaveSystem.GetCollectionMultiplier());
 
             globalGrowthBonus.text =
                 (mushSpd + collectibleBonus).ToString("F1") + "% (" +
