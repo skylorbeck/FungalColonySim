@@ -197,7 +197,12 @@ public class StatTracking
     public uint[] mushrooms = new uint[3];
     public uint spores = 0;
     public uint converges = 0;
+
     public uint skillPoints = 0;
+    //TODO more stats
+    //cauldron clicks
+    //sells
+    //buys
 }
 
 [Serializable]

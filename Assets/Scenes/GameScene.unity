@@ -216,7 +216,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Decrease the time it takes to harvest a fully grown Mushroom by 10%
+        (compounding)
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_Name
@@ -344,6 +349,10 @@ PrefabInstance:
       value: Growth Speed
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Increases the rate at which Mushrooms grow by 10% (compounding)
       objectReference: {fileID: 0}
@@ -1805,6 +1814,14 @@ PrefabInstance:
       value: Golden Pegs
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Pegs can turn gold, doubling the score they give.
       objectReference: {fileID: 0}
@@ -3673,9 +3690,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipHeader
-      value: Golden Spores
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipHeader
+      value: Golden Spores
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Gives each Mushroom a 2% chance to double harvest
       objectReference: {fileID: 0}
@@ -3846,6 +3875,18 @@ PrefabInstance:
     - target: {fileID: 1390691346252139534, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -705.13477
+      objectReference: {fileID: 0}
+    - target: {fileID: 2403905990079797398, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504425853114417939, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504425853114417939, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: tooltipContent
+      value: Unlocks a Red Mushroom Farm
       objectReference: {fileID: 0}
     - target: {fileID: 2695498247815503576, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
       propertyPath: m_Name
@@ -5178,6 +5219,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: +1 Golden Spore Multiplier
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -6169,6 +6214,14 @@ PrefabInstance:
     - target: {fileID: 431845782454687652, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_text
       value: Unlock Blue Farm
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: Unlocks a Blue Mushroom Farm
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_Name
@@ -7747,6 +7800,14 @@ PrefabInstance:
         buttons'
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Adds quick input buttons for adding 25%, 50% and 100% of your mushrooms
         to the Cauldron.
@@ -10059,6 +10120,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Increases the value of Blue Mushrooms when Converging by 50%
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -11091,6 +11156,10 @@ PrefabInstance:
       value: Growth Speed
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Increases the rate at which Mushrooms grow by 10% (compounding)
       objectReference: {fileID: 0}
@@ -12983,6 +13052,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: A ball will launch every second automatically, if available.
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -14223,8 +14300,20 @@ PrefabInstance:
         Scale'
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipHeader
+      value: One Time Purchase
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
-      value: Adds quick input buttons for adding just enough potions to make exactly
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: Adds quick input buttons for adding just enough mushrooms to make exactly
         as many potions as you want.
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -14354,6 +14443,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: adc72d74126f21948b65d4d867511040, type: 3}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Automagically harvest fully grown mushrooms after 3s
       objectReference: {fileID: 0}
@@ -16524,9 +16621,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipHeader
-      value: Golden Spore Chance
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipHeader
+      value: Golden Spore Chance
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: +2% chance for Golden Spores (additive)
       objectReference: {fileID: 0}
@@ -16741,7 +16846,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -123.494995}
+  m_AnchoredPosition: {x: 250, y: -76.235}
   m_SizeDelta: {x: 480, y: 132.47}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &635941132
@@ -16774,8 +16879,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4290756543
-  m_fontColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -16792,8 +16897,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -19350,6 +19455,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Clicking on the Cauldron removes one (1) additional second per click
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -19479,6 +19588,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: e28df1568380b00429a623abe41b3bfc, type: 3}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Automagically harvest fully grown mushrooms after 3s
       objectReference: {fileID: 0}
@@ -25395,6 +25512,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Each Unique Ingredient in the pot reduces brew time by its % of the
         total. Maximum 10% per unique ingredient.
@@ -34485,6 +34610,14 @@ PrefabInstance:
         Casting'
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipHeader
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Increases the amount of balls generated by 1
       objectReference: {fileID: 0}
@@ -35750,6 +35883,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Potions need 25% less mushrooms
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -36590,6 +36731,10 @@ PrefabInstance:
         Value'
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Increases the Value of Spores when calculating Skill Points by 100%
       objectReference: {fileID: 0}
@@ -39254,6 +39399,18 @@ PrefabInstance:
         Press'
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipHeader
+      value: Repeatable Purchase
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Doubles Ball Regen Speed
       objectReference: {fileID: 0}
@@ -39515,6 +39672,14 @@ PrefabInstance:
       value: Golden Balls
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Balls Can turn gold, doubling the score they gain.
       objectReference: {fileID: 0}
@@ -40554,7 +40719,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Decrease the time it takes to harvest a fully grown Mushroom by 10%
+        (compounding)
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_Name
@@ -42158,6 +42328,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Logs never burn up. You'll never have to click that button again. Also
         removes button.
       objectReference: {fileID: 0}
@@ -42288,14 +42466,14 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1998800315}
   - {fileID: 635941130}
+  - {fileID: 1998800315}
   m_Father: {fileID: 382068364}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -10000, y: -10000}
-  m_SizeDelta: {x: 500, y: 199.73}
+  m_SizeDelta: {x: 500, y: 191.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1805973535
 MonoBehaviour:
@@ -42310,7 +42488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+  m_Color: {r: 0.2509804, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -42620,6 +42798,10 @@ PrefabInstance:
       value: -885
       objectReference: {fileID: 0}
     - target: {fileID: 2403905990079797398, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504425853114417939, guid: 9197186713ea59741b2e1b848a37669e, type: 3}
       propertyPath: tooltipContent
       value: Increases the value of Brown Mushrooms when Converging by 50%
       objectReference: {fileID: 0}
@@ -43509,6 +43691,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Increases the rate at which Mushrooms grow by 10% (compounding)
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -43631,6 +43817,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Unlocks a Cauldron that you can brew potions in, and a marketplace to
         sell them at.
@@ -44521,6 +44715,10 @@ PrefabInstance:
         Value'
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Increases the value of Red Mushrooms when Converging by 50%
       objectReference: {fileID: 0}
@@ -47445,8 +47643,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -33.629997}
-  m_SizeDelta: {x: 320.63, y: 47.26}
+  m_AnchoredPosition: {x: 250, y: -162.16}
+  m_SizeDelta: {x: 368.44, y: 39.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1998800316
 MonoBehaviour:
@@ -47468,7 +47666,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Test Test
+  m_text: One Purchase
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c69a962538905c347b039d14f16f716d, type: 2}
   m_sharedMaterial: {fileID: -6705255957619247848, guid: c69a962538905c347b039d14f16f716d, type: 2}
@@ -47477,8 +47675,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4286611584
+  m_fontColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -47495,8 +47693,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -47574,6 +47772,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 541a1bf7adf6cac4595b74904c656b55, type: 3}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Automagically harvest fully grown mushrooms after 3s
       objectReference: {fileID: 0}
@@ -48395,6 +48601,14 @@ PrefabInstance:
       value: Bigger Ball Bag
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Ball soft Cap increased to 100
       objectReference: {fileID: 0}
@@ -49875,6 +50089,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: purchaseLimit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Cauldron Brews 25% Faster
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -50041,7 +50263,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Decrease the time it takes to harvest a fully grown Mushroom by 10%
+        (compounding)
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: m_Name
@@ -53944,6 +54171,10 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: adc72d74126f21948b65d4d867511040, type: 3}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Replace a block of dirt with a block of grass
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -54069,6 +54300,10 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: e28df1568380b00429a623abe41b3bfc, type: 3}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
       value: Replace a block of dirt with a block of grass
       objectReference: {fileID: 0}
     - target: {fileID: 7399685138712937222, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
@@ -54193,6 +54428,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 541a1bf7adf6cac4595b74904c656b55, type: 3}
     - target: {fileID: 4734534053043389051, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
+      propertyPath: tooltipContent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767500471155235326, guid: 03417c88b050ac4438915300fb19f5e2, type: 3}
       propertyPath: tooltipContent
       value: Replace a block of dirt with a block of grass
       objectReference: {fileID: 0}
