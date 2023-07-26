@@ -11,6 +11,9 @@ public class SettingsMenu : MonoBehaviour
     public Toggle confirmDelete;
     public Button resetButton;
 
+    public bool settingsOpen => settingsMenu.gameObject.activeSelf;
+    public bool statsOpen => statsMenu.gameObject.activeSelf;
+
     public void Start()
     {
         confirmDelete.isOn = false;

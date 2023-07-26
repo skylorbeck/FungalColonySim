@@ -25,7 +25,7 @@ public class GameMaster : MonoBehaviour
     public Hivemind Hivemind;
     public Cauldron Cauldron;
     public Marketplace Marketplace;
-
+    public SettingsMenu SettingsMenu;
     public int saveTimer = 0;
 
     public float inputDelay = 1f;
@@ -33,7 +33,6 @@ public class GameMaster : MonoBehaviour
     public Color[] mushroomColors = new Color[3];
 
     //TODO harvest mushrooms by clicking on floor
-    //TODO reset button
     //TODO red and blue upgrades have different scaling?
     //TODO Regenerate, a second layer of prestige that resets hivemind levels and gives a flat bonus to mushroom production
 
