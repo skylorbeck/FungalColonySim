@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Merchant : MonoBehaviour
 {
@@ -13,7 +10,6 @@ public class Merchant : MonoBehaviour
     {
         "Hello, I'm a merchant.",
         "I sell stuff.",
-        "I'm not very good at this.",
         "Come back anytime.",
         "What do you want?",
         "What're ya buyin'?",
@@ -21,6 +17,10 @@ public class Merchant : MonoBehaviour
         "What do you want?",
         "What're ya sellin'?",
         "What do you have?",
+        "Payment first, secrets later.",
+        "Currency speaks, silence denies.",
+        "Trade your riches, or yourself.",
+        "Seeking treasures, are we?"
     };
 
     public string[] thankYou = new[]
@@ -29,6 +29,12 @@ public class Merchant : MonoBehaviour
         "Thanks for that!",
         "Thanks!",
         "I'll use it to buy more stuff!",
+        "Ah, a rare gem indeed.",
+        "Such a fine choice...",
+        "Who am I to stop you?",
+        "Buy a memory, take a dream.",
+        "A wise choice, my friend.",
+        "I'll take it."
     };
 
     public string[] noItem = new[]
@@ -38,6 +44,9 @@ public class Merchant : MonoBehaviour
         "...I'm not a charity.",
         "...Nothing...?",
         "*grumble*",
+        "Some doors should remain closed...",
+        "No gold, no goods, my friend.",
+        "No coins, no dreams.",
     };
 
     public string[] noMoney = new[]
@@ -47,6 +56,9 @@ public class Merchant : MonoBehaviour
         "...I'm not a charity.",
         "...No money...?",
         "*grumble*",
+        "A simple trade won't suffice...",
+        "I'm afraid your purse is light...",
+        "Treasure you seek, coins you lack...",
     };
 
 
@@ -55,7 +67,12 @@ public class Merchant : MonoBehaviour
         GameMaster.instance.ModeMaster.OnModeChange += RandomSaying;
     }
 
- 
+    void FixedUpdate()
+    {
+        speech.transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * 2) * 5);
+    }
+
+
     public void RandomSaying()
     {
         UpdateText(sayings[Random.Range(0, sayings.Length)]);
@@ -65,15 +82,10 @@ public class Merchant : MonoBehaviour
     {
         UpdateText(thankYou[Random.Range(0, thankYou.Length)]);
     }
-    
+
     public void RandomNoItem()
     {
         UpdateText(noItem[Random.Range(0, noItem.Length)]);
-    }
-
-    void FixedUpdate()
-    {
-        speech.transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * 2) * 5);
     }
 
     public void RandomNoMoney()
