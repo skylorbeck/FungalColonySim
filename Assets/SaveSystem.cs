@@ -103,17 +103,17 @@ public class SaveSystem : MonoBehaviour
 
     public static float GetBrownAutoHarvestTimeActual()
     {
-        return (3 / (GetBrownAutoHarvestBonusAsPercent() + 1));
+        return save.farmSave.upgrades.autoHarvest[0] ? 3 / (GetBrownAutoHarvestBonusAsPercent() + 1) : 0;
     }
 
     public static float GetRedAutoHarvestTimeActual()
     {
-        return (3 / (GetRedAutoHarvestBonusAsPercent() + 1));
+        return save.farmSave.upgrades.autoHarvest[1] ? 3 / (GetRedAutoHarvestBonusAsPercent() + 1) : 0;
     }
 
     public static float GetBlueAutoHarvestTimeActual()
     {
-        return (3 / (GetBlueAutoHarvestBonusAsPercent() + 1));
+        return save.farmSave.upgrades.autoHarvest[2] ? 3 / (GetBlueAutoHarvestBonusAsPercent() + 1) : 0;
     }
 
     public static float GetMushroomsPerSecond(int index)

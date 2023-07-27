@@ -24,6 +24,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void OpenSettings()
     {
+        SFXMaster.instance.PlayMenuClick();
         settingsMenu.gameObject.SetActive(true);
         settingsMenu.DOLocalMoveY(0, 0.5f);
         settingsRayBlocker.SetActive(true);
@@ -31,6 +32,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void CloseSettings()
     {
+        SFXMaster.instance.PlayMenuClick();
         PlayerPrefs.Save();
         confirmDelete.isOn = false;
         settingsMenu.DOLocalMoveY(2000, 0.5f).OnComplete(() => settingsMenu.gameObject.SetActive(false));
@@ -40,17 +42,20 @@ public class SettingsMenu : MonoBehaviour
     public void ToggleDelete(bool value)
     {
         resetButton.interactable = value;
+        SFXMaster.instance.PlayMenuClick();
     }
 
     public void ConfirmDelete()
     {
         if (!confirmDelete.isOn) return;
+        SFXMaster.instance.PlayMenuClick();
         SaveSystem.instance.Reset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void OpenStats()
     {
+        SFXMaster.instance.PlayMenuClick();
         statsMenu.gameObject.SetActive(true);
         statsMenu.DOLocalMoveY(0, 0.5f);
         settingsRayBlocker.SetActive(true);
@@ -58,6 +63,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void CloseStats()
     {
+        SFXMaster.instance.PlayMenuClick();
         statsMenu.DOLocalMoveY(2000, 0.5f).OnComplete(() => statsMenu.gameObject.SetActive(false));
         settingsRayBlocker.SetActive(false);
     }

@@ -283,6 +283,7 @@ public class ConvergenceMaster : MonoBehaviour
     {
         inStore = false;
         exitStoreButton.interactable = false;
+        SFXMaster.instance.PlayMenuClick();
         float duration = 0.5f;
         rayBlocker.DOFade(0, duration).onComplete += () => rayBlocker.gameObject.SetActive(false);
         convergenceStoreMenu.transform.DOLocalMoveX(-2000, duration).onComplete += () =>
