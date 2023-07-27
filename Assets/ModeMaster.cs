@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using TMPro;
@@ -45,7 +46,7 @@ public class ModeMaster : MonoBehaviour
     [SerializeField] private Gamemode[] modesToDisableCamera;
     public UnityAction OnModeChange;
 
-    private void Start()
+    private IEnumerator Start()
     {
         BrownFarmUpgrades.SetActive(false);
         RedFarmUpgrades.SetActive(false);
@@ -56,6 +57,7 @@ public class ModeMaster : MonoBehaviour
 
         currentMode = Gamemode.Hivemind;
         SetMode(Gamemode.BrownFarm);
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         UpdateButton();
         BrownFarm.transform.position = new Vector3(0, 0, 0);
         RedFarm.transform.position = new Vector3(distance, 0, 0);

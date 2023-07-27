@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -97,7 +98,7 @@ public class Marketplace : MonoBehaviour
         set => SaveSystem.save.marketSave.shopTicks = value;
     }
 
-    void Start()
+    IEnumerator Start()
     {
         GameMaster.instance.ModeMaster.OnModeChange += sellPreview.Clear;
         Refresh();
@@ -117,7 +118,7 @@ public class Marketplace : MonoBehaviour
         goldenPegButton.SetIcon(coinSprite);
         autoFireButton.SetIcon(coinSprite);
         cauldronClickPowerButton.SetIcon(coinSprite);
-
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         UpdateBrownValueText();
         UpdateRedValueText();
         UpdateBlueValueText();
