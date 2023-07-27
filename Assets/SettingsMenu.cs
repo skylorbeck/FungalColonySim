@@ -80,4 +80,10 @@ public class SettingsMenu : MonoBehaviour
         offlineMenu.DOLocalMoveY(2000, 0.5f).OnComplete(() => offlineMenu.gameObject.SetActive(false));
         settingsRayBlocker.SetActive(false);
     }
+
+    public void EmailFeedback()
+    {
+        string email = "mailto:FCS@skylorbeck.website?subject=Feedback";
+        Application.OpenURL(email);
+    }
 }

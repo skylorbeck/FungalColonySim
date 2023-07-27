@@ -9,6 +9,7 @@ public class TitleAnimator : MonoBehaviour
     public float inputDelay = 3f;
     public float inputTimer = 0f;
     public TextMeshPro pressStartText;
+    public TextMeshProUGUI versionText;
 
     public TextMeshPro TitleText;
     public TextMeshPro TitleText2;
@@ -34,6 +35,7 @@ public class TitleAnimator : MonoBehaviour
         StoreFinalScales();
         ZeroAll();
         StartAnimation();
+        versionText.text = "v" + Application.version;
     }
 
     public void Update()
