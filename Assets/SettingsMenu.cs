@@ -7,12 +7,15 @@ public class SettingsMenu : MonoBehaviour
 {
     public RectTransform settingsMenu;
     public RectTransform statsMenu;
+    public RectTransform offlineMenu;
     public GameObject settingsRayBlocker;
     public Toggle confirmDelete;
     public Button resetButton;
 
     public bool settingsOpen => settingsMenu.gameObject.activeSelf;
     public bool statsOpen => statsMenu.gameObject.activeSelf;
+
+    public bool offlineOpen => offlineMenu.gameObject.activeSelf;
 
     public void Start()
     {
@@ -56,6 +59,19 @@ public class SettingsMenu : MonoBehaviour
     public void CloseStats()
     {
         statsMenu.DOLocalMoveY(2000, 0.5f).OnComplete(() => statsMenu.gameObject.SetActive(false));
+        settingsRayBlocker.SetActive(false);
+    }
+
+    public void OpenOffline()
+    {
+        offlineMenu.gameObject.SetActive(true);
+        offlineMenu.DOLocalMoveY(0, 0.5f);
+        settingsRayBlocker.SetActive(true);
+    }
+
+    public void CloseOffline()
+    {
+        offlineMenu.DOLocalMoveY(2000, 0.5f).OnComplete(() => offlineMenu.gameObject.SetActive(false));
         settingsRayBlocker.SetActive(false);
     }
 }

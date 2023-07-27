@@ -38,9 +38,7 @@ public class BlockMaster : MonoBehaviour
     public float timer = 0;
     public float seconds = 0;
     public float mushPerSec = 0;
-    public float mushPerTenSec = 0;
     public uint mushOneSecondAgo = 0;
-    public uint mushTenSecondAgo = 0;
 
     public MushroomBlock.MushroomType currentMushroomType = MushroomBlock.MushroomType.Brown;
     public ObjectPool<BiomeBlock> biomeBlockPool;
@@ -68,8 +66,6 @@ public class BlockMaster : MonoBehaviour
         enrichButton.gameObject.SetActive(false);
         yield return StartCoroutine(CreateWorld());
         UpdateMushPerSec();
-        UpdateMushPerTenSec();
-        UpdateMushPerTenSec();
     }
 
     void Update()
@@ -102,13 +98,6 @@ public class BlockMaster : MonoBehaviour
         if (timer > 1f) //TODO make this a time manager class and combine it with the timer in the marketplace
         {
             timer = 0;
-            seconds++;
-            if (seconds > 10)
-            {
-                seconds = 0;
-                UpdateMushPerTenSec();
-            }
-
             UpdateMushPerSec();
         }
         else
@@ -131,15 +120,10 @@ public class BlockMaster : MonoBehaviour
         mushPerSec = (SaveSystem.save.statsTotal.mushrooms[(int)currentMushroomType] -
                       mushOneSecondAgo);
         mushOneSecondAgo = SaveSystem.save.statsTotal.mushrooms[(int)currentMushroomType];
-        MushPerSecText.text = "MPS: " + mushPerTenSec + " (" + mushPerSec + ")";
+        MushPerSecText.text = "MPS: " + SaveSystem.GetMushroomsPerSecond((int)currentMushroomType).ToString("F1") +
+                              " (" + mushPerSec + ")";
     }
 
-    public void UpdateMushPerTenSec()
-    {
-        mushPerTenSec = (SaveSystem.save.statsTotal.mushrooms[(int)currentMushroomType] -
-                         mushTenSecondAgo) / 10f;
-        mushTenSecondAgo = SaveSystem.save.statsTotal.mushrooms[(int)currentMushroomType];
-    }
 
     private float GetMushPerSec()
     {

@@ -13,6 +13,7 @@ public class GameMaster : MonoBehaviour
     public Tooltip tooltip;
     public Toggle fpsToggle;
     public DayNightSystem dayNightSystem;
+    public OfflineProgressMenu offlineProgressMenu;
 
     public ModeMaster ModeMaster;
     public UpgradeMaster brownUpgradeMaster;
@@ -55,6 +56,8 @@ public class GameMaster : MonoBehaviour
         camera = Camera.main;
         yield return new WaitUntil(() => SaveSystem.instance != null);
         SaveSystem.instance.Load();
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
+        offlineProgressMenu.UpdateOfflineProgress();
     }
 
     void Update()

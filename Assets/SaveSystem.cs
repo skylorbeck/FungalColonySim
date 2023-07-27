@@ -14,6 +14,10 @@ public class SaveSystem : MonoBehaviour
     public TextMeshProUGUI saveText;
     public bool loaded = false;
     [SerializeField] private SaveFile saveFile;
+    public int[] offlineMushrooms = new int[3];
+    public long offlineTime = 0;
+    public float cauldronOfflineProgress = 0;
+    public float offlineMultiplier = .05f;
     public static SaveFile save => instance.saveFile;
 
     public void Awake()
@@ -21,7 +25,7 @@ public class SaveSystem : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            Load();
+            // Load();
         }
         else
         {
@@ -112,6 +116,28 @@ public class SaveSystem : MonoBehaviour
         return (3 / (GetBlueAutoHarvestBonusAsPercent() + 1));
     }
 
+    public static float GetMushroomsPerSecond(int index)
+    {
+        float mushPerHarvest = save.farmSave.upgrades.autoHarvest[index]
+            ? 1 + save.farmSave.upgrades.mushroomMultiplier
+            : 0;
+        mushPerHarvest *= save.farmSave.mushroomBlockCount[index];
+        float totalTime = index switch
+        {
+            0 => GetBrownGrowthTimeActual(),
+            1 => GetRedGrowthTimeActual(),
+            2 => GetBlueGrowthTimeActual(),
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
+        } + index switch
+        {
+            0 => GetBrownAutoHarvestTimeActual(),
+            1 => GetRedAutoHarvestTimeActual(),
+            2 => GetBlueAutoHarvestTimeActual(),
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
+        };
+        return mushPerHarvest / totalTime;
+    }
+
     public bool SpendSpores(uint amount)
     {
         if (instance.saveFile.stats.spores < amount) return false;
@@ -135,6 +161,7 @@ public class SaveSystem : MonoBehaviour
 
     private void Save()
     {
+        save.lastPlayedTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         Save("savefile", saveFile);
         saveIcon.DOKill();
         saveText.DOKill();
@@ -176,6 +203,27 @@ public class SaveSystem : MonoBehaviour
             }
         }
 
+
+        long lastPlayed = saveFile.lastPlayedTimestamp;
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        offlineTime = now - lastPlayed;
+        offlineMushrooms[0] = Mathf.RoundToInt(GetMushroomsPerSecond(0) * offlineMultiplier * offlineTime);
+        offlineMushrooms[1] = Mathf.RoundToInt(GetMushroomsPerSecond(1) * offlineMultiplier * offlineTime);
+        offlineMushrooms[2] = Mathf.RoundToInt(GetMushroomsPerSecond(2) * offlineMultiplier * offlineTime);
+        if (offlineTime < 0 || lastPlayed == 0 || TimeSpan.FromSeconds(offlineTime).Seconds < 1)
+        {
+            offlineTime = 0;
+            offlineMushrooms[0] = 0;
+            offlineMushrooms[1] = 0;
+            offlineMushrooms[2] = 0;
+            GameMaster.instance.SettingsMenu.CloseOffline();
+        }
+
+        save.AddMushroom(0, (uint)offlineMushrooms[0]);
+        save.AddMushroom(1, (uint)offlineMushrooms[1]);
+        save.AddMushroom(2, (uint)offlineMushrooms[2]);
+        cauldronOfflineProgress = offlineTime * offlineMultiplier;
+        save.cauldronSave.progress += cauldronOfflineProgress;
         loaded = true;
     }
 
@@ -223,6 +271,7 @@ public class SaveSystem : MonoBehaviour
 public class SaveFile
 {
     public uint saveVersion = 5;
+    public long lastPlayedTimestamp = 0;
     public FarmSave farmSave = new FarmSave();
     public StatTracking stats = new StatTracking();
     public StatTracking statsTotal = new StatTracking();
@@ -230,6 +279,15 @@ public class SaveFile
     public MarketSave marketSave = new MarketSave();
     public PlinkoSave plinkoSave = new PlinkoSave();
     public List<CollectionItemSaveData> collectionItems = new List<CollectionItemSaveData>();
+
+    public void AddMushroom(int index, uint amount = 1, bool addToTotal = true)
+    {
+        stats.mushrooms[index] += amount;
+        if (addToTotal)
+        {
+            statsTotal.mushrooms[index] += amount;
+        }
+    }
 }
 
 [Serializable]
