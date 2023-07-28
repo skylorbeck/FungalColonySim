@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,8 +19,9 @@ public class CollectionShelf : MonoBehaviour
     public TextMeshProUGUI collectiblePercentText;
 
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         var datas = SaveSystem.save.collectionItems;
         for (var i = 0; i < datas.Count; i++)
         {

@@ -56,8 +56,8 @@ public class ModeMaster : MonoBehaviour
         MarketplaceUpgrades.SetActive(false);
 
         currentMode = Gamemode.Hivemind;
-        SetMode(Gamemode.BrownFarm);
         yield return new WaitUntil(() => SaveSystem.instance.loaded);
+        SetMode(Gamemode.BrownFarm);
         UpdateButton();
         BrownFarm.transform.position = new Vector3(0, 0, 0);
         RedFarm.transform.position = new Vector3(distance, 0, 0);

@@ -1,4 +1,6 @@
+using System.Collections;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hivemind : MonoBehaviour
@@ -50,8 +52,9 @@ public class Hivemind : MonoBehaviour
     public uint unlockCauldronCost = 10;
 
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         unlockRedButton.SetCostText(unlockRedCost.ToString("N0"));
         unlockBlueButton.SetCostText(unlockBlueCost.ToString("N0"));
         goldenSporeButton.SetCostText(goldenSporeCost.ToString("N0"));
@@ -73,6 +76,7 @@ public class Hivemind : MonoBehaviour
         unlockCauldronButton.SetIcon(skillpoint);
 
         plinkoMachine.transform.localPosition = new Vector3(0, 0, 0);
+        yield return new WaitForNextFrameUnit();
         collectionShelf.transform.localPosition = new Vector3(-5, collectionShelf.GetY(), 0);
     }
 
