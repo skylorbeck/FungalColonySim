@@ -8,6 +8,12 @@ public class CauldronCurrencyVisualizer : CurrencyVisualizer
         switch (currency)
         {
             case Currency.BrownMushroom:
+                if (SaveSystem.save.cauldronSave.isOn)
+                {
+                    text.text = SaveSystem.save.stats.mushrooms[0].ToString("N0");
+                    break;
+                }
+
                 uint brownMushrooms = SaveSystem.save.stats.mushrooms[0];
                 if (SaveSystem.save.cauldronSave.ingredients.Contains(MushroomBlock.MushroomType.Brown))
                 {
@@ -18,6 +24,12 @@ public class CauldronCurrencyVisualizer : CurrencyVisualizer
                 text.text = brownMushrooms.ToString("N0");
                 break;
             case Currency.RedMushroom:
+                if (SaveSystem.save.cauldronSave.isOn)
+                {
+                    text.text = SaveSystem.save.stats.mushrooms[1].ToString("N0");
+                    break;
+                }
+
                 uint redMushrooms = SaveSystem.save.stats.mushrooms[1];
                 if (SaveSystem.save.cauldronSave.ingredients.Contains(MushroomBlock.MushroomType.Red))
                 {
@@ -28,6 +40,12 @@ public class CauldronCurrencyVisualizer : CurrencyVisualizer
                 text.text = redMushrooms.ToString("N0");
                 break;
             case Currency.BlueMushroom:
+                if (SaveSystem.save.cauldronSave.isOn)
+                {
+                    text.text = SaveSystem.save.stats.mushrooms[2].ToString("N0");
+                    break;
+                }
+
                 uint blueMushrooms = SaveSystem.save.stats.mushrooms[2];
                 if (SaveSystem.save.cauldronSave.ingredients.Contains(MushroomBlock.MushroomType.Blue))
                 {
