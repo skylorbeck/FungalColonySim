@@ -21,7 +21,7 @@ public class CurrencyVisualizer : MonoBehaviour
     }
 
     public Currency currency;
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] protected TextMeshProUGUI text;
     [SerializeField] private Image image;
 
     void Start()
@@ -41,7 +41,7 @@ public class CurrencyVisualizer : MonoBehaviour
         UpdateVisuals();
     }
 
-    public void SetCurrency(Currency currency)
+    public virtual void SetCurrency(Currency currency)
     {
         this.currency = currency;
         switch (currency)
