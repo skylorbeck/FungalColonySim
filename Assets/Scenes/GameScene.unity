@@ -38972,12 +38972,12 @@ MonoBehaviour:
   pegDistance: 1.5
   rowDistance: 2
   prizeWeights:
-  - 0.59
-  - 0.1
+  - 0.6
+  - 0.05
   - 0.01
+  - 0.2
   - 0.15
   - 0.1
-  - 0.05
   numberPrefab: {fileID: 320771085538145067, guid: f18c05eaa8b70a740a429d3f045d35a9, type: 3}
   rectParent: {fileID: 604290423}
   jackpotSound: {fileID: 8300000, guid: 31568072a58c3924e8b86e3120df4560, type: 3}
