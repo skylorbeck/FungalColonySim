@@ -704,7 +704,7 @@ public class CauldronSave
 
     public int GetMaxBrewAmount()
     {
-        return (int)level * 10;
+        return (int)(level * 10 + upgrades.capacityBooster);
     }
 }
 
@@ -722,6 +722,6 @@ public class CauldronUpgrades
     public uint clickPower = 0;
 
     public uint capacityBooster = 0; //TODO: Implement
-    [FormerlySerializedAs("flatXpBonus")] public uint clickXpBonus = 0;
-    public uint potionExperienceBonus = 0;
+    [FormerlySerializedAs("flatXpBonus")] public uint clickXpBonus = 0; //TODO: Implement
+    public uint potionExperienceBonus = 0; //TODO: Implement
 }

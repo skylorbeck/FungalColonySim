@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using DamageNumbersPro;
 using DG.Tweening;
@@ -62,8 +63,9 @@ public class PlinkoMachine : MonoBehaviour
     public bool canFire => fireTimer <= 0;
 
 
-    public void Start()
+    public IEnumerator Start()
     {
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         ballPool = new ObjectPool<PlinkoBall>(
             () =>
             {
