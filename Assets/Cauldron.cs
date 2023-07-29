@@ -34,8 +34,8 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public TMP_InputField desiredPotionsText;
     public Button decreaseDesiredPotionsButton;
     public Button increaseDesiredPotionsButton;
-    public GameObject percentButtons; //TODO turn on when has upgrade
-    public GameObject evenPotionButtons; //TODO turn on when has upgrade
+    public GameObject percentButtons;
+    public GameObject evenPotionButtons;
 
     public SpriteRenderer ingredientSprite;
     public Image ingredientPreviewImage;
@@ -113,6 +113,13 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.save.cauldronSave.upgrades.autoWood;
         percentButtons.SetActive(SaveSystem.save.cauldronSave.upgrades.percentButtons);
         evenPotionButtons.SetActive(SaveSystem.save.cauldronSave.upgrades.evenAmount);
+        if (cauldronSave.GetTotalIngredients() > GetMaxIngredients() * neededIngredients)
+        {
+            RemoveAllIngredients();
+            cauldronSave.progress = 0;
+            cauldronSave.progressMax = 0;
+            TurnOff();
+        }
     }
 
     void Update()
@@ -160,7 +167,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         UpdateButtons();
     }
 
-    private void CheckFueledAndReady()
+    private void CalculateIngredientTotal()
     {
         cauldronSave.ingredientTotal = 0;
         foreach (int amount in cauldronSave.ingredientAmounts)
@@ -222,8 +229,18 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public void AddIngredient()
     {
         ValidateValue();
+        if (cauldronSave.GetTotalIngredients() >= GetMaxIngredients())
+        {
+            return;
+        }
+
         AddIngredient(currentIngredient, int.Parse(ingredientAmountText.text));
         ValidateValue();
+    }
+
+    public int GetMaxIngredients()
+    {
+        return cauldronSave.GetMaxBrewAmount() * neededIngredients;
     }
 
     public void AddIngredient(MushroomBlock.MushroomType ingredient, int amount = 1)
@@ -264,7 +281,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
             };
         };
 
-        CheckFueledAndReady();
+        CalculateIngredientTotal();
         UpdateNeededIngredients();
         cauldronSave.progressMax = baseBrewTime + (baseBrewTime *
                                                    ((cauldronSave.ingredientTotal - neededIngredients) /
@@ -334,7 +351,6 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
             SFXMaster.instance.PlayOneShot(removeIngredientSound);
         }
 
-        ;
         cauldronSave.ingredients.Clear();
         cauldronSave.ingredientAmounts.Clear();
         ingredientBar.SetAmounts(cauldronSave.ingredientAmounts, cauldronSave.ingredients);
@@ -445,7 +461,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     public void UpdateButtons()
     {
-        CheckFueledAndReady();
+        CalculateIngredientTotal();
         ProcessDesiredPotions();
         fuelButton.interactable = !cauldronSave.hasFuel && !cauldronSave.isOn;
         onButton.interactable = cauldronSave.ingredients.Count > 0 && cauldronSave.hasFuel &&
@@ -492,6 +508,11 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     {
         if (int.TryParse(ingredientAmountText.text, out var value))
         {
+            if (cauldronSave.GetTotalIngredients() + value >= GetMaxIngredients())
+            {
+                value = GetMaxIngredients() - cauldronSave.GetTotalIngredients();
+            }
+
             if (value > 0)
             {
                 int alreadyHave = 0;
@@ -502,10 +523,10 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
                 if (value > SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave)
                 {
-                    ingredientAmountText.text =
-                        (SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave)
-                        .ToString();
+                    value = Mathf.FloorToInt(SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave);
                 }
+
+                ingredientAmountText.text = value.ToString();
 
                 UpdateButtons();
                 return;
@@ -524,8 +545,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
             alreadyHave = cauldronSave.ingredientAmounts[cauldronSave.ingredients.IndexOf(currentIngredient)];
         }
 
-        ingredientAmountText.text = Mathf.RoundToInt(
-                (SaveSystem.save.stats.mushrooms[(int)currentIngredient] - alreadyHave) * percent)
+        ingredientAmountText.text = Mathf.RoundToInt(GetMaxIngredients() * percent - alreadyHave)
             .ToString();
         ValidateValue();
         SFXMaster.instance.PlayMenuClick();
@@ -607,6 +627,24 @@ public class CauldronSave
     public List<MushroomBlock.MushroomType> ingredients = new List<MushroomBlock.MushroomType>();
     public List<int> ingredientAmounts = new List<int>();
     public int ingredientTotal = 0;
+    public uint xp = 0;
+    public uint level = 1;
+
+    public int GetTotalIngredients()
+    {
+        int total = 0;
+        foreach (int i in ingredientAmounts)
+        {
+            total += i;
+        }
+
+        return total;
+    }
+
+    public int GetMaxBrewAmount()
+    {
+        return (int)level * 10;
+    }
 }
 
 [Serializable]

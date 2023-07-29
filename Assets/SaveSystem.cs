@@ -204,6 +204,13 @@ public class SaveSystem : MonoBehaviour
         }
 
 
+        CalculateOfflineProgress();
+
+        loaded = true;
+    }
+
+    private void CalculateOfflineProgress()
+    {
         long lastPlayed = saveFile.lastPlayedTimestamp;
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         offlineTime = (int)(now - lastPlayed);
@@ -227,8 +234,6 @@ public class SaveSystem : MonoBehaviour
             cauldronOfflineProgress = offlineTime * offlineMultiplier;
             save.cauldronSave.progress += cauldronOfflineProgress;
         }
-
-        loaded = true;
     }
 
     public void Load<T>(string path, out T data) where T : new()
