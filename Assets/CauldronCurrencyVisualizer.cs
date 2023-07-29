@@ -77,7 +77,7 @@ public class CauldronCurrencyVisualizer : CurrencyVisualizer
                 text.text = SaveSystem.save.plinkoSave.balls.ToString("N0");
                 break;
             case Currency.Collectible:
-                text.text = SaveSystem.GetCollectionMultiplier().ToString("N0");
+                text.text = SaveSystem.save.collectionItems.Count.ToString("N0");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(currency), currency, null);
