@@ -15,7 +15,7 @@ public class SaveSystem : MonoBehaviour
     public bool loaded = false;
     [SerializeField] private SaveFile saveFile;
     public int[] offlineMushrooms = new int[3];
-    public long offlineTime = 0;
+    public int offlineTime = 0;
     public float cauldronOfflineProgress = 0;
     public float offlineMultiplier = .05f;
     public static SaveFile save => instance.saveFile;
@@ -206,11 +206,11 @@ public class SaveSystem : MonoBehaviour
 
         long lastPlayed = saveFile.lastPlayedTimestamp;
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        offlineTime = now - lastPlayed;
+        offlineTime = (int)(now - lastPlayed);
         offlineMushrooms[0] = Mathf.RoundToInt(GetMushroomsPerSecond(0) * offlineMultiplier * offlineTime);
         offlineMushrooms[1] = Mathf.RoundToInt(GetMushroomsPerSecond(1) * offlineMultiplier * offlineTime);
         offlineMushrooms[2] = Mathf.RoundToInt(GetMushroomsPerSecond(2) * offlineMultiplier * offlineTime);
-        if (offlineTime < 0 || lastPlayed == 0 || TimeSpan.FromSeconds(offlineTime).Seconds < 1)
+        if (lastPlayed == 0 || offlineTime < 5)
         {
             offlineTime = 0;
             offlineMushrooms[0] = 0;
@@ -218,12 +218,16 @@ public class SaveSystem : MonoBehaviour
             offlineMushrooms[2] = 0;
             GameMaster.instance.SettingsMenu.CloseOffline();
         }
+        else
+        {
+            GameMaster.instance.SettingsMenu.OpenOffline();
+            save.AddMushroom(0, (uint)offlineMushrooms[0]);
+            save.AddMushroom(1, (uint)offlineMushrooms[1]);
+            save.AddMushroom(2, (uint)offlineMushrooms[2]);
+            cauldronOfflineProgress = offlineTime * offlineMultiplier;
+            save.cauldronSave.progress += cauldronOfflineProgress;
+        }
 
-        save.AddMushroom(0, (uint)offlineMushrooms[0]);
-        save.AddMushroom(1, (uint)offlineMushrooms[1]);
-        save.AddMushroom(2, (uint)offlineMushrooms[2]);
-        cauldronOfflineProgress = offlineTime * offlineMultiplier;
-        save.cauldronSave.progress += cauldronOfflineProgress;
         loaded = true;
     }
 
