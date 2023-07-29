@@ -140,14 +140,14 @@ public class Marketplace : MonoBehaviour
     void FixedUpdate()
     {
         TickTimer();
-        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Marketplace) return;
+        if (!GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Marketplace)) return;
         TickUpgrades();
     }
 
     private void UpdateCauldronClickPowerText()
     {
         cauldronClickPowerCost = (uint)(cauldronClickPowerBaseCost * cauldronClickPowerCostMultiplier *
-                                        (SaveSystem.save.cauldronSave.upgrades.cauldronClickPower +
+                                        (SaveSystem.save.cauldronSave.upgrades.clickPower +
                                          1));
         cauldronClickPowerButton.SetCostText(cauldronClickPowerCost.ToString("N0"));
     }
@@ -294,7 +294,7 @@ public class Marketplace : MonoBehaviour
         }
 
         if (cauldronClickPowerButton.isActiveAndEnabled &&
-            SaveSystem.save.cauldronSave.upgrades.cauldronClickPower >= cauldronClickPowerMax - 0.01f)
+            SaveSystem.save.cauldronSave.upgrades.clickPower >= cauldronClickPowerMax - 0.01f)
         {
             cauldronClickPowerButton.gameObject.SetActive(false);
         }
@@ -313,7 +313,7 @@ public class Marketplace : MonoBehaviour
             Refresh();
         }
 
-        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Marketplace)
+        if (!GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Marketplace))
         {
             return;
         }
@@ -546,7 +546,7 @@ public class Marketplace : MonoBehaviour
         if (SaveSystem.instance.SpendCoins(cauldronClickPowerCost))
         {
             SFXMaster.instance.PlayMenuClick();
-            SaveSystem.save.cauldronSave.upgrades.cauldronClickPower += 1;
+            SaveSystem.save.cauldronSave.upgrades.clickPower += 1;
             SaveSystem.SaveS();
             UpdateCauldronClickPowerText();
         }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlinkoTeleporter : MonoBehaviour
@@ -9,7 +6,7 @@ public class PlinkoTeleporter : MonoBehaviour
     public GameObject portalOut;
     public AudioClip[] teleportSound;
     public ParticleSystem teleportParticles;
-    
+
     //TODO good place for upgrades. Score + on teleport?
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -21,10 +18,9 @@ public class PlinkoTeleporter : MonoBehaviour
             pos.x = outPos.x + (pos.x - portalIn.transform.position.x);
             pos.y = outPos.y;
             col.transform.position = pos;
-            if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Hivemind) return;
+            if (!GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Hivemind)) return;
             SFXMaster.instance.PlayOneShot(teleportSound[UnityEngine.Random.Range(0, teleportSound.Length)]);
             teleportParticles.Play();
         }
     }
-
 }

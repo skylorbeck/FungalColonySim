@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Pool;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -57,6 +58,16 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public AudioClip finishSound;
 
     public DamageNumberMesh damageNumberMesh;
+    public DamageNumberGUI xpNumberGUI;
+    public RectTransform xpPopSpawnPoint;
+
+    public TextMeshProUGUI curLevelText;
+    public TextMeshProUGUI cauldronCapacityText;
+    public Image xpBar;
+    public Image fakeXpBar;
+    public float xpBarFillSpeed = 2f;
+    public uint potionBaseXp = 2;
+    public float potionCompleteMulti = 5f;
     public ObjectPool<SpriteRenderer> ingredientPool;
 
     private CauldronSave cauldronSave => SaveSystem.save.cauldronSave;
@@ -113,11 +124,10 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         cauldronSave.hasFuel = cauldronSave.hasFuel || SaveSystem.save.cauldronSave.upgrades.autoWood;
         percentButtons.SetActive(SaveSystem.save.cauldronSave.upgrades.percentButtons);
         evenPotionButtons.SetActive(SaveSystem.save.cauldronSave.upgrades.evenAmount);
-        if (cauldronSave.GetTotalIngredients() > GetMaxIngredients() * neededIngredients)
+        if (cauldronSave.GetTotalIngredients() > GetMaxIngredients())
         {
             RemoveAllIngredients();
             cauldronSave.progress = 0;
-            cauldronSave.progressMax = 0;
             TurnOff();
         }
     }
@@ -129,6 +139,15 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     void FixedUpdate()
     {
+        if (GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Potions))
+        {
+            curLevelText.text = "Lv. " + cauldronSave.level;
+            cauldronCapacityText.text = GetMaxIngredients().ToString("N0");
+            xpBar.fillAmount = cauldronSave.GetLevelProgress();
+            fakeXpBar.fillAmount =
+                Mathf.Lerp(fakeXpBar.fillAmount, xpBar.fillAmount, Time.fixedDeltaTime * xpBarFillSpeed);
+        }
+
         ProgressState();
         progressMask.transform.localPosition =
             new Vector3(0, maskOffset * (cauldronSave.progress / cauldronSave.progressMax), 0);
@@ -138,10 +157,13 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     {
         if (cauldronSave.isOn && !cauldronSave.isDone)
         {
-            cauldronSave.progress += 1f + cauldronSave.upgrades.cauldronClickPower; //TODO good place to upgrade
-            damageNumberMesh.Spawn(cauldronSprite.transform.position, 1 + cauldronSave.upgrades.cauldronClickPower);
+            cauldronSave.progress += 1f + cauldronSave.upgrades.clickPower; //TODO good place to upgrade
+            damageNumberMesh.Spawn(cauldronSprite.transform.position, 1 + cauldronSave.upgrades.clickPower);
             cauldronSprite.transform.DOComplete();
             cauldronSprite.transform.DOPunchScale(Vector3.one * punchSize, 0.1f, 1, 0.5f);
+
+            uint xp = (uint)(1 + cauldronSave.upgrades.clickXpBonus);
+            AddExperience(xp);
             SFXMaster.instance.PlayCauldronPop();
         }
         else if (cauldronSave.isDone)
@@ -151,6 +173,19 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         else if (!cauldronSave.hasFuel)
         {
             AddFuel();
+        }
+    }
+
+    private void AddExperience(uint xp)
+    {
+        cauldronSave.xp += xp;
+        xpNumberGUI.Spawn(xpPopSpawnPoint.position, xp).SetAnchoredPosition(xpPopSpawnPoint, Vector2.zero);
+        if (cauldronSave.CheckLevelUp())
+        {
+            cauldronCapacityText.rectTransform.DOComplete();
+            curLevelText.rectTransform.DOComplete();
+            cauldronCapacityText.rectTransform.DOShakePosition(0.5f, new Vector3(0, 10, 0));
+            curLevelText.rectTransform.DOPunchScale(Vector3.one * punchSize, 0.5f, 1, 0.5f);
         }
     }
 
@@ -346,7 +381,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
 
     public void RemoveAllIngredients()
     {
-        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Potions)
+        if (GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Potions))
         {
             SFXMaster.instance.PlayOneShot(removeIngredientSound);
         }
@@ -430,6 +465,9 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
             Mathf.FloorToInt(cauldronSave.ingredientTotal / (float)neededIngredients); //TODO good place for upgrades
 
         potions[(int)potionType] += (uint)potionAmount;
+
+        AddExperience((uint)potionAmount *
+                      (uint)((potionBaseXp + cauldronSave.upgrades.potionExperienceBonus) * potionCompleteMulti));
 
         potionSprite.transform.DOComplete();
         timeLeftText.text = "+" + potionAmount.ToString();
@@ -629,6 +667,29 @@ public class CauldronSave
     public int ingredientTotal = 0;
     public uint xp = 0;
     public uint level = 1;
+    private float experienceBaseMultiplier = 2.1f; //y
+    private float experienceMultiplier = .1f; //x
+
+    private float experienceToNextLevel => Mathf.Pow(level / experienceMultiplier, experienceBaseMultiplier);
+    private float levelProgress => xp / experienceToNextLevel;
+
+    public bool CheckLevelUp()
+    {
+        if (xp >= experienceToNextLevel)
+        {
+            xp -= (uint)experienceToNextLevel;
+            level++;
+            return true;
+            // SFXMaster.instance.PlayLevelUp();//TODO add this
+        }
+
+        return false;
+    }
+
+    public float GetLevelProgress()
+    {
+        return levelProgress;
+    }
 
     public int GetTotalIngredients()
     {
@@ -656,5 +717,11 @@ public class CauldronUpgrades
     public bool autoWood = false;
     public bool percentButtons = false;
     public bool evenAmount = false;
-    public uint cauldronClickPower = 0;
+
+    [FormerlySerializedAs("cauldronClickPower")]
+    public uint clickPower = 0;
+
+    public uint capacityBooster = 0; //TODO: Implement
+    [FormerlySerializedAs("flatXpBonus")] public uint clickXpBonus = 0;
+    public uint potionExperienceBonus = 0;
 }

@@ -86,7 +86,7 @@ public class Hivemind : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.Hivemind) return;
+        if (!GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Hivemind)) return;
 
         TickUpgradeButtons();
     }

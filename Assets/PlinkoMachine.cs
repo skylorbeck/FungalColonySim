@@ -115,7 +115,7 @@ public class PlinkoMachine : MonoBehaviour
 
     public void Update()
     {
-        if (!(GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind &&
+        if (!(GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Hivemind) &&
               GameMaster.instance.Hivemind.mode == Hivemind.HiveMindMode.Plinko)) return;
 
 
@@ -159,7 +159,7 @@ public class PlinkoMachine : MonoBehaviour
 
     public void AwardCollectible()
     {
-        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        if (GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Hivemind))
         {
             SFXMaster.instance.PlayOneShot(jackpotSound);
         }
@@ -234,7 +234,7 @@ public class PlinkoMachine : MonoBehaviour
             return;
         }
 
-        if (GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        if (GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Hivemind))
         {
             SFXMaster.instance.PlayMenuClick();
         }

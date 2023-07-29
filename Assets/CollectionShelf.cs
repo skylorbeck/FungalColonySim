@@ -38,7 +38,7 @@ public class CollectionShelf : MonoBehaviour
 
     void Update()
     {
-        if (!(GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind &&
+        if (!(GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.Hivemind) &&
               GameMaster.instance.Hivemind.mode == Hivemind.HiveMindMode.Collection)) return;
         if (Input.mouseScrollDelta.y > 0)
         {

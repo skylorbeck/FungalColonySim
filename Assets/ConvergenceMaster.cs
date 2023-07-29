@@ -255,7 +255,7 @@ public class ConvergenceMaster : MonoBehaviour
         confirmConvergeButton.interactable = false;
         yield return StartCoroutine(HideMenu());
         ShowStoreMenu();
-        if (GameMaster.instance.ModeMaster.currentMode != ModeMaster.Gamemode.BrownFarm)
+        if (!GameMaster.instance.ModeMaster.IsMode(ModeMaster.Gamemode.BrownFarm))
         {
             GameMaster.instance.ModeMaster.SetMode(ModeMaster.Gamemode.BrownFarm);
         }

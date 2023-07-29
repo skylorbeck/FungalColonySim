@@ -304,4 +304,9 @@ public class ModeMaster : MonoBehaviour
     {
         return (int)currentMode * distance;
     }
+
+    public bool IsMode(Gamemode gamemode)
+    {
+        return currentMode == gamemode;
+    }
 }
