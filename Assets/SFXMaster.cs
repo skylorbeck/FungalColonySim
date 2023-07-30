@@ -16,6 +16,7 @@ public class SFXMaster : MonoBehaviour
     public List<AudioClip> blockPlace;
     public AudioClip menuClick;
     public AudioClip wood;
+    public AudioClip plinkoHit;
     public List<AudioClip> cauldronPop;
 
     public Slider volumeSlider;
@@ -91,10 +92,7 @@ public class SFXMaster : MonoBehaviour
 
     public void PlayMenuClick()
     {
-        if (volumeSlider.value.Equals(0)) return;
-
-        Randomize();
-        audioSource.PlayOneShot(menuClick);
+        PlayOneShot(menuClick);
     }
 
     public void PlayCauldronPop()
@@ -105,6 +103,11 @@ public class SFXMaster : MonoBehaviour
     public void PlayWood()
     {
         PlayOneShot(wood);
+    }
+
+    public void PlayPlinkoHit()
+    {
+        PlayOneShot(plinkoHit);
     }
 
     public void SetVolume(float volume)

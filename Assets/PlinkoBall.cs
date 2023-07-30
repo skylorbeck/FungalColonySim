@@ -7,10 +7,12 @@ public class PlinkoBall : PlinkoPiece
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        /*if (col.gameObject.CompareTag("Peg") && GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
-        { 
-            SFXMaster.instance.PlayOneShot(popSound);
-        }*/
+        if (col.gameObject.CompareTag("Peg") &&
+            GameMaster.instance.ModeMaster.currentMode == ModeMaster.Gamemode.Hivemind)
+        {
+            SFXMaster.instance.PlayPlinkoHit();
+        }
+
         if (col.gameObject.CompareTag("PlinkoRemove"))
         {
             hasWon = false;
