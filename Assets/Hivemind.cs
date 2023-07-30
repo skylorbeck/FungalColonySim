@@ -77,7 +77,7 @@ public class Hivemind : MonoBehaviour
 
         plinkoMachine.transform.localPosition = new Vector3(0, 0, 0);
         yield return new WaitForNextFrameUnit();
-        collectionShelf.transform.localPosition = new Vector3(-5, collectionShelf.GetY(), 0);
+        collectionShelf.transform.localPosition = new Vector3(-6, collectionShelf.GetY(), 0);
     }
 
     void Update()
