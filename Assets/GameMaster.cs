@@ -33,8 +33,6 @@ public class GameMaster : MonoBehaviour
 
     public Color[] mushroomColors = new Color[3];
 
-    //TODO harvest mushrooms by clicking on floor
-    //TODO red and blue upgrades have different scaling?
     //TODO Regenerate, a second layer of prestige that resets hivemind levels and gives a flat bonus to mushroom production
 
     IEnumerator Start()

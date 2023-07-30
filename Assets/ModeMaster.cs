@@ -19,7 +19,6 @@ public class ModeMaster : MonoBehaviour
         Marketplace,
     }
 
-    //TODO check for current mode and enable/disable processing intensive things
     public int distance = 200;
     public float duration = 1;
 

@@ -301,22 +301,22 @@ public class PlinkoMachine : MonoBehaviour
                         prizeText.text = "Skill Points +" + hivemindPoints;
                         break;
                     case 3:
-                        uint bpotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        uint bpotions = (uint)Random.Range(1, 5);
                         SaveSystem.save.marketSave.potionsCount[0] += bpotions;
                         prizeText.text = "Brown Potions +" + bpotions;
                         break;
                     case 4:
-                        uint rpotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        uint rpotions = (uint)Random.Range(1, 5);
                         SaveSystem.save.marketSave.potionsCount[0] += rpotions;
                         prizeText.text = "Red Potions +" + rpotions;
                         break;
                     case 5:
-                        uint bupotions = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        uint bupotions = (uint)Random.Range(1, 5);
                         SaveSystem.save.marketSave.potionsCount[0] += bupotions;
                         prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:
-                        uint balls = (uint)Random.Range(1, 3); //TODO good place for upgrades
+                        uint balls = (uint)Random.Range(1, 3);
                         SaveSystem.save.plinkoSave.balls += balls;
                         prizeText.text = "Balls +" + balls;
                         break;

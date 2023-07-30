@@ -313,16 +313,12 @@ public class Hivemind : MonoBehaviour
             mode = HiveMindMode.Collection;
             plinkoMachine.transform.DOMoveY(-200, 0.5f).SetEase(Ease.InOutCubic);
             collectionShelf.transform.DOMoveY(0, 0.5f).SetEase(Ease.InOutCubic);
-            // plinkoButton.ToggleButton(false); //TODO replace this with plinko UI toggle
-            // collectionButton.ToggleButton(true); //TODO replace this with collection UI toggle
         }
         else
         {
             mode = HiveMindMode.Plinko;
             plinkoMachine.transform.DOMoveY(0, 0.5f).SetEase(Ease.InOutCubic);
             collectionShelf.transform.DOMoveY(collectionShelf.GetY(), 0.5f).SetEase(Ease.InOutCubic);
-            // plinkoButton.ToggleButton(true);
-            // collectionButton.ToggleButton(false);
         }
     }
 }

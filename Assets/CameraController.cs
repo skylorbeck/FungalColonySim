@@ -66,7 +66,7 @@ public class CameraController : MonoBehaviour
             grabCursorPointer.enabled = false;
         }
 
-        if (isDragging) //TODO fix this so it clamps relative to the mode instead of world origin
+        if (isDragging)
         {
             Vector3 pos = camera.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
             Vector3 move = new Vector3(pos.x * dragSpeed, pos.y * dragSpeed, 0);

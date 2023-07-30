@@ -17,7 +17,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public SpriteRenderer progressSprite;
     public SpriteRenderer[] fire;
     public SpriteRenderer[] wood;
-    public Button fuelButton; //TODO turn off when has auto-fuel upgrade
+    public Button fuelButton;
     public Button onButton;
     public Button gatherButton;
     public SpriteRenderer potionSprite;
@@ -723,6 +723,6 @@ public class CauldronUpgrades
     public uint clickPower = 0;
 
     public uint capacityBooster = 0; //TODO: Implement
-    [FormerlySerializedAs("flatXpBonus")] public uint clickXpBonus = 0; //TODO: Implement
+    public uint clickXpBonus = 0; //TODO: Implement
     public uint potionExperienceBonus = 0; //TODO: Implement
 }
