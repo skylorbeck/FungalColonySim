@@ -291,12 +291,12 @@ public class PlinkoMachine : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        uint spores = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        uint spores = 1;
                         SaveSystem.save.stats.spores += spores;
                         prizeText.text = "Spores +" + spores;
                         break;
                     case 2:
-                        uint hivemindPoints = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        uint hivemindPoints = 1;
                         SaveSystem.save.stats.skillPoints += hivemindPoints;
                         prizeText.text = "Skill Points +" + hivemindPoints;
                         break;
@@ -316,7 +316,7 @@ public class PlinkoMachine : MonoBehaviour
                         prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:
-                        uint balls = (uint)Random.Range(1, 5); //TODO good place for upgrades
+                        uint balls = (uint)Random.Range(1, 3); //TODO good place for upgrades
                         SaveSystem.save.plinkoSave.balls += balls;
                         prizeText.text = "Balls +" + balls;
                         break;
