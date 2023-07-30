@@ -38965,7 +38965,7 @@ MonoBehaviour:
   autoFireTimer: 0
   autoFireRate: 1
   fireTimer: 0
-  fireRate: 0.2
+  fireRate: 0.15
   spawnTimerBar: {fileID: 202618297}
   pegRows: 6
   pegsPerRow: 10
