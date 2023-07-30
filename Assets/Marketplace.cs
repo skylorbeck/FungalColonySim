@@ -100,6 +100,7 @@ public class Marketplace : MonoBehaviour
 
     IEnumerator Start()
     {
+        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         GameMaster.instance.ModeMaster.OnModeChange += sellPreview.Clear;
         Refresh();
         Sprite coinSprite = Resources.Load<Sprite>("Sprites/Coin");
@@ -118,7 +119,6 @@ public class Marketplace : MonoBehaviour
         goldenPegButton.SetIcon(coinSprite);
         autoFireButton.SetIcon(coinSprite);
         cauldronClickPowerButton.SetIcon(coinSprite);
-        yield return new WaitUntil(() => SaveSystem.instance.loaded);
         UpdateBrownValueText();
         UpdateRedValueText();
         UpdateBlueValueText();

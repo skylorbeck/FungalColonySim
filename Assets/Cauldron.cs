@@ -214,6 +214,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public void TurnOn()
     {
         if (!cauldronSave.hasFuel) return;
+        cauldronSave.progress = 0;
         SFXMaster.instance.PlayOneShot(brewSound);
         cauldronSave.isOn = true;
         foreach (var renderer in fire)
