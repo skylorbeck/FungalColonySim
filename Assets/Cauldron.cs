@@ -38,6 +38,9 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public GameObject percentButtons;
     public GameObject evenPotionButtons;
 
+    public float cauldronClickLimit = 0.1f;
+    public float cauldronClickTimer = 0f;
+
     public SpriteRenderer ingredientSprite;
     public Image ingredientPreviewImage;
     public TMP_InputField ingredientAmountText;
@@ -69,6 +72,7 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
     public uint potionBaseXp = 2;
     public float potionCompleteMulti = 5f;
     public ObjectPool<SpriteRenderer> ingredientPool;
+    public bool canClick => cauldronClickTimer < cauldronClickLimit;
 
     private CauldronSave cauldronSave => SaveSystem.save.cauldronSave;
     private uint[] potions => SaveSystem.save.marketSave.potionsCount;
@@ -151,20 +155,18 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         ProgressState();
         progressMask.transform.localPosition =
             new Vector3(0, maskOffset * (cauldronSave.progress / cauldronSave.progressMax), 0);
+        if (cauldronClickTimer >= cauldronClickLimit)
+        {
+            cauldronClickTimer -= Time.fixedDeltaTime;
+        }
     }
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (cauldronSave.isOn && !cauldronSave.isDone)
+        if (cauldronSave.isOn && !cauldronSave.isDone && canClick)
         {
-            cauldronSave.progress += 1f + cauldronSave.upgrades.clickPower; //TODO good place to upgrade
-            damageNumberMesh.Spawn(cauldronSprite.transform.position, 1 + cauldronSave.upgrades.clickPower);
-            cauldronSprite.transform.DOComplete();
-            cauldronSprite.transform.DOPunchScale(Vector3.one * punchSize, 0.1f, 1, 0.5f);
-
-            uint xp = (uint)(1 + cauldronSave.upgrades.clickXpBonus);
-            AddExperience(xp);
-            SFXMaster.instance.PlayCauldronPop();
+            cauldronClickTimer = cauldronClickLimit;
+            ClickCauldron();
         }
         else if (cauldronSave.isDone)
         {
@@ -174,6 +176,17 @@ public class Cauldron : MonoBehaviour, IPointerClickHandler
         {
             AddFuel();
         }
+    }
+
+    private void ClickCauldron()
+    {
+        cauldronSave.progress += 1f + cauldronSave.upgrades.clickPower; //TODO good place to upgrade
+        damageNumberMesh.Spawn(cauldronSprite.transform.position, 1 + cauldronSave.upgrades.clickPower);
+        cauldronSprite.transform.DOComplete();
+        cauldronSprite.transform.DOPunchScale(Vector3.one * punchSize, 0.1f, 1, 0.5f);
+        uint xp = (uint)(1 + cauldronSave.upgrades.clickXpBonus);
+        AddExperience(xp);
+        SFXMaster.instance.PlayCauldronPop();
     }
 
     private void AddExperience(uint xp)

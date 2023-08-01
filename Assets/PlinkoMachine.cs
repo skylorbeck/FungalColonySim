@@ -307,12 +307,12 @@ public class PlinkoMachine : MonoBehaviour
                         break;
                     case 4:
                         uint rpotions = (uint)Random.Range(1, 5);
-                        SaveSystem.save.marketSave.potionsCount[0] += rpotions;
+                        SaveSystem.save.marketSave.potionsCount[1] += rpotions;
                         prizeText.text = "Red Potions +" + rpotions;
                         break;
                     case 5:
                         uint bupotions = (uint)Random.Range(1, 5);
-                        SaveSystem.save.marketSave.potionsCount[0] += bupotions;
+                        SaveSystem.save.marketSave.potionsCount[2] += bupotions;
                         prizeText.text = "Blue Potions +" + bupotions;
                         break;
                     default:
